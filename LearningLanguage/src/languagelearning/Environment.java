@@ -12,6 +12,7 @@ public class Environment implements Runnable
 	public static final double DUST_START_PERCENTAGE = 0.6;
 	public static final double DUST_VARIANCE_PERCENTAGE = 0.1;
 	public static final int AGENTS_INIT_COUNT = 7;
+	public static final boolean CIRCULAR = false; 
 	
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid = new int[LearningLanguage.GRID_HEIGHT][LearningLanguage.GRID_WIDTH]; 
@@ -108,6 +109,11 @@ public class Environment implements Runnable
 	
 	public boolean canMove(int x, int y)
 	{
+		// Check boundaries of environment
+		if (x < 0 || x >= LearningLanguage.GRID_WIDTH || y < 0 || y >= LearningLanguage.GRID_HEIGHT) {
+			return false;
+		}
+		
 		// Physical properties of moving (thus not for sensing purposes!)
 		for(int i=0;i<objects.size();i++)
 		{

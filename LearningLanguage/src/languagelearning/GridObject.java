@@ -25,25 +25,37 @@ public class GridObject
 	
 	public void moveNorth()
 	{
-		int ny = (y - 1 + LearningLanguage.GRID_HEIGHT) % LearningLanguage.GRID_HEIGHT;
+		int ny = y - 1;
+		if (Environment.CIRCULAR) {
+			ny = (y - 1 + LearningLanguage.GRID_HEIGHT) % LearningLanguage.GRID_HEIGHT;
+		}
 		move(x, ny);
 	}
 	
 	public void moveEast()
 	{
-		int nx = (x + 1) % LearningLanguage.GRID_WIDTH;
+		int nx = x + 1;
+		if (Environment.CIRCULAR) {
+			nx = (x + 1) % LearningLanguage.GRID_WIDTH;
+		}
 		move(nx, y);
 	}
 	
 	public void moveSouth()
 	{
-		int ny = (y + 1) % LearningLanguage.GRID_HEIGHT;
+		int ny = y + 1;
+		if (Environment.CIRCULAR) {
+			ny = (y + 1) % LearningLanguage.GRID_HEIGHT;
+		}
 		move(x, ny);
 	}
 	
 	public void moveWest()
 	{
-		int nx = (x - 1 + LearningLanguage.GRID_WIDTH) % LearningLanguage.GRID_WIDTH;
+		int nx = x - 1;
+		if (Environment.CIRCULAR) {
+			nx = (x - 1 + LearningLanguage.GRID_WIDTH) % LearningLanguage.GRID_WIDTH;
+		}
 		move(nx, y);
 	}
 	
