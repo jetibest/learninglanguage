@@ -2,6 +2,14 @@ package languagelearning;
 
 public class LearningLanguage
 {
+	/*
+	 * TODO:
+	 * Make use of synchronized keyword
+	 * TODO:
+	 * Make GRID_SIZE dependent on the JFrame dimensions when resized (start out with default value)
+	 * And split up in GRIDCELL_WIDTH, GRIDCELL_HEIGHT instead of a squared size.
+	 */
+	
 	public static final LearningLanguage MAIN = new LearningLanguage();
 	public static final int GRID_WIDTH = 32;
 	public static final int GRID_HEIGHT = 20;
@@ -9,22 +17,31 @@ public class LearningLanguage
 	
 	private boolean isRunning;
 	private LLWindow win;
+	private Environment env;
 	
 	public LearningLanguage()
 	{
-		isRunning = true;
+		win = new LLWindow();
+		env = new Environment();
 	}
 	
 	public void init(String[] args)
 	{
-		win = new LLWindow();
-		
+		env.init();
+	}
+	
+	public Environment getEnvironment()
+	{
+		return env;
 	}
 	
 	public void start()
 	{
 		log(this.getClass().getName(), "Started!");
 		
+		isRunning = true;
+		
+		env.start();
 		win.start();
 	}
 	
@@ -32,6 +49,7 @@ public class LearningLanguage
 	{
 		isRunning = false;
 		win.stop();
+		env.stop();
 		
 		log(this.getClass().getName(), "Stopped!");
 	}

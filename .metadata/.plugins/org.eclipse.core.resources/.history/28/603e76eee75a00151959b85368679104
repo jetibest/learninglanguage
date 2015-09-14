@@ -1,0 +1,17 @@
+package languagelearning;
+
+public class Environment
+{
+	private List<GridObject> objects = new ArrayList<GridObject>();
+	private int[][] dustgrid; 
+	
+	public Environment()
+	{
+		
+	}
+	
+	public int[][] getDustGrid()
+	{
+		return dustgrid;
+	}
+}

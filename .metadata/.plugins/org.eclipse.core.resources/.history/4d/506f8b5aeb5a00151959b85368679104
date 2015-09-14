@@ -1,0 +1,16 @@
+package languagelearning;
+
+public class Agent
+{
+	// How do we implement:
+	// Direction-based vs Sensors and move in any direction
+	
+	// 0,1,2,3 -> NORTH, EAST, SOUTH, WEST
+	private int direction = 0;
+	private 
+	
+	public Agent()
+	{
+		
+	}
+}

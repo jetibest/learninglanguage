@@ -1,0 +1,11 @@
+package languagelearning;
+
+public class Environment
+{
+	private GridObject[][] grid;
+	
+	public Environment()
+	{
+		
+	}
+}

@@ -1,0 +1,20 @@
+package languagelearning;
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class Environment
+{
+	private List<GridObject> objects = new ArrayList<GridObject>();
+	private int[][] dustgrid; 
+	
+	public Environment()
+	{
+		
+	}
+	
+	public int[][] getDustGrid()
+	{
+		return dustgrid;
+	}
+}

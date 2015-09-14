@@ -1,0 +1,36 @@
+package languagelearning;
+
+public class Agent extends GridObject
+{
+	// How do we implement:
+	// Direction-based vs Sensors and move in any direction
+	
+	// 0,1,2,3 -> NORTH, EAST, SOUTH, WEST
+	private int direction = 0;
+		
+	public Agent(int x, int y)
+	{
+		super(x, y);
+	}
+	
+	public void moveForward()
+	{
+		// Try to change x,y in direction
+		if(direction == 0)
+		{
+			moveNorth();
+		}
+		else if(direction == 1)
+		{
+			moveEast();
+		}
+		else if(direction == 2)
+		{
+			moveSouth();
+		}
+		else if(direction == 3)
+		{
+			moveWest();
+		}
+	}
+}

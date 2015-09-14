@@ -1,0 +1,23 @@
+package languagelearning;
+
+public class GridObject
+{
+	private int x;
+	private int y;
+	
+	public GridObject()
+	{
+		
+	}
+	
+	public int getX()
+	{
+		return x;
+	}
+	
+	public int getY()
+	{
+		return y;
+	}
+	
+}

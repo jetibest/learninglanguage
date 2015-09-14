@@ -1,0 +1,12 @@
+package languagelearning;
+
+public class Agent
+{
+	private int direction = 0;
+	private 
+	
+	public Agent()
+	{
+		
+	}
+}

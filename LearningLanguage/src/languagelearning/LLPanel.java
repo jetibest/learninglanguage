@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -16,6 +17,7 @@ public class LLPanel extends JPanel implements Runnable
 	
 	private int gridWidth;
 	private int gridHeight;
+	private int gridSize;
 	private int panelWidth;
 	private int panelHeight;
 	private Dimension panelSize;
@@ -28,10 +30,11 @@ public class LLPanel extends JPanel implements Runnable
 	
 	private void init()
 	{
-		gridWidth = LearningLanguage.MAIN.GRID_WIDTH;
-		gridHeight = LearningLanguage.MAIN.GRID_HEIGHT;
-		panelWidth = gridWidth*LearningLanguage.MAIN.GRID_SIZE;
-		panelHeight = gridHeight*LearningLanguage.MAIN.GRID_SIZE;
+		gridSize = LearningLanguage.GRID_SIZE;
+		gridWidth = LearningLanguage.GRID_WIDTH;
+		gridHeight = LearningLanguage.GRID_HEIGHT;
+		panelWidth = gridWidth*LearningLanguage.GRID_SIZE;
+		panelHeight = gridHeight*LearningLanguage.GRID_SIZE;
 		panelSize = new Dimension(panelWidth, panelHeight);
 		setPreferredSize(panelSize);
 		
@@ -55,6 +58,31 @@ public class LLPanel extends JPanel implements Runnable
 		
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, panelWidth, panelHeight);
+		
+		if(LearningLanguage.MAIN.isRunning())
+		{
+			int[][] dustgrid = LearningLanguage.MAIN.getEnvironment().getDustGrid();
+			for(int i=0;i<gridHeight;i++)
+			{
+				int[] dustrow = dustgrid[i];
+				for(int j=0;j<gridWidth;j++)
+				{
+					int value = dustrow[j];
+					Color c = new Color((int) (255.0D*value/Environment.DUST_MAX), 0, 0);
+					g.setColor(c);
+					g.fillRect(j*gridSize, i*gridSize, gridSize, gridSize);
+				}
+			}
+			
+			List<GridObject> gridObjects = LearningLanguage.MAIN.getEnvironment().getGridObjects();
+			for(int i=0;i<gridObjects.size();i++)
+			{
+				GridObject go = gridObjects.get(i);
+				
+				g.setColor(Color.GREEN);
+				g.fillOval(go.getX()*gridSize, go.getY()*gridSize, gridSize, gridSize);
+			}
+		}
 	}
 	
 	@Override
@@ -68,7 +96,7 @@ public class LLPanel extends JPanel implements Runnable
 			
 			try
 			{
-				Thread.sleep(100);
+				Thread.sleep(50);
 			}
 			catch(Exception e)
 			{

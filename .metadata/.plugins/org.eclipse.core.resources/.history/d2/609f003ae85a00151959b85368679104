@@ -1,0 +1,28 @@
+package languagelearning;
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class Environment
+{
+	public static final int DUST_MAX = 100;
+	public static final int DUST_MIN = 0;
+	
+	private List<GridObject> objects = new ArrayList<GridObject>();
+	private int[][] dustgrid = new int[LearningLanguage.GRID_HEIGHT][LearningLanguage.GRID_WIDTH]; 
+	
+	public Environment()
+	{
+		init();
+	}
+	
+	private void init()
+	{
+		
+	}
+	
+	public int[][] getDustGrid()
+	{
+		return dustgrid;
+	}
+}
