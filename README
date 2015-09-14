@@ -1,0 +1,19 @@
+##### Installation instructions #####
+This project is made by Eclipse.
+But can also be imported with NetBeans.
+Clean/Build the project, and then Run.
+
+##### About #####
+This project simulates vacuum cleaners in a dusty environment.
+The goal is to let the agents create their own language.
+This language should emerge, and therefore not be implemented in code.
+The research goal is to look at the minimal conditions for a language to emerge.
+
+##### Current state #####
+Step 1. "Hello World": Complete!
+	Dumb vacuum cleaners run around in a dusty environment.
+	Dust increases over time.
+	Vacuum cleaners collect dust.
+	Vacuum cleaners randomly choose a direction and move forward in that direction for a while.
+
+Step 2. "Basic Communication": Not started.
