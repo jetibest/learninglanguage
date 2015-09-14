@@ -1,9 +1,0 @@
-package languagelearning;
-
-public class Agent
-{
-	public Agent()
-	{
-		
-	}
-}
