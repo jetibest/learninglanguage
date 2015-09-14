@@ -1,5 +1,6 @@
 package languagelearning;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 public class LLWindow extends JFrame
@@ -10,6 +11,7 @@ public class LLWindow extends JFrame
 	 */
 	
 	private LLPanel llPanel;
+	private LLControlPanel llControlPanel;
 	
 	public LLWindow()
 	{
@@ -36,14 +38,17 @@ public class LLWindow extends JFrame
 	
 	private void init()
 	{
-		llPanel = new LLPanel();
-		
+		setLayout(new BoxLayout(getContentPane(),BoxLayout.Y_AXIS));
 		setTitle("Learning Language");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
+		llPanel = new LLPanel();
 		getContentPane().add(llPanel);
 		
-		setVisible(true);
+		llControlPanel = new LLControlPanel();
+		getContentPane().add(llControlPanel);
+		
 		pack();
+		setVisible(true);
 	}
 }

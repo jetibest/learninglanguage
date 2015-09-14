@@ -12,11 +12,11 @@ public class Environment implements Runnable
 	public static final double DUST_START_PERCENTAGE = 0.6;
 	public static final double DUST_VARIANCE_PERCENTAGE = 0.1;
 	public static final int AGENTS_INIT_COUNT = 7;
-	public static final boolean CIRCULAR = false; 
 	
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid = new int[LearningLanguage.GRID_HEIGHT][LearningLanguage.GRID_WIDTH]; 
 	private Thread t;
+	private boolean bounded = true; // with walls
 	
 	public Environment()
 	{
@@ -145,4 +145,18 @@ public class Environment implements Runnable
 	{
 		return dustgrid;
 	}
+
+	public boolean isBoundled() {
+		return bounded;
+	}
+	
+	public boolean isBoundless() {
+		return !bounded;
+	}
+
+	public void setBounded(boolean bounded) {
+		this.bounded = bounded;
+	}
+	
+	
 }
