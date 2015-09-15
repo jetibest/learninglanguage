@@ -12,3 +12,6 @@
 hs_err_pid*
 
 .metadata
+/LearningLanguage/nbproject/private/
+/LearningLanguage/nbproject
+/LearningLanguage/build.xml
