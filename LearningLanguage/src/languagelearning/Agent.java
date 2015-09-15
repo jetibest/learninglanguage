@@ -8,7 +8,12 @@ public class Agent extends GridObject implements Runnable
 	// Direction-based vs Sensors and move in any direction
 	
 	// 0,1,2,3 -> NORTH, EAST, SOUTH, WEST
-	private int direction = 0;
+	public static final int DIRECTION_NORTH = 0;
+	public static final int DIRECTION_EAST = 1;
+	public static final int DIRECTION_SOUTH = 2;
+	public static final int DIRECTION_WEST = 3;
+	
+	private int direction = DIRECTION_NORTH;
 	private Thread t;
 	
 	public Agent(int x, int y)

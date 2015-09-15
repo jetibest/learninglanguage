@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -81,6 +82,25 @@ public class LLPanel extends JPanel implements Runnable
 				
 				g.setColor(Color.GREEN);
 				g.fillOval(go.getX()*gridSize, go.getY()*gridSize, gridSize, gridSize);
+				
+				if (go instanceof Agent) {
+					Agent agent = (Agent)go;
+					
+					int halfGridSize = (int)(gridSize*0.5);
+					int centerX = go.getX()*gridSize + halfGridSize;
+					int centerY = go.getY()*gridSize + halfGridSize;
+					int directionX = centerX;
+					int directionY = centerY;
+					switch (agent.getDirection()) {
+					case Agent.DIRECTION_NORTH: directionY = directionY - halfGridSize; break;
+					case Agent.DIRECTION_EAST: directionX = directionX + halfGridSize; break;
+					case Agent.DIRECTION_SOUTH: directionY = directionY + halfGridSize; break;
+					case Agent.DIRECTION_WEST: directionX = directionX - halfGridSize; break;
+					}
+					
+					g.setColor(Color.BLUE);
+					g.drawLine(centerX, centerY, directionX, directionY);
+				}
 			}
 		}
 	}
