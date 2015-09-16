@@ -18,8 +18,10 @@ public class LLControlPanel extends JPanel
 	private JCheckBox boundedCheckBox;
         private JSlider simSpeedSlider;
         private JLabel simTimer;
-        private NumberFormat nf = new DecimalFormat("#,###,###,##0");
-	
+        private JLabel totalDustIndicator;
+        private NumberFormat ticksNF = new DecimalFormat("#,###,###,##0");
+	private NumberFormat dustNF = new DecimalFormat("0.#");
+        
 	public LLControlPanel() {
 		super(new FlowLayout(FlowLayout.LEFT));
 		
@@ -64,6 +66,11 @@ public class LLControlPanel extends JPanel
                 simTimer.setToolTipText("Simulation time in ticks");
                 
                 add(simTimer);
+                
+                totalDustIndicator = new JLabel("?%");
+                totalDustIndicator.setToolTipText("Total amount of dust in the environment in percentage.");
+                
+                add(totalDustIndicator);
 	}
         
         public void start()
@@ -77,6 +84,11 @@ public class LLControlPanel extends JPanel
         
         public void updateTime(long ticks)
         {
-            simTimer.setText(nf.format(ticks) + " ticks");
+            simTimer.setText(ticksNF.format(ticks) + " ticks");
+        }
+        
+        public void updateTotalDustPercentage(double dustPercentage)
+        {
+            totalDustIndicator.setText(dustNF.format(dustPercentage) + "%");
         }
 }

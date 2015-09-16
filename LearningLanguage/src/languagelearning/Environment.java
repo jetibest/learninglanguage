@@ -87,17 +87,22 @@ public class Environment implements Runnable
 	{
 		LearningLanguage.MAIN.log(this.getClass().getName(), "Started!");
 		
+                LLControlPanel llcp = LearningLanguage.MAIN.getWindow().getControlPanel();
+                int gridCellsCount = LearningLanguage.GRID_HEIGHT*LearningLanguage.GRID_WIDTH;
 		long start;
 		while(LearningLanguage.MAIN.isRunning())
 		{
 			start = System.currentTimeMillis();
 			
+                        long totalDust = 0;
 			for(int i=0;i<LearningLanguage.GRID_HEIGHT;i++)
 			{
 				int[] row = dustgrid[i];
 				for(int j=0;j<LearningLanguage.GRID_WIDTH;j++)
 				{
-					row[j] = Math.min(row[j] + DUST_INCREMENT_VALUE, DUST_MAX);
+                                        int val = Math.min(row[j] + DUST_INCREMENT_VALUE, DUST_MAX);
+					row[j] = val;
+                                        totalDust += val;
 				}
 			}
 			
@@ -118,7 +123,8 @@ public class Environment implements Runnable
                             }
                         }
                         
-                        LearningLanguage.MAIN.getWindow().getControlPanel().updateTime(ticks);
+                        llcp.updateTotalDustPercentage(100.0D*(totalDust - DUST_MIN*gridCellsCount)/((DUST_MAX - DUST_MIN)*gridCellsCount));
+                        llcp.updateTime(ticks);
                         
                         ticks++;
                         
