@@ -68,7 +68,7 @@ public class Agent extends GridObject implements Runnable
 			
 			try
 			{
-				Thread.sleep(Math.max(0, AGENT_INTERVAL - (System.currentTimeMillis() - start)));
+				Thread.sleep(Math.max(0, (long) (LearningLanguage.MAIN.getEnvironment().getSimulationSpeedMultiplier()*AGENT_INTERVAL - (System.currentTimeMillis() - start))));
 			}
 			catch(Exception e)
 			{

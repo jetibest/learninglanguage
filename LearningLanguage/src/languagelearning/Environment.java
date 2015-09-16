@@ -5,18 +5,22 @@ import java.util.ArrayList;
 
 public class Environment implements Runnable
 {
-	public static final int DUST_MAX = 100;
+	public static final int DUST_MAX = 1000;
 	public static final int DUST_MIN = 0;
-	public static final int DUST_INCREMENT_VALUE = 1;
+	public static final int DUST_INCREMENT_VALUE = 5;
 	public static final long DUST_INCREMENT_INTERVAL = 1000;
 	public static final double DUST_START_PERCENTAGE = 0.6;
 	public static final double DUST_VARIANCE_PERCENTAGE = 0.1;
 	public static final int AGENTS_INIT_COUNT = 7;
+        public static final int SIM_SPEED_MIN = 0;
+        public static final int SIM_SPEED_MAX = 1000;
+        public static final int SIM_SPEED_DEFAULT = 500;
 	
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid = new int[LearningLanguage.GRID_HEIGHT][LearningLanguage.GRID_WIDTH]; 
 	private Thread t;
 	private boolean bounded = true; // with walls
+        private int simulationSpeed = SIM_SPEED_DEFAULT;
 	
 	public Environment()
 	{
@@ -97,7 +101,7 @@ public class Environment implements Runnable
 			
 			try
 			{
-				Thread.sleep(Math.max(0, DUST_INCREMENT_INTERVAL - (System.currentTimeMillis() - start)));
+				Thread.sleep(Math.max(0, (long) (getSimulationSpeedMultiplier()*DUST_INCREMENT_INTERVAL - (System.currentTimeMillis() - start))));
 			}
 			catch(Exception e)
 			{
@@ -158,5 +162,14 @@ public class Environment implements Runnable
 		this.bounded = bounded;
 	}
 	
+        public double getSimulationSpeedMultiplier()
+        {
+            return 1 - (simulationSpeed*1.0D - SIM_SPEED_MIN)/(SIM_SPEED_MAX - SIM_SPEED_MIN);
+        }
+        
+        public void setSimulationSpeed(int speed)
+        {
+            this.simulationSpeed = speed;
+        }
 	
 }

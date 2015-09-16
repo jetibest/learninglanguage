@@ -2,7 +2,7 @@ package languagelearning;
 
 public class VacuumCleaner extends Agent
 {
-	public static final int DUST_CLEAN_VALUE = 30;
+	public static final int DUST_CLEAN_VALUE = 500;
 	private Environment env;
 	
 	public VacuumCleaner(int x, int y)
@@ -49,7 +49,7 @@ public class VacuumCleaner extends Agent
 			
 			try
 			{
-				Thread.sleep(Math.max(0, AGENT_INTERVAL - (System.currentTimeMillis() - start)));
+				Thread.sleep(Math.max(0, (long) (LearningLanguage.MAIN.getEnvironment().getSimulationSpeedMultiplier()*AGENT_INTERVAL - (System.currentTimeMillis() - start))));
 			}
 			catch(Exception e)
 			{
