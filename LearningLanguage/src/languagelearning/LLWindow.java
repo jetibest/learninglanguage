@@ -17,15 +17,22 @@ public class LLWindow extends JFrame
 	{
 		init();
 	}
+        
+        public LLControlPanel getControlPanel()
+        {
+            return llControlPanel;
+        }
 	
 	public void stop()
 	{
 		llPanel.stop();
+                llControlPanel.stop();
 	}
 	
 	public void start()
 	{
 		llPanel.start();
+                llControlPanel.start();
 	}
 	
 	@Override

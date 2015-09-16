@@ -12,6 +12,23 @@ public class GridObject
 		this.y = y;
 		env = LearningLanguage.MAIN.getEnvironment();
 	}
+        
+        public void start()
+        {
+            // Maybe some pre-run initialization here
+            // As opposed to the init function, here is it guaranteed that all objects etc. are initialized.
+            // So this function may utilize certain functions that cannot yet be done in init()
+        }
+        
+        public void stop()
+        {
+            
+        }
+        
+        public void run()
+        {
+            // Do an update on the object
+        }
 	
 	public void move(int x, int y)
 	{

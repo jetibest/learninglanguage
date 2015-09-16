@@ -29,6 +29,11 @@ public class LearningLanguage
 	{
 		env.init();
 	}
+        
+        public LLWindow getWindow()
+        {
+            return win;
+        }
 	
 	public Environment getEnvironment()
 	{

@@ -2,13 +2,14 @@ package languagelearning;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Environment implements Runnable
 {
 	public static final int DUST_MAX = 1000;
 	public static final int DUST_MIN = 0;
 	public static final int DUST_INCREMENT_VALUE = 5;
-	public static final long DUST_INCREMENT_INTERVAL = 1000;
+	public static final long SIMULATION_INTERVAL = 1000; // is affected by simulationSpeed, see `getSimulationSpeedMultiplier()`
 	public static final double DUST_START_PERCENTAGE = 0.6;
 	public static final double DUST_VARIANCE_PERCENTAGE = 0.1;
 	public static final int AGENTS_INIT_COUNT = 7;
@@ -21,6 +22,7 @@ public class Environment implements Runnable
 	private Thread t;
 	private boolean bounded = true; // with walls
         private int simulationSpeed = SIM_SPEED_DEFAULT;
+        private long ticks = 0;
 	
 	public Environment()
 	{
@@ -99,9 +101,30 @@ public class Environment implements Runnable
 				}
 			}
 			
+                        // Call `run` for all objects in a random order
+                        {
+                            int n = objects.size();
+                            List<Integer> visited = new ArrayList<Integer>();
+                            for(int i=0;i<n;i++)
+                            {
+                                visited.add(i);
+                            }
+                            int i = 0;
+                            while(visited.size() > 0)
+                            {
+                                i = (i + (int) (n*Math.random()))%n;
+                                objects.get(visited.remove(i)).run();
+                                n--;
+                            }
+                        }
+                        
+                        LearningLanguage.MAIN.getWindow().getControlPanel().updateTime(ticks);
+                        
+                        ticks++;
+                        
 			try
 			{
-				Thread.sleep(Math.max(0, (long) (getSimulationSpeedMultiplier()*DUST_INCREMENT_INTERVAL - (System.currentTimeMillis() - start))));
+				Thread.sleep(Math.max(0, (long) (getSimulationSpeedMultiplier()*SIMULATION_INTERVAL - (System.currentTimeMillis() - start))));
 			}
 			catch(Exception e)
 			{
@@ -169,6 +192,9 @@ public class Environment implements Runnable
         
         public void setSimulationSpeed(int speed)
         {
+            // Beware, if speed is set too high, then multiplier is zero.
+            // When Thread.sleep is 0, this means that some threads may receive an unfair advantage. This cannot be guaranteed then.
+            // Maybe we need to use ticks instead.
             this.simulationSpeed = speed;
         }
 	

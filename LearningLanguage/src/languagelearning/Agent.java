@@ -1,9 +1,7 @@
 package languagelearning;
 
-public class Agent extends GridObject implements Runnable
+public class Agent extends GridObject
 {
-	public static final long AGENT_INTERVAL = 200;
-	
 	// How do we implement:
 	// Direction-based vs Sensors and move in any direction
 	
@@ -14,7 +12,6 @@ public class Agent extends GridObject implements Runnable
 	public static final int DIRECTION_WEST = 3;
 	
 	private int direction = DIRECTION_NORTH;
-	private Thread t;
 	
 	public Agent(int x, int y)
 	{
@@ -25,57 +22,28 @@ public class Agent extends GridObject implements Runnable
 	
 	private void init()
 	{
-		t = new Thread(this);
 	}
 	
-	public void start()
-	{
-		t.start();
-	}
-	
-	public void stop()
-	{
-		// No interrupt required here
-	}
-	
-	@Override
+        @Override
 	public void run()
 	{
-		LearningLanguage.MAIN.log(this.getClass().getName(), "Started!");
-		
-		long start;
-		while(LearningLanguage.MAIN.isRunning())
-		{
-			start = System.currentTimeMillis();
-			
-			// Move around, and sometimes randomly change direction
-			
-			if(Math.random() < 0.1)
-			{
-				if(Math.random() < 0.5)
-				{
-					turnLeft();
-				}
-				else
-				{
-					turnRight();
-				}
-			}
-			else
-			{
-				moveForward();
-			}
-			
-			try
-			{
-				Thread.sleep(Math.max(0, (long) (LearningLanguage.MAIN.getEnvironment().getSimulationSpeedMultiplier()*AGENT_INTERVAL - (System.currentTimeMillis() - start))));
-			}
-			catch(Exception e)
-			{
-			}
-		}
-		
-		LearningLanguage.MAIN.log(this.getClass().getName(), "Stopped!");
+                // Move around, and sometimes randomly change direction
+
+                if(Math.random() < 0.1)
+                {
+                        if(Math.random() < 0.5)
+                        {
+                                turnLeft();
+                        }
+                        else
+                        {
+                                turnRight();
+                        }
+                }
+                else
+                {
+                        moveForward();
+                }
 	}
 	
 	public void turnLeft()

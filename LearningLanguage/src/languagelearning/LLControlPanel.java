@@ -2,9 +2,12 @@ package languagelearning;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -14,6 +17,8 @@ public class LLControlPanel extends JPanel
 {
 	private JCheckBox boundedCheckBox;
         private JSlider simSpeedSlider;
+        private JLabel simTimer;
+        private NumberFormat nf = new DecimalFormat("#,###,###,##0");
 	
 	public LLControlPanel() {
 		super(new FlowLayout(FlowLayout.LEFT));
@@ -55,5 +60,23 @@ public class LLControlPanel extends JPanel
                 
                 add(simSpeedSlider);
                 
+                simTimer = new JLabel("0 ticks");
+                simTimer.setToolTipText("Simulation time in ticks");
+                
+                add(simTimer);
 	}
+        
+        public void start()
+        {
+        }
+        
+        public void stop()
+        {
+            // Do nothing
+        }
+        
+        public void updateTime(long ticks)
+        {
+            simTimer.setText(nf.format(ticks) + " ticks");
+        }
 }
