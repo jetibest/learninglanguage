@@ -3,7 +3,7 @@ package languagelearning;
 public class VacuumCleaner extends Agent
 {
 	public static final int DUST_CLEAN_VALUE = 500;
-	private Environment env;
+	public Environment env;
 	
 	public VacuumCleaner(int x, int y)
 	{
@@ -12,7 +12,7 @@ public class VacuumCleaner extends Agent
 		env = LearningLanguage.MAIN.getEnvironment();
 	}
 	
-	private void collectDust()
+	public void collectDust()
 	{
 		env.setDustValue(getX(), getY(), Math.max(Environment.DUST_MIN, env.getDustValue(getX(), getY()) - DUST_CLEAN_VALUE));
 	}

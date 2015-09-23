@@ -44,7 +44,7 @@ public class Environment implements Runnable
 		{
 			int initX = (int) (Math.random()*LearningLanguage.GRID_WIDTH);
 			int initY = (int) (Math.random()*LearningLanguage.GRID_HEIGHT);
-			objects.add(new VacuumCleaner(initX, initY));
+			objects.add(new SmartVacuumCleaner(initX, initY));
 		}
 		
 		t = new Thread(this);
@@ -166,9 +166,13 @@ public class Environment implements Runnable
 	
 	public int getDustValue(int x, int y)
 	{
+            if(x>=0 && x < LearningLanguage.GRID_WIDTH && y>=0 && y < LearningLanguage.GRID_HEIGHT)
+            {
 		return dustgrid[y][x];
-	}
-	
+            }
+            return 0;
+        }
+        
 	public List<GridObject> getGridObjects()
 	{
 		return objects;
