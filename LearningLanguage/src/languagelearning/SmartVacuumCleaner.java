@@ -20,9 +20,6 @@ public class SmartVacuumCleaner extends VacuumCleaner
             int DustSouth = env.getDustValue(getX(), getY()+1);
             int DustWest = env.getDustValue(getX()-1, getY()); 
             
-                System.out.print("DustNorth = " + DustNorth + " DustEast = " + DustEast + " DustSouth = " + DustSouth + "DustWest = " + DustWest + "\n\n");
-            
-            
                 // Move to direction with most dust
                 collectDust();             
                         
