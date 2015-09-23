@@ -5,13 +5,7 @@ public class Agent extends GridObject
 	// How do we implement:
 	// Direction-based vs Sensors and move in any direction
 	
-	// 0,1,2,3 -> NORTH, EAST, SOUTH, WEST
-	public static final int DIRECTION_NORTH = 0;
-	public static final int DIRECTION_EAST = 1;
-	public static final int DIRECTION_SOUTH = 2;
-	public static final int DIRECTION_WEST = 3;
-	
-	private int direction = DIRECTION_NORTH;
+	private Direction direction = Direction.NORTH;
 	
 	public Agent(int x, int y)
 	{
@@ -48,15 +42,15 @@ public class Agent extends GridObject
 	
 	public void turnLeft()
 	{
-		direction = (direction + 3)%4;
+		direction = direction.nextCounterClockWise();
 	}
 	
 	public void turnRight()
 	{
-		direction = (direction + 1)%4;
+		direction = direction.nextClockWise();
 	}
 	
-	public int getDirection()
+	public Direction getDirection()
 	{
 		return direction;
 	}
@@ -64,21 +58,32 @@ public class Agent extends GridObject
 	public void moveForward()
 	{
 		// Try to change x,y in direction
-		if(direction == 0)
+		if(direction == Direction.NORTH)
 		{
 			moveNorth();
 		}
-		else if(direction == 1)
+		else if(direction == Direction.EAST)
 		{
 			moveEast();
 		}
-		else if(direction == 2)
+		else if(direction == Direction.SOUTH)
 		{
 			moveSouth();
 		}
-		else if(direction == 3)
+		else if(direction == Direction.WEST)
 		{
 			moveWest();
+		}
+	}
+	
+	@Override
+	public void doAction(Action action) {
+		if (action == AgentAction.TURN_LEFT) {
+			turnLeft();
+		} else if (action == AgentAction.TURN_RIGHT) {
+			turnRight();
+		} else if (action == AgentAction.MOVE_FORWARD) {
+			moveForward();
 		}
 	}
 }

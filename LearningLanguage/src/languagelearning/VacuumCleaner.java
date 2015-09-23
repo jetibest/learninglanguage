@@ -41,4 +41,12 @@ public class VacuumCleaner extends Agent
                 }
 			
 	}
+        
+	@Override
+	public void doAction(Action action) {
+		super.doAction(action);
+		if (action == VacuumCleanerAction.COLLECT_DUST) {
+			collectDust();
+		}
+	}
 }

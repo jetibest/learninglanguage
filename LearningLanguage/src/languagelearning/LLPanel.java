@@ -92,10 +92,10 @@ public class LLPanel extends JPanel implements Runnable
 					int directionX = centerX;
 					int directionY = centerY;
 					switch (agent.getDirection()) {
-					case Agent.DIRECTION_NORTH: directionY = directionY - halfGridSize; break;
-					case Agent.DIRECTION_EAST: directionX = directionX + halfGridSize; break;
-					case Agent.DIRECTION_SOUTH: directionY = directionY + halfGridSize; break;
-					case Agent.DIRECTION_WEST: directionX = directionX - halfGridSize; break;
+					case NORTH: directionY = directionY - halfGridSize; break;
+					case EAST: directionX = directionX + halfGridSize; break;
+					case SOUTH: directionY = directionY + halfGridSize; break;
+					case WEST: directionX = directionX - halfGridSize; break;
 					}
 					
 					g.setColor(Color.BLUE);
