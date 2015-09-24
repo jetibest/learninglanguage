@@ -1,5 +1,6 @@
 package languagelearning.agents;
 
+import java.util.List;
 import java.util.Random;
 
 import languagelearning.actions.Action;
@@ -13,6 +14,8 @@ import languagelearning.states.State;
 public class RL1VacuumCleaner extends VacuumCleaner {
 	private IncrementalStateActionPolicy policy;
 	private Random rnd;
+	private State prevState;
+	private Action prevAction;
 	
 	public RL1VacuumCleaner(int x, int y) {
 		super(x, y);
@@ -62,6 +65,12 @@ public class RL1VacuumCleaner extends VacuumCleaner {
 		int reward = doAction(action);
 		System.out.println("REWARD = " + reward);
 		policy.addReward(state, action, reward);
+		if (prevState != null && prevAction != null) {
+			policy.addReward(prevState, prevAction, (int)(reward * 0.5));
+		}
+ 		
+		prevState = state;
+		prevAction = action;
 	}
 	
 	private Action[] getAvailableActions() {
