@@ -99,4 +99,8 @@ public abstract class GridObject {
 	public int getY() {
 		return y;
 	}
+	
+	public Environment getEnvironment() {
+		return env;
+	}
 }

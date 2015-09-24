@@ -8,20 +8,17 @@ import languagelearning.states.LookAheadState;
 public class VacuumCleaner extends Agent
 {
 	public static final int DUST_CLEAN_VALUE = 500;
-	public Environment env;
 	
 	public VacuumCleaner(int x, int y)
 	{
 		super(x, y);
-		
-		env = LearningLanguage.MAIN.getEnvironment();
 	}
 	
 	public int collectDust()
 	{
-		int dustBefore = env.getDustValue(getX(), getY());
-		int dustAfter = Math.max(Environment.DUST_MIN, env.getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
-		env.setDustValue(getX(), getY(), dustAfter);
+		int dustBefore = getEnvironment().getDustValue(getX(), getY());
+		int dustAfter = Math.max(Environment.DUST_MIN, getEnvironment().getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
+		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 		
 		int reward = dustBefore - dustAfter;
 		return reward;
@@ -66,8 +63,8 @@ public class VacuumCleaner extends Agent
 		int xAhead = getNewXInDirection(getDirection());
 		int yAhead = getNewYInDirection(getDirection());
 
-		boolean dustAhead = env.getDustValue(xAhead, yAhead) > 0;
-		boolean obstacleAhead = !env.canMove(xAhead, yAhead);
+		boolean dustAhead = getEnvironment().getDustValue(xAhead, yAhead) > 0;
+		boolean obstacleAhead = !getEnvironment().canMove(xAhead, yAhead);
 		LookAheadState state = new LookAheadState(dustAhead,obstacleAhead);
 		
 		return state;

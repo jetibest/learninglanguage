@@ -15,10 +15,10 @@ public class SmartVacuumCleaner extends VacuumCleaner
         @Override
 	public void run()
 	{	
-            int DustNorth = env.getDustValue(getX(), getY()-1); 
-            int DustEast = env.getDustValue(getX()+1, getY());
-            int DustSouth = env.getDustValue(getX(), getY()+1);
-            int DustWest = env.getDustValue(getX()-1, getY()); 
+            int DustNorth = getEnvironment().getDustValue(getX(), getY()-1); 
+            int DustEast = getEnvironment().getDustValue(getX()+1, getY());
+            int DustSouth = getEnvironment().getDustValue(getX(), getY()+1);
+            int DustWest = getEnvironment().getDustValue(getX()-1, getY()); 
             
                 // Move to direction with most dust
                 collectDust();             
