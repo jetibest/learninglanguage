@@ -35,10 +35,31 @@ public class SmartVacuumCleaner extends VacuumCleaner
                 {
                    moveWest();
                 }
-                else
+                else if(DustSouth > 0)
                 {
                    moveSouth();
                 }
+                else
+                {
+                    int randomdirection = (int)(Math.random()*4);
+                    if (randomdirection == 0)
+                    {
+                        moveNorth();
+                    }
+                    else if(randomdirection == 1)
+                    {
+                        moveEast();
+                    }
+                    else if(randomdirection == 2)
+                    {
+                        moveSouth();
+                    }
+                    else
+                    {
+                        moveWest();
+                    }
+                }
+                
 			
 	}   
 }
