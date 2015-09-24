@@ -106,31 +106,11 @@ public class RunnableEnvironment extends Environment implements Runnable {
 		while (LearningLanguage.MAIN.isRunning()) {
 			start = System.currentTimeMillis();
 
-			long totalDust = 0;
-			for (int i = 0; i < getGridHeight(); i++) {
-				int[] row = getDustGrid()[i];
-				for (int j = 0; j < getGridWidth(); j++) {
-					int val = Math.min(row[j] + DUST_INCREMENT_VALUE, DUST_MAX);
-					row[j] = val;
-					totalDust += val;
-				}
-			}
-
-			// Call `run` for all objects in a random order
-			{
-				int n = getObjects().size();
-				List<Integer> visited = new ArrayList<Integer>();
-				for (int i = 0; i < n; i++) {
-					visited.add(i);
-				}
-				int i = 0;
-				while (visited.size() > 0) {
-					i = (i + (int) (n * Math.random())) % n;
-					getObjects().get(visited.remove(i)).run();
-					n--;
-				}
-			}
-
+			updateDust();
+			
+			updateObjects();
+			
+			long totalDust = getTotalDust();
 			statusUpdater.updateTotalDustPercentage(100.0D
 					* (totalDust - DUST_MIN * gridCellsCount)
 					/ ((DUST_MAX - DUST_MIN) * gridCellsCount));
@@ -149,7 +129,34 @@ public class RunnableEnvironment extends Environment implements Runnable {
 
 		logger.log(this.getClass().getName(), "Stopped!");
 	}
+	
+	public void updateDust() {
+		for (int i = 0; i < getGridHeight(); i++) {
+			int[] row = getDustGrid()[i];
+			for (int j = 0; j < getGridWidth(); j++) {
+				int val = Math.min(row[j] + DUST_INCREMENT_VALUE, DUST_MAX);
+				row[j] = val;
+			}
+		}
+	}
 
+	public void updateObjects() {
+		// Call `run` for all objects in a random order
+		{
+			int n = getObjects().size();
+			List<Integer> visited = new ArrayList<Integer>();
+			for (int i = 0; i < n; i++) {
+				visited.add(i);
+			}
+			int i = 0;
+			while (visited.size() > 0) {
+				i = (i + (int) (n * Math.random())) % n;
+				getObjects().get(visited.remove(i)).run();
+				n--;
+			}
+		}
+	}
+	
 	public double getSimulationSpeedMultiplier() {
 		return 1 - (simulationSpeed * 1.0D - SIM_SPEED_MIN)
 				/ (SIM_SPEED_MAX - SIM_SPEED_MIN);

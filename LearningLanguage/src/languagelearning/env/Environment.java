@@ -88,4 +88,14 @@ public class Environment {
 	public List<GridObject> getObjects() {
 		return this.objects;
 	}
+	
+	public long getTotalDust() {
+		long totalDust = 0;
+		for (int i = 0; i < gridHeight; i++) {
+			for (int j = 0; j < gridWidth; j++) {
+				totalDust += dustgrid[i][j];
+			}
+		}
+		return totalDust;
+	}
 }
