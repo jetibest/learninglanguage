@@ -8,6 +8,8 @@ public class LookAheadState extends State {
 	private boolean dustAhead;
 	
 	public LookAheadState(boolean obstacleAhead,boolean dustAhead) {
+		this.obstacleAhead = obstacleAhead;
+		this.dustAhead = dustAhead;
 	}
 
 	public boolean isObstacleAhead() {

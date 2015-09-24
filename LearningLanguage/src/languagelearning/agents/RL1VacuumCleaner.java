@@ -22,9 +22,15 @@ public class RL1VacuumCleaner extends VacuumCleaner {
 
 	@Override
 	public void run() {
+		System.out.println("======================================");
+		//System.out.println("POLICY:");
+		//System.out.println(policy);
+
 		double explorationRate = 0.1;
 		
 		State state = getLookAheadState();
+		System.out.println("CURRENT STATE = " + state);
+
 		Action[] possibleActions = getAvailableActions();
 
 		Action action = null;
@@ -33,7 +39,7 @@ public class RL1VacuumCleaner extends VacuumCleaner {
 			action = possibleActions[rnd.nextInt(possibleActions.length)];
 		} else {
 			// Exploit
-			double maxValue = Double.MIN_VALUE;
+			double maxValue = -999;
 			for (Action possibleAction: possibleActions) {
 				double value = policy.getValue(state, possibleAction);
 				if (value > maxValue) {
@@ -43,7 +49,9 @@ public class RL1VacuumCleaner extends VacuumCleaner {
 			}
 		}
 		
+		System.out.println("CHOOSEN ACTION = " + action);
 		int reward = doAction(action);
+		System.out.println("REWARD = " + reward);
 		policy.addReward(state, action, reward);
 	}
 	

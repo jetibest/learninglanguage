@@ -1,6 +1,8 @@
 package languagelearning.policies;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import languagelearning.actions.Action;
 import languagelearning.states.State;
@@ -41,5 +43,25 @@ public class IncrementalStateActionPolicy {
 		}
 		rewardCountAndAmount[0]++;
 		rewardCountAndAmount[1] = rewardCountAndAmount[1] + reward;
+	}
+	
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		
+		Set<State> states = values.keySet();
+		Iterator<State> statesIt = states.iterator();
+		while (statesIt.hasNext()) {
+			State state = statesIt.next();
+			Set<Action> actions = values.get(state).keySet();
+			Iterator<Action> actionsIt = actions.iterator();
+			while (actionsIt.hasNext()) {
+				Action action = actionsIt.next();
+				
+				double value = getValue(state,action);
+				buffer.append("STATE = " + state + " ACTION = " + action + " VALUE = " + value + "\n");
+			}
+		}
+		
+		return buffer.toString();
 	}
 }

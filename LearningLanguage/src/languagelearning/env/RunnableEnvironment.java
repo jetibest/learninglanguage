@@ -13,7 +13,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 															// `getSimulationSpeedMultiplier()`
 	public static final double DUST_START_PERCENTAGE = 0.6;
 	public static final double DUST_VARIANCE_PERCENTAGE = 0.1;
-	public static final int AGENTS_INIT_COUNT = 7;
+	public static final int AGENTS_INIT_COUNT = 1;
 	public static final int SIM_SPEED_MIN = 0;
 	public static final int SIM_SPEED_MAX = 1000;
 	public static final int SIM_SPEED_DEFAULT = 500;
