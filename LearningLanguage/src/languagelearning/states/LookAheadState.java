@@ -17,4 +17,23 @@ public class LookAheadState extends State {
 	public boolean isDustAhead() {
 		return dustAhead;
 	}
+	
+	@Override
+	public String toString() {
+		return "obstacleAhead="+obstacleAhead + " dustAhead="+dustAhead;
+	}
+	
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof LookAheadState) {
+			LookAheadState other = (LookAheadState)o;
+			return other.isDustAhead() == dustAhead && other.isObstacleAhead() == obstacleAhead;
+		}
+		return false;
+	}
 }
