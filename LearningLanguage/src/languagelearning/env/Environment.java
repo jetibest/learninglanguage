@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import languagelearning.LearningLanguage;
+import languagelearning.Logger;
+import languagelearning.StatusUpdater;
 import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
 import languagelearning.agents.SmartVacuumCleaner;
@@ -20,12 +22,91 @@ public class Environment {
 	private boolean bounded = true; // with walls
 	private int gridHeight;
 	private int gridWidth;
+	private long ticks = 0;
+	private Logger logger;
+	private StatusUpdater statusUpdater;
+
 
 	public Environment(int gridHeight, int gridWidth) {
 		this.gridHeight = gridHeight;
 		this.gridWidth = gridWidth;
 		
 		this.dustgrid = new int[gridHeight][gridWidth];
+	}
+	
+	public void init() {
+		initDust();
+		initAgents();
+	}
+
+	public void initDust() {
+		// To be implemented in subclasses
+	}
+	
+	public void initAgents() {
+		// To be implemented in subclasses
+	}
+	
+	public void start() {
+		for (int i = 0; i < getObjects().size(); i++) {
+			GridObject go = getObjects().get(i);
+
+			// Check if we need to start gridobject
+			if (go instanceof Agent) {
+				((Agent) go).start();
+			}
+		}
+	}
+
+	public void stop() {
+		for (int i = 0; i < getObjects().size(); i++) {
+			GridObject go = getObjects().get(i);
+
+			// Check if we need to start gridobject
+			if (go instanceof Agent) {
+				((Agent) go).stop();
+			}
+		}
+
+		// No interrupt required here
+	}
+	
+	public void tick() {
+		updateDust();
+		
+		updateObjects();
+		
+		updateStatus();
+		
+		ticks++;
+	}
+	
+	public void updateDust() {
+		// To be implemented in subclasses
+	}
+	
+	public void updateObjects() {
+		// To be implemented in subclasses
+	}
+	
+	public void updateStatus() {
+		// To be implemented in subclasses
+	}
+	
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
+	
+	public Logger getLogger() {
+		return this.logger;
+	}
+	
+	public void setStatusUpdater(StatusUpdater statusUpdater) {
+		this.statusUpdater = statusUpdater;
+	}
+	
+	public StatusUpdater getStatusUpdater() {
+		return this.statusUpdater;
 	}
 
 	public boolean canMove(int x, int y) {
@@ -65,7 +146,7 @@ public class Environment {
 		return dustgrid;
 	}
 
-	public boolean isBoundled() {
+	public boolean isBounded() {
 		return bounded;
 	}
 
@@ -97,5 +178,9 @@ public class Environment {
 			}
 		}
 		return totalDust;
+	}
+	
+	public long getTicks() {
+		return ticks;
 	}
 }

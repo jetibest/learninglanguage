@@ -25,29 +25,18 @@ public class RunnableEnvironment extends Environment implements Runnable {
 
 	private Thread t;
 	private int simulationSpeed = SIM_SPEED_DEFAULT;
-	private long ticks = 0;
-	private Logger logger;
-	private StatusUpdater statusUpdater;
 
 	public RunnableEnvironment(int getGridHeight, int getGridWidth) {
 		super(getGridHeight, getGridWidth);
 	}
 	
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-	
-	public void setStatusUpdater(StatusUpdater statusUpdater) {
-		this.statusUpdater = statusUpdater;
-	}
-
 	public void init() {
-		initDust();
-		initAgents();
+		super.init();
 
 		t = new Thread(this);
 	}
 	
+	@Override
 	public void initDust() {
 		for (int i = 0; i < getGridHeight(); i++) {
 			int[] row = new int[getGridWidth()];
@@ -61,6 +50,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 		}
 	}
 	
+	@Override
 	public void initAgents() {
 		for (int i = 0; i < AGENTS_INIT_COUNT; i++) {
 			int initX = (int) (Math.random() * getGridWidth());
@@ -70,35 +60,16 @@ public class RunnableEnvironment extends Environment implements Runnable {
 		}
 	}
 
+	@Override
 	public void start() {
 		t.start();
-
-		for (int i = 0; i < getObjects().size(); i++) {
-			GridObject go = getObjects().get(i);
-
-			// Check if we need to start gridobject
-			if (go instanceof Agent) {
-				((Agent) go).start();
-			}
-		}
-	}
-
-	public void stop() {
-		for (int i = 0; i < getObjects().size(); i++) {
-			GridObject go = getObjects().get(i);
-
-			// Check if we need to start gridobject
-			if (go instanceof Agent) {
-				((Agent) go).stop();
-			}
-		}
-
-		// No interrupt required here
+		
+		super.start();
 	}
 
 	@Override
 	public void run() {
-		logger.log(this.getClass().getName(), "Started!");
+		getLogger().log(this.getClass().getName(), "Started!");
 
 		long start;
 		while (LearningLanguage.MAIN.isRunning()) {
@@ -115,19 +86,10 @@ public class RunnableEnvironment extends Environment implements Runnable {
 			}
 		}
 
-		logger.log(this.getClass().getName(), "Stopped!");
+		getLogger().log(this.getClass().getName(), "Stopped!");
 	}
 	
-	public void tick() {
-		updateDust();
-		
-		updateObjects();
-		
-		updateStatus();
-		
-		ticks++;
-	}
-	
+	@Override
 	public void updateDust() {
 		for (int i = 0; i < getGridHeight(); i++) {
 			int[] row = getDustGrid()[i];
@@ -138,6 +100,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 		}
 	}
 
+	@Override
 	public void updateObjects() {
 		// Call `run` for all objects in a random order
 		{
@@ -155,14 +118,15 @@ public class RunnableEnvironment extends Environment implements Runnable {
 		}
 	}
 	
+	@Override
 	public void updateStatus() {
 		int gridCellsCount = getGridHeight()
 				* getGridWidth();
 		long totalDust = getTotalDust();
-		statusUpdater.updateTotalDustPercentage(100.0D
+		getStatusUpdater().updateTotalDustPercentage(100.0D
 				* (totalDust - DUST_MIN * gridCellsCount)
 				/ ((DUST_MAX - DUST_MIN) * gridCellsCount));
-		statusUpdater.updateTime(ticks);
+		getStatusUpdater().updateTime(getTicks());
 	}
 	
 	public double getSimulationSpeedMultiplier() {
