@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import languagelearning.LLControlPanel;
 import languagelearning.LearningLanguage;
 import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
 import languagelearning.agents.SmartVacuumCleaner;
+import languagelearning.gui.LLControlPanel;
 
 public class Environment {
 	public static final int DUST_MAX = 1000;

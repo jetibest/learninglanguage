@@ -1,7 +1,9 @@
-package languagelearning;
+package languagelearning.gui;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+
+import languagelearning.LearningLanguage;
 
 public class LLWindow extends JFrame
 {

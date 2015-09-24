@@ -1,4 +1,4 @@
-package languagelearning;
+package languagelearning.gui;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -13,6 +13,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import languagelearning.LearningLanguage;
 import languagelearning.env.Environment;
 import languagelearning.env.RunnableEnvironment;
 

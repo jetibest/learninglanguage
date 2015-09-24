@@ -1,4 +1,4 @@
-package languagelearning;
+package languagelearning.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import languagelearning.LearningLanguage;
 import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
 import languagelearning.env.Environment;

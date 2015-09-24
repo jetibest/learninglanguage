@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import languagelearning.LLControlPanel;
 import languagelearning.LearningLanguage;
 import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
 import languagelearning.agents.SmartVacuumCleaner;
+import languagelearning.gui.LLControlPanel;
 
 public class RunnableEnvironment extends Environment implements Runnable {
 	public static final long SIMULATION_INTERVAL = 1000; // is affected by

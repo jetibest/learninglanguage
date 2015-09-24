@@ -2,6 +2,7 @@ package languagelearning;
 
 import languagelearning.env.Environment;
 import languagelearning.env.RunnableEnvironment;
+import languagelearning.gui.LLWindow;
 
 public class LearningLanguage {
 	/*
