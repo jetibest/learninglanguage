@@ -57,14 +57,14 @@ public abstract class GridObject {
 	public int getNewXInDirection(Direction direction) {
 		if (direction == Direction.EAST) {
 			if (env.isBoundless()) {
-				return (x + 1) % LearningLanguage.GRID_WIDTH;
+				return (x + 1) % env.getGridWidth();
 			} else {
 				return x + 1;
 			}
 		} else if (direction == Direction.WEST) {
 			if (env.isBoundless()) {
-				return (x - 1 + LearningLanguage.GRID_WIDTH)
-						% LearningLanguage.GRID_WIDTH;
+				return (x - 1 + env.getGridWidth())
+						% env.getGridWidth();
 			} else {
 				return x - 1;
 			}
@@ -76,14 +76,14 @@ public abstract class GridObject {
 	public int getNewYInDirection(Direction direction) {
 		if (direction == Direction.NORTH) {
 			if (env.isBoundless()) {
-				return (y - 1 + LearningLanguage.GRID_HEIGHT)
-						% LearningLanguage.GRID_HEIGHT;
+				return (y - 1 + env.getGridHeight())
+						% env.getGridHeight();
 			} else {
 				return y - 1;
 			}
 		} else if (direction == Direction.SOUTH) {
 			if (env.isBoundless()) {
-				return (y + 1) % LearningLanguage.GRID_HEIGHT;
+				return (y + 1) % env.getGridHeight();
 			} else {
 				return y + 1;
 			}

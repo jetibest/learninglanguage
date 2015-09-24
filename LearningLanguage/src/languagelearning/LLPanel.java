@@ -36,8 +36,8 @@ public class LLPanel extends JPanel implements Runnable
 	private void init()
 	{
 		gridSize = LearningLanguage.GRID_SIZE;
-		gridWidth = LearningLanguage.GRID_WIDTH;
-		gridHeight = LearningLanguage.GRID_HEIGHT;
+		gridWidth = LearningLanguage.MAIN.getEnvironment().getGridWidth();
+		gridHeight = LearningLanguage.MAIN.getEnvironment().getGridHeight();
 		panelWidth = gridWidth*LearningLanguage.GRID_SIZE;
 		panelHeight = gridHeight*LearningLanguage.GRID_SIZE;
 		panelSize = new Dimension(panelWidth, panelHeight);
