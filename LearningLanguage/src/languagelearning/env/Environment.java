@@ -15,7 +15,7 @@ import languagelearning.gui.LLControlPanel;
 public class Environment {
 	public static final int DUST_MAX = 1000;
 	public static final int DUST_MIN = 0;
-	public static final int DUST_INCREMENT_VALUE = 5;
+	public static final int DUST_INCREMENT_VALUE = 0;
 
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid;
