@@ -9,6 +9,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import languagelearning.agents.Agent;
+import languagelearning.agents.GridObject;
+import languagelearning.env.Environment;
+
 public class LLPanel extends JPanel implements Runnable
 {
 	/*

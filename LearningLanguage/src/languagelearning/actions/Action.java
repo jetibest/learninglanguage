@@ -1,5 +1,8 @@
-package languagelearning;
+package languagelearning.actions;
 
+/*
+ * Generic action, which agents can execute
+ */
 public class Action {
 	private String action;
 	

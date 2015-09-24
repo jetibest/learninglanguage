@@ -1,4 +1,7 @@
-package languagelearning;
+package languagelearning.agents;
+
+import languagelearning.actions.Action;
+import languagelearning.actions.AgentAction;
 
 public class Agent extends GridObject
 {
@@ -76,7 +79,6 @@ public class Agent extends GridObject
 		}
 	}
 	
-	@Override
 	public void doAction(Action action) {
 		if (action == AgentAction.TURN_LEFT) {
 			turnLeft();

@@ -13,6 +13,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import languagelearning.env.Environment;
+
 public class LLControlPanel extends JPanel
 {
 	private JCheckBox boundedCheckBox;

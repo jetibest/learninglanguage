@@ -1,8 +1,14 @@
-package languagelearning;
+package languagelearning.env;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import languagelearning.LLControlPanel;
+import languagelearning.LearningLanguage;
+import languagelearning.agents.Agent;
+import languagelearning.agents.GridObject;
+import languagelearning.agents.SmartVacuumCleaner;
 
 public class Environment implements Runnable
 {
@@ -44,6 +50,7 @@ public class Environment implements Runnable
 		{
 			int initX = (int) (Math.random()*LearningLanguage.GRID_WIDTH);
 			int initY = (int) (Math.random()*LearningLanguage.GRID_HEIGHT);
+			//objects.add(new VacuumCleaner(initX, initY));
 			objects.add(new SmartVacuumCleaner(initX, initY));
 		}
 		

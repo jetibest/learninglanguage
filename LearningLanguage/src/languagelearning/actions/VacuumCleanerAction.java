@@ -1,4 +1,4 @@
-package languagelearning;
+package languagelearning.actions;
 
 public class VacuumCleanerAction extends AgentAction {
 	public static VacuumCleanerAction COLLECT_DUST = new VacuumCleanerAction("COLLECT_DUST");

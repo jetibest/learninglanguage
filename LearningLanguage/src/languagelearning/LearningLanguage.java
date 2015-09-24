@@ -1,5 +1,7 @@
 package languagelearning;
 
+import languagelearning.env.Environment;
+
 public class LearningLanguage
 {
 	/*

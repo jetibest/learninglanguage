@@ -1,4 +1,4 @@
-package languagelearning;
+package languagelearning.actions;
 
 public class AgentAction extends Action {
 	public static AgentAction TURN_LEFT = new AgentAction("TURN_LEFT");

@@ -1,4 +1,4 @@
-package languagelearning;
+package languagelearning.agents;
 
 public enum Direction {
 	NORTH, EAST, SOUTH, WEST;

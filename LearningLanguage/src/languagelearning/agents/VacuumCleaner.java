@@ -1,4 +1,10 @@
-package languagelearning;
+package languagelearning.agents;
+
+import languagelearning.LearningLanguage;
+import languagelearning.actions.Action;
+import languagelearning.actions.VacuumCleanerAction;
+import languagelearning.env.Environment;
+import languagelearning.states.BasicEnvironmentState;
 
 public class VacuumCleaner extends Agent
 {
@@ -48,5 +54,17 @@ public class VacuumCleaner extends Agent
 		if (action == VacuumCleanerAction.COLLECT_DUST) {
 			collectDust();
 		}
+	}
+	
+	public BasicEnvironmentState getBasicEnvironmentState() {
+		// Next grid square in direction of vacuum cleaner
+		int xAhead = getNewXInDirection(getDirection());
+		int yAhead = getNewYInDirection(getDirection());
+
+		boolean dustAhead = env.getDustValue(xAhead, yAhead) > 0;
+		boolean obstacleAhead = !env.canMove(xAhead, yAhead);
+		BasicEnvironmentState state = new BasicEnvironmentState(dustAhead,obstacleAhead);
+		
+		return state;
 	}
 }
