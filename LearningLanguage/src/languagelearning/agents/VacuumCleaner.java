@@ -53,7 +53,7 @@ public class VacuumCleaner extends Agent
 	public int doAction(Action action) {
 		int reward = super.doAction(action);
 		if (action == Action.COLLECT_DUST) {
-			reward = collectDust();
+			reward = reward + collectDust();
 		}
 		return reward;
 	}

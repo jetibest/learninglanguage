@@ -19,6 +19,15 @@ public class RL1VacuumCleaner extends VacuumCleaner {
 		this.policy = new IncrementalStateActionPolicy();
 		this.rnd = new Random();
 	}
+	
+	@Override
+	public int moveForward() {
+		// Move and collect dust
+		
+		int reward = super.moveForward();
+		reward = reward + collectDust();
+		return reward;
+	}
 
 	@Override
 	public void run() {
@@ -56,6 +65,6 @@ public class RL1VacuumCleaner extends VacuumCleaner {
 	}
 	
 	private Action[] getAvailableActions() {
-		return new Action[]{Action.TURN_LEFT,Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST};
+		return new Action[]{Action.TURN_LEFT,Action.TURN_RIGHT,Action.MOVE_FORWARD, Action.COLLECT_DUST};
 	}
 }

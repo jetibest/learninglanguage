@@ -42,14 +42,16 @@ public class Agent extends GridObject
                 }
 	}
 	
-	public void turnLeft()
+	public int turnLeft()
 	{
 		direction = direction.nextCounterClockWise();
+		return 0; // Reward = 0
 	}
 	
-	public void turnRight()
+	public int turnRight()
 	{
 		direction = direction.nextClockWise();
+		return 0; // Reward = 0
 	}
 	
 	public Direction getDirection()
@@ -57,7 +59,7 @@ public class Agent extends GridObject
 		return direction;
 	}
 	
-	public void moveForward()
+	public int moveForward()
 	{
 		// Try to change x,y in direction
 		if(direction == Direction.NORTH)
@@ -76,15 +78,16 @@ public class Agent extends GridObject
 		{
 			moveWest();
 		}
+		return 0; // Reward = 0
 	}
 	
 	public int doAction(Action action) {
 		if (action == Action.TURN_LEFT) {
-			turnLeft();
+			return turnLeft();
 		} else if (action == Action.TURN_RIGHT) {
-			turnRight();
+			return turnRight();
 		} else if (action == Action.MOVE_FORWARD) {
-			moveForward();
+			return moveForward();
 		}
 		// Reward = 0
 		return 0;
