@@ -1,7 +1,7 @@
 package languagelearning.states;
 
 /*
- * Basic environment/perception state - can see ahead and detect dust or obstacle
+ * Basic environment/perception state - is there dust and/or obstacle ahead
  */
 public class BasicEnvironmentState extends EnvironmentState {
 	private boolean obstacleAhead;
