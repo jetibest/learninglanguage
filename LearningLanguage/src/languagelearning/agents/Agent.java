@@ -78,7 +78,7 @@ public class Agent extends GridObject
 		}
 	}
 	
-	public void doAction(Action action) {
+	public int doAction(Action action) {
 		if (action == Action.TURN_LEFT) {
 			turnLeft();
 		} else if (action == Action.TURN_RIGHT) {
@@ -86,5 +86,7 @@ public class Agent extends GridObject
 		} else if (action == Action.MOVE_FORWARD) {
 			moveForward();
 		}
+		// Reward = 0
+		return 0;
 	}
 }

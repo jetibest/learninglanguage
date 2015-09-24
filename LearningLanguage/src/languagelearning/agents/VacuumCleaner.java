@@ -17,9 +17,14 @@ public class VacuumCleaner extends Agent
 		env = LearningLanguage.MAIN.getEnvironment();
 	}
 	
-	public void collectDust()
+	public int collectDust()
 	{
-		env.setDustValue(getX(), getY(), Math.max(Environment.DUST_MIN, env.getDustValue(getX(), getY()) - DUST_CLEAN_VALUE));
+		int dustBefore = env.getDustValue(getX(), getY());
+		int dustAfter = Math.max(Environment.DUST_MIN, env.getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
+		env.setDustValue(getX(), getY(), dustAfter);
+		
+		int reward = dustBefore - dustAfter;
+		return reward;
 	}
 	
         @Override
@@ -48,11 +53,12 @@ public class VacuumCleaner extends Agent
 	}
         
 	@Override
-	public void doAction(Action action) {
-		super.doAction(action);
+	public int doAction(Action action) {
+		int reward = super.doAction(action);
 		if (action == Action.COLLECT_DUST) {
-			collectDust();
+			reward = collectDust();
 		}
+		return reward;
 	}
 	
 	public LookAheadState getLookAheadState() {
