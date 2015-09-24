@@ -23,8 +23,8 @@ public class RL1VacuumCleaner extends VacuumCleaner {
 	@Override
 	public void run() {
 		System.out.println("======================================");
-		//System.out.println("POLICY:");
-		//System.out.println(policy);
+		System.out.println("POLICY:");
+		System.out.println(policy);
 
 		double explorationRate = 0.1;
 		

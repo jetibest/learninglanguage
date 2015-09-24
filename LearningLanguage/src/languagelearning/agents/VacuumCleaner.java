@@ -63,9 +63,10 @@ public class VacuumCleaner extends Agent
 		int xAhead = getNewXInDirection(getDirection());
 		int yAhead = getNewYInDirection(getDirection());
 
-		boolean dustAhead = getEnvironment().getDustValue(xAhead, yAhead) > 0;
-		boolean obstacleAhead = !getEnvironment().canMove(xAhead, yAhead);
-		LookAheadState state = new LookAheadState(obstacleAhead,dustAhead);
+		LookAheadState state = new LookAheadState();
+		state.setObstacleAhead(!getEnvironment().canMove(xAhead, yAhead));
+		state.setDustAhead(getEnvironment().getDustValue(xAhead, yAhead) > 0);
+		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
 		
 		return state;
 	}
