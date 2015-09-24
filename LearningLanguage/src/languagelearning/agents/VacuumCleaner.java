@@ -2,7 +2,6 @@ package languagelearning.agents;
 
 import languagelearning.LearningLanguage;
 import languagelearning.actions.Action;
-import languagelearning.actions.VacuumCleanerAction;
 import languagelearning.env.Environment;
 import languagelearning.states.BasicEnvironmentState;
 
@@ -51,7 +50,7 @@ public class VacuumCleaner extends Agent
 	@Override
 	public void doAction(Action action) {
 		super.doAction(action);
-		if (action == VacuumCleanerAction.COLLECT_DUST) {
+		if (action == Action.COLLECT_DUST) {
 			collectDust();
 		}
 	}

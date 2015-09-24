@@ -1,7 +1,6 @@
 package languagelearning.agents;
 
 import languagelearning.actions.Action;
-import languagelearning.actions.AgentAction;
 
 public class Agent extends GridObject
 {
@@ -80,11 +79,11 @@ public class Agent extends GridObject
 	}
 	
 	public void doAction(Action action) {
-		if (action == AgentAction.TURN_LEFT) {
+		if (action == Action.TURN_LEFT) {
 			turnLeft();
-		} else if (action == AgentAction.TURN_RIGHT) {
+		} else if (action == Action.TURN_RIGHT) {
 			turnRight();
-		} else if (action == AgentAction.MOVE_FORWARD) {
+		} else if (action == Action.MOVE_FORWARD) {
 			moveForward();
 		}
 	}
