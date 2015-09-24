@@ -2,6 +2,7 @@ package languagelearning;
 
 import languagelearning.env.Environment;
 import languagelearning.env.RunnableEnvironment;
+import languagelearning.gui.LLControlPanel;
 import languagelearning.gui.LLWindow;
 
 public class LearningLanguage implements Logger {
@@ -27,6 +28,7 @@ public class LearningLanguage implements Logger {
 		env = new RunnableEnvironment(GRID_HEIGHT, GRID_WIDTH);
 		win = new LLWindow();
 		env.setLogger(this);
+		env.setStatusUpdater(getWindow().getControlPanel());
 		env.init();
 	}
 

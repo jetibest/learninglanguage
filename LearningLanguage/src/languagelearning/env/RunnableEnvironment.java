@@ -5,6 +5,7 @@ import java.util.List;
 
 import languagelearning.LearningLanguage;
 import languagelearning.Logger;
+import languagelearning.StatusUpdater;
 import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
 import languagelearning.agents.SmartVacuumCleaner;
@@ -26,6 +27,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	private int simulationSpeed = SIM_SPEED_DEFAULT;
 	private long ticks = 0;
 	private Logger logger;
+	private StatusUpdater statusUpdater;
 
 	public RunnableEnvironment(int getGridHeight, int getGridWidth) {
 		super(getGridHeight, getGridWidth);
@@ -33,6 +35,10 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	
 	public void setLogger(Logger logger) {
 		this.logger = logger;
+	}
+	
+	public void setStatusUpdater(StatusUpdater statusUpdater) {
+		this.statusUpdater = statusUpdater;
 	}
 
 	public void init() {
@@ -94,8 +100,6 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	public void run() {
 		logger.log(this.getClass().getName(), "Started!");
 
-		LLControlPanel llcp = LearningLanguage.MAIN.getWindow()
-				.getControlPanel();
 		int gridCellsCount = getGridHeight()
 				* getGridWidth();
 		long start;
@@ -127,10 +131,10 @@ public class RunnableEnvironment extends Environment implements Runnable {
 				}
 			}
 
-			llcp.updateTotalDustPercentage(100.0D
+			statusUpdater.updateTotalDustPercentage(100.0D
 					* (totalDust - DUST_MIN * gridCellsCount)
 					/ ((DUST_MAX - DUST_MIN) * gridCellsCount));
-			llcp.updateTime(ticks);
+			statusUpdater.updateTime(ticks);
 
 			ticks++;
 

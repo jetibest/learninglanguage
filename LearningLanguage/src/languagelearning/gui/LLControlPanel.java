@@ -14,10 +14,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import languagelearning.LearningLanguage;
-import languagelearning.env.Environment;
+import languagelearning.StatusUpdater;
 import languagelearning.env.RunnableEnvironment;
 
-public class LLControlPanel extends JPanel
+public class LLControlPanel extends JPanel implements StatusUpdater
 {
 	private JCheckBox boundedCheckBox;
         private JSlider simSpeedSlider;
@@ -86,11 +86,13 @@ public class LLControlPanel extends JPanel
             // Do nothing
         }
         
+        @Override
         public void updateTime(long ticks)
         {
             simTimer.setText(ticksNF.format(ticks) + " ticks");
         }
         
+        @Override
         public void updateTotalDustPercentage(double dustPercentage)
         {
             totalDustIndicator.setText(dustNF.format(dustPercentage) + "%");
