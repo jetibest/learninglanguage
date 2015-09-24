@@ -1,6 +1,7 @@
 package languagelearning;
 
 import languagelearning.env.Environment;
+import languagelearning.env.RunnableEnvironment;
 
 public class LearningLanguage {
 	/*
@@ -16,13 +17,13 @@ public class LearningLanguage {
 
 	private boolean isRunning;
 	private LLWindow win;
-	private Environment env;
+	private RunnableEnvironment env;
 
 	public LearningLanguage() {
 	}
 
 	public void init(String[] args) {
-		env = new Environment(GRID_HEIGHT, GRID_WIDTH);
+		env = new RunnableEnvironment(GRID_HEIGHT, GRID_WIDTH);
 		win = new LLWindow();
 		env.init();
 	}
@@ -31,7 +32,7 @@ public class LearningLanguage {
 		return win;
 	}
 
-	public Environment getEnvironment() {
+	public RunnableEnvironment getEnvironment() {
 		return env;
 	}
 

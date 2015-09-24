@@ -14,6 +14,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import languagelearning.env.Environment;
+import languagelearning.env.RunnableEnvironment;
 
 public class LLControlPanel extends JPanel
 {
@@ -40,8 +41,8 @@ public class LLControlPanel extends JPanel
 		add(boundedCheckBox);
                 
                 simSpeedSlider = new JSlider(JSlider.HORIZONTAL);
-                simSpeedSlider.setMinimum(Environment.SIM_SPEED_MIN);
-                simSpeedSlider.setMaximum(Environment.SIM_SPEED_MAX);
+                simSpeedSlider.setMinimum(RunnableEnvironment.SIM_SPEED_MIN);
+                simSpeedSlider.setMaximum(RunnableEnvironment.SIM_SPEED_MAX);
                 simSpeedSlider.addChangeListener(new ChangeListener()
                 {
                     @Override
@@ -52,14 +53,14 @@ public class LLControlPanel extends JPanel
                         {
                             return;
                         }
-                        Environment env = ll.getEnvironment();
+                        RunnableEnvironment env = ll.getEnvironment();
                         if(env != null)
                         {
                             env.setSimulationSpeed(simSpeedSlider.getValue());
                         }
                     }
                 });
-                simSpeedSlider.setValue(Environment.SIM_SPEED_DEFAULT);
+                simSpeedSlider.setValue(RunnableEnvironment.SIM_SPEED_DEFAULT);
                 simSpeedSlider.setToolTipText("Simulation speed (" + simSpeedSlider.getMinimum() + "-" + simSpeedSlider.getMaximum() + ")");
                 
                 add(simSpeedSlider);
