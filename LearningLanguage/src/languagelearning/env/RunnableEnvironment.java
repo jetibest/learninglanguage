@@ -1,10 +1,10 @@
 package languagelearning.env;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 import languagelearning.LearningLanguage;
+import languagelearning.Logger;
 import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
 import languagelearning.agents.SmartVacuumCleaner;
@@ -25,12 +25,24 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	private Thread t;
 	private int simulationSpeed = SIM_SPEED_DEFAULT;
 	private long ticks = 0;
+	private Logger logger;
 
 	public RunnableEnvironment(int getGridHeight, int getGridWidth) {
 		super(getGridHeight, getGridWidth);
 	}
+	
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
 
 	public void init() {
+		initDust();
+		initAgents();
+
+		t = new Thread(this);
+	}
+	
+	public void initDust() {
 		for (int i = 0; i < getGridHeight(); i++) {
 			int[] row = new int[getGridWidth()];
 			for (int j = 0; j < getGridWidth(); j++) {
@@ -41,15 +53,15 @@ public class RunnableEnvironment extends Environment implements Runnable {
 			}
 			getDustGrid()[i] = row;
 		}
-
+	}
+	
+	public void initAgents() {
 		for (int i = 0; i < AGENTS_INIT_COUNT; i++) {
 			int initX = (int) (Math.random() * getGridWidth());
 			int initY = (int) (Math.random() * getGridHeight());
 			// objects.add(new VacuumCleaner(initX, initY));
 			getObjects().add(new SmartVacuumCleaner(initX, initY));
 		}
-
-		t = new Thread(this);
 	}
 
 	public void start() {
@@ -80,7 +92,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 
 	@Override
 	public void run() {
-		LearningLanguage.MAIN.log(this.getClass().getName(), "Started!");
+		logger.log(this.getClass().getName(), "Started!");
 
 		LLControlPanel llcp = LearningLanguage.MAIN.getWindow()
 				.getControlPanel();
@@ -131,7 +143,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 			}
 		}
 
-		LearningLanguage.MAIN.log(this.getClass().getName(), "Stopped!");
+		logger.log(this.getClass().getName(), "Stopped!");
 	}
 
 	public double getSimulationSpeedMultiplier() {

@@ -4,7 +4,7 @@ import languagelearning.env.Environment;
 import languagelearning.env.RunnableEnvironment;
 import languagelearning.gui.LLWindow;
 
-public class LearningLanguage {
+public class LearningLanguage implements Logger {
 	/*
 	 * TODO: Make use of synchronized keyword TODO: Make GRID_SIZE dependent on
 	 * the JFrame dimensions when resized (start out with default value) And
@@ -26,6 +26,7 @@ public class LearningLanguage {
 	public void init(String[] args) {
 		env = new RunnableEnvironment(GRID_HEIGHT, GRID_WIDTH);
 		win = new LLWindow();
+		env.setLogger(this);
 		env.init();
 	}
 
@@ -58,6 +59,7 @@ public class LearningLanguage {
 		return isRunning;
 	}
 
+	@Override
 	public void log(String key, String msg) {
 		System.out.println(key + ": " + msg);
 	}
