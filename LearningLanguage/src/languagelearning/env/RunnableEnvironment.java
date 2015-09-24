@@ -100,23 +100,11 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	public void run() {
 		logger.log(this.getClass().getName(), "Started!");
 
-		int gridCellsCount = getGridHeight()
-				* getGridWidth();
 		long start;
 		while (LearningLanguage.MAIN.isRunning()) {
 			start = System.currentTimeMillis();
-
-			updateDust();
 			
-			updateObjects();
-			
-			long totalDust = getTotalDust();
-			statusUpdater.updateTotalDustPercentage(100.0D
-					* (totalDust - DUST_MIN * gridCellsCount)
-					/ ((DUST_MAX - DUST_MIN) * gridCellsCount));
-			statusUpdater.updateTime(ticks);
-
-			ticks++;
+			tick();
 
 			try {
 				Thread.sleep(Math.max(0,
@@ -128,6 +116,16 @@ public class RunnableEnvironment extends Environment implements Runnable {
 		}
 
 		logger.log(this.getClass().getName(), "Stopped!");
+	}
+	
+	public void tick() {
+		updateDust();
+		
+		updateObjects();
+		
+		updateStatus();
+		
+		ticks++;
 	}
 	
 	public void updateDust() {
@@ -155,6 +153,16 @@ public class RunnableEnvironment extends Environment implements Runnable {
 				n--;
 			}
 		}
+	}
+	
+	public void updateStatus() {
+		int gridCellsCount = getGridHeight()
+				* getGridWidth();
+		long totalDust = getTotalDust();
+		statusUpdater.updateTotalDustPercentage(100.0D
+				* (totalDust - DUST_MIN * gridCellsCount)
+				/ ((DUST_MAX - DUST_MIN) * gridCellsCount));
+		statusUpdater.updateTime(ticks);
 	}
 	
 	public double getSimulationSpeedMultiplier() {
