@@ -11,19 +11,18 @@ import languagelearning.states.State;
 /*
  * Temporal difference learning agent (using SARSA algorithm)
  */
-public class TDSarsaVacuumCleaner extends VacuumCleaner {
-	private static final double EXPLORATION_RATE = 0.05;
-	private static final double LEARNING_RATE = 0.2; // alpha
-	private static final double FUTURE_REWARD_DISCOUNT_RATE = 0.95; // gamma
+public class TDQLearningVacuumCleaner extends VacuumCleaner {
+	private static final double EXPLORATION_RATE = 0.1;
+	private static final double LEARNING_RATE = 0.7; // the learning rate, set between 0 and 1. Setting it to 0 means that the Q-values are never updated, hence nothing is learned. Setting a high value such as 0.9 means that learning can occur quickly.
+	private static final double FUTURE_REWARD_DISCOUNT_RATE = 0.9; // discount factor, also set between 0 and 1. This models the fact that future rewards are worth less than immediate rewards. Mathematically, the discount factor needs to be set less than 0 for the algorithm to converge.
 	
 	private StateActionPolicy policy;
 	private Random rnd;
 	private State state0;
 	private Action action0;
 	private State state1;
-	private Action action1;
 	
-	public TDSarsaVacuumCleaner(int x, int y) {
+	public TDQLearningVacuumCleaner(int x, int y) {
 		super(x, y);
 		this.policy = new StateActionPolicy();
 		this.rnd = new Random();
@@ -31,22 +30,22 @@ public class TDSarsaVacuumCleaner extends VacuumCleaner {
 	
 	@Override
 	public void run() {
-		// Temporal difference algorithm based on: https://webdocs.cs.ualberta.ca/~sutton/book/ebook/node64.html
+		// Temporal difference algorithm based on: http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html
 		
 		if (state0 == null) {
 			// Initialize state
 			state0 = getCurrentState();
-			// Choose action from state
-			action0 = getEGreedyAction(state0);
 		}
 		
+		// Choose action from state
+		action0 = getEGreedyAction(state0);
+
 		// Take action, observe reward
 		double reward0 = doAction(action0);
 		// Observe new state'
 		state1 = getCurrentState();
 		
-		// Choose action' from state' 
-		action1 = getEGreedyAction(state1);
+		Action action1 = policy.getActionWithMaxValue(state1, getPossibleActions());
 		
 		// Update policy
 		double value0 = policy.getValue(state0, action0);
@@ -58,15 +57,6 @@ public class TDSarsaVacuumCleaner extends VacuumCleaner {
 		state0 = state1;
 		action0 = action1;
 	}
-	
-/*	@Override
-	public int moveForward() {
-		// Move and collect dust
-		
-		int reward = super.moveForward();
-		reward = reward + collectDust();
-		return reward;
-	}*/
 	
 	private State getCurrentState() {
 		//return getLookAroundState();

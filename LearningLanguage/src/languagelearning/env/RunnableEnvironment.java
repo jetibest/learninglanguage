@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import languagelearning.LearningLanguage;
-import languagelearning.agents.TDSarsaVacuumCleaner;
+import languagelearning.agents.TDQLearningVacuumCleaner;
 
 public class RunnableEnvironment extends Environment implements Runnable {
 	public static final long SIMULATION_INTERVAL = 1000; // is affected by
@@ -51,7 +51,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 			int initX = (int) (Math.random() * getGridWidth());
 			int initY = (int) (Math.random() * getGridHeight());
 			// objects.add(new VacuumCleaner(initX, initY));
-			getObjects().add(new TDSarsaVacuumCleaner(initX, initY));
+			getObjects().add(new TDQLearningVacuumCleaner(initX, initY));
 		}
 	}
 
