@@ -1,6 +1,7 @@
 package languagelearning.agents;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 
 import languagelearning.actions.Action;
@@ -29,7 +30,7 @@ public class RL2VacuumCleaner extends VacuumCleaner {
 		System.out.println("POLICY:");
 		System.out.println(policy);
 
-		double explorationRate = 0.3;
+		double explorationRate = 0.1;
 		
 		State state = getLookAroundState();
 		System.out.println("CURRENT STATE = " + state);
@@ -65,6 +66,13 @@ public class RL2VacuumCleaner extends VacuumCleaner {
 	}
 	
 	private Action[] getAvailableActions() {
-		return new Action[]{Action.MOVE_NORTH,Action.MOVE_EAST,Action.MOVE_SOUTH,Action.MOVE_WEST,Action.COLLECT_DUST};
+		Action[] actions = new Action[]{Action.MOVE_NORTH,Action.MOVE_EAST,Action.MOVE_SOUTH,Action.MOVE_WEST,Action.COLLECT_DUST};
+		Arrays.sort(actions,new Comparator<Action>() {
+
+			@Override
+			public int compare(Action o1, Action o2) {
+				return (int)(rnd.nextInt(3) - 1);
+			}});
+		return actions;
 	}
 }
