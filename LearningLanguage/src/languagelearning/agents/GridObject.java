@@ -57,20 +57,24 @@ public abstract class GridObject {
 		move(getNewXInDirection(Direction.WEST), getNewYInDirection(Direction.WEST));
 		return 0;
 	}
-	
+
 	public int getNewXInDirection(Direction direction) {
+		return getNewXInDirection(direction,1);
+	}
+	
+	public int getNewXInDirection(Direction direction,int step) {
 		if (direction == Direction.EAST) {
 			if (env.isBoundless()) {
-				return (x + 1) % env.getGridWidth();
+				return (x + step) % env.getGridWidth();
 			} else {
-				return x + 1;
+				return x + step;
 			}
 		} else if (direction == Direction.WEST) {
 			if (env.isBoundless()) {
-				return (x - 1 + env.getGridWidth())
+				return (x - step + env.getGridWidth())
 						% env.getGridWidth();
 			} else {
-				return x - 1;
+				return x - step;
 			}
 		} else {
 			return x;
@@ -78,18 +82,22 @@ public abstract class GridObject {
 	}
 
 	public int getNewYInDirection(Direction direction) {
+		return getNewYInDirection(direction,1);
+	}
+	
+	public int getNewYInDirection(Direction direction,int step) {
 		if (direction == Direction.NORTH) {
 			if (env.isBoundless()) {
-				return (y - 1 + env.getGridHeight())
+				return (y - step + env.getGridHeight())
 						% env.getGridHeight();
 			} else {
-				return y - 1;
+				return y - step;
 			}
 		} else if (direction == Direction.SOUTH) {
 			if (env.isBoundless()) {
-				return (y + 1) % env.getGridHeight();
+				return (y + step) % env.getGridHeight();
 			} else {
-				return y + 1;
+				return y + step;
 			}
 		} else {
 			return y;

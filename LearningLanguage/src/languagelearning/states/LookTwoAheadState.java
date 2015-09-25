@@ -3,31 +3,22 @@ package languagelearning.states;
 /*
  * Basic environment/perception state - is there dust and/or obstacle ahead
  */
-public class LookAheadState extends State {
+public class LookTwoAheadState extends State {
 	private boolean obstacleAhead;
-	private boolean dustAhead;
+	private boolean dustOneAhead;
+	private boolean dustTwoAhead;
 	private boolean dustBelow;
 	
-	public LookAheadState() {
+	public LookTwoAheadState() {
 	}
 
 	public boolean isObstacleAhead() {
 		return obstacleAhead;
 	}
 
-	public boolean isDustAhead() {
-		return dustAhead;
-	}
-	
 	public void setObstacleAhead(boolean obstacleAhead) {
 		this.obstacleAhead = obstacleAhead;
 	}
-
-	public void setDustAhead(boolean dustAhead) {
-		this.dustAhead = dustAhead;
-	}
-	
-	
 
 	public boolean isDustBelow() {
 		return dustBelow;
@@ -37,9 +28,25 @@ public class LookAheadState extends State {
 		this.dustBelow = dustBelow;
 	}
 
+	public boolean isDustOneAhead() {
+		return dustOneAhead;
+	}
+
+	public void setDustOneAhead(boolean dustOneAhead) {
+		this.dustOneAhead = dustOneAhead;
+	}
+
+	public boolean isDustTwoAhead() {
+		return dustTwoAhead;
+	}
+
+	public void setDustTwoAhead(boolean dustTwoAhead) {
+		this.dustTwoAhead = dustTwoAhead;
+	}
+
 	@Override
 	public String toString() {
-		return "O-A="+obstacleAhead + " D-A="+dustAhead  + " D-B="+dustBelow;
+		return "O-A="+obstacleAhead + " D-1A="+dustOneAhead  + " D-2A=" + dustTwoAhead + " D-B="+dustBelow;
 	}
 	
 	@Override
@@ -49,8 +56,8 @@ public class LookAheadState extends State {
 	
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof LookAheadState) {
-			LookAheadState other = (LookAheadState)o;
+		if (o instanceof LookTwoAheadState) {
+			LookTwoAheadState other = (LookTwoAheadState)o;
 			return toString().equals(other.toString());
 		}
 		return false;
