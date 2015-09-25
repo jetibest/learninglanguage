@@ -88,6 +88,14 @@ public class Agent extends GridObject
 			return turnRight();
 		} else if (action == Action.MOVE_FORWARD) {
 			return moveForward();
+		} else if (action == Action.MOVE_NORTH) {
+			return moveNorth();
+		} else if (action == Action.MOVE_EAST) {
+			return moveEast();
+		} else if (action == Action.MOVE_SOUTH) {
+			return moveSouth();
+		} else if (action == Action.MOVE_WEST) {
+			return moveWest();
 		}
 		// Reward = 0
 		return 0;

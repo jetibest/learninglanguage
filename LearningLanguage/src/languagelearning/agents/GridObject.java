@@ -38,20 +38,24 @@ public abstract class GridObject {
 		this.y = y;
 	}
 
-	public void moveNorth() {
+	public int moveNorth() {
 		move(getNewXInDirection(Direction.NORTH), getNewYInDirection(Direction.NORTH));
+		return 0;
 	}
 
-	public void moveEast() {
+	public int moveEast() {
 		move(getNewXInDirection(Direction.EAST), getNewYInDirection(Direction.EAST));
+		return 0;
 	}
 
-	public void moveSouth() {
+	public int moveSouth() {
 		move(getNewXInDirection(Direction.SOUTH), getNewYInDirection(Direction.SOUTH));
+		return 0;
 	}
 
-	public void moveWest() {
+	public int moveWest() {
 		move(getNewXInDirection(Direction.WEST), getNewYInDirection(Direction.WEST));
+		return 0;
 	}
 	
 	public int getNewXInDirection(Direction direction) {

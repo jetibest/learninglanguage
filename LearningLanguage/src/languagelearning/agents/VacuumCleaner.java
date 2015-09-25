@@ -1,9 +1,9 @@
 package languagelearning.agents;
 
-import languagelearning.LearningLanguage;
 import languagelearning.actions.Action;
 import languagelearning.env.Environment;
 import languagelearning.states.LookAheadState;
+import languagelearning.states.LookAroundState;
 
 public class VacuumCleaner extends Agent
 {
@@ -66,6 +66,35 @@ public class VacuumCleaner extends Agent
 		LookAheadState state = new LookAheadState();
 		state.setObstacleAhead(!getEnvironment().canMove(xAhead, yAhead));
 		state.setDustAhead(getEnvironment().getDustValue(xAhead, yAhead) > 0);
+		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
+		
+		return state;
+	}
+
+	public LookAroundState getLookAroundState() {
+		int xNorth = getNewXInDirection(Direction.NORTH);
+		int yNorth = getNewYInDirection(Direction.NORTH);
+
+		int xEast = getNewXInDirection(Direction.EAST);
+		int yEast = getNewYInDirection(Direction.EAST);
+
+		int xSouth = getNewXInDirection(Direction.SOUTH);
+		int ySouth = getNewYInDirection(Direction.SOUTH);
+		
+		int xWest = getNewXInDirection(Direction.WEST);
+		int yWest = getNewYInDirection(Direction.WEST);
+		
+		LookAroundState state = new LookAroundState();
+		state.setObstacleNorth(!getEnvironment().canMove(xNorth, yNorth));
+		state.setObstacleEast(!getEnvironment().canMove(xEast, yEast));
+		state.setObstacleSouth(!getEnvironment().canMove(xSouth, ySouth));
+		state.setObstacleWest(!getEnvironment().canMove(xWest, yWest));
+
+		state.setDustNorth(getEnvironment().getDustValue(xNorth, yNorth) > 0);
+		state.setDustEast(getEnvironment().getDustValue(xEast, yEast) > 0);
+		state.setDustSouth(getEnvironment().getDustValue(xSouth, ySouth) > 0);
+		state.setDustWest(getEnvironment().getDustValue(xWest, yWest) > 0);
+
 		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
 		
 		return state;
