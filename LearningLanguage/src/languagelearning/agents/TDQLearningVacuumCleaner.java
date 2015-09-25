@@ -37,11 +37,17 @@ public class TDQLearningVacuumCleaner extends VacuumCleaner {
 			state0 = getCurrentState();
 		}
 		
+		log("============================================");
+		log("POLICY = " + policy);
+		log("STATE = " + state0);
+		
 		// Choose action from state
 		action0 = getEGreedyAction(state0);
+		log("ACTION = " + action0);
 
 		// Take action, observe reward
 		double reward0 = doAction(action0);
+		log("REWARD = " + reward0);
 		// Observe new state'
 		state1 = getCurrentState();
 		
@@ -58,9 +64,13 @@ public class TDQLearningVacuumCleaner extends VacuumCleaner {
 		action0 = action1;
 	}
 	
+	private void log(String text) {
+		System.out.println(text);
+	}
+	
 	private State getCurrentState() {
 		//return getLookAroundState();
-		return getLookTwoAheadState();
+		return getLookAheadState();
 	}
 	
 	private Action getEGreedyAction(State state) {
