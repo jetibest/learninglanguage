@@ -70,7 +70,7 @@ public class TDSarsaVacuumCleaner extends VacuumCleaner {
 	
 	private State getCurrentState() {
 		//return getLookAroundState();
-		return getLookTwoAheadState();
+		return getDustTwoAheadBelowAndObstacleAheadState();
 	}
 	
 	private Action getEGreedyAction(State state) {

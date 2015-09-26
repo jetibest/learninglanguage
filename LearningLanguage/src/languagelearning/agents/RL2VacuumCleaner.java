@@ -32,7 +32,7 @@ public class RL2VacuumCleaner extends VacuumCleaner {
 
 		double explorationRate = 0.1;
 		
-		State state = getLookAroundState();
+		State state = getDustAroundBelowAndObstacleAroundState();
 		System.out.println("CURRENT STATE = " + state);
 
 		Action[] possibleActions = getAvailableActions();
