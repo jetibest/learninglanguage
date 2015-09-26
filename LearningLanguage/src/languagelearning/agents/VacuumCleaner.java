@@ -2,9 +2,10 @@ package languagelearning.agents;
 
 import languagelearning.actions.Action;
 import languagelearning.env.Environment;
-import languagelearning.states.DustBelowState;
 import languagelearning.states.DustAheadBelowAndObstacleAheadState;
 import languagelearning.states.DustAroundBelowAndObstacleAroundState;
+import languagelearning.states.DustBelowAndObstacleAheadState;
+import languagelearning.states.DustBelowState;
 import languagelearning.states.DustTwoAheadBelowAndObstacleAheadState;
 
 public class VacuumCleaner extends Agent
@@ -62,6 +63,18 @@ public class VacuumCleaner extends Agent
 	
 	public DustBelowState getDustBelowState() {
 		DustBelowState state = new DustBelowState();
+		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
+		
+		return state;
+	}
+	
+	public DustBelowAndObstacleAheadState getDustBelowAndObstacleAheadState() {
+		// Next grid square in direction of vacuum cleaner
+		int xAhead = getNewXInDirection(getDirection());
+		int yAhead = getNewYInDirection(getDirection());
+
+		DustBelowAndObstacleAheadState state = new DustBelowAndObstacleAheadState();
+		state.setObstacleAhead(!getEnvironment().canMove(xAhead, yAhead));
 		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
 		
 		return state;

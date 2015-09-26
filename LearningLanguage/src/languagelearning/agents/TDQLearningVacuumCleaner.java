@@ -51,6 +51,7 @@ public class TDQLearningVacuumCleaner extends VacuumCleaner {
 		double value0 = policy.getValue(state0, action0);
 		double value1 = policy.getValue(state1, action1);
 		double valueDelta = LEARNING_RATE * (reward0 + (FUTURE_REWARD_DISCOUNT_RATE * value1) - value0);
+		log("VALUE DELTA: " + valueDelta);
 		double newValue0 = value0 + valueDelta;
 		policy.setValue(state0, action0, newValue0);
 	}
@@ -60,8 +61,7 @@ public class TDQLearningVacuumCleaner extends VacuumCleaner {
 	}
 	
 	private State getCurrentState() {
-		//return getLookAroundState();
-		return getDustBelowState();
+		return getDustBelowAndObstacleAheadState();
 	}
 	
 	private Action getEGreedyAction(State state) {
