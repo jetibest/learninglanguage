@@ -13,14 +13,11 @@ import languagelearning.states.State;
  */
 public class TDQLearningVacuumCleaner extends VacuumCleaner {
 	private static final double EXPLORATION_RATE = 0.1;
-	private static final double LEARNING_RATE = 0.7; // the learning rate, set between 0 and 1. Setting it to 0 means that the Q-values are never updated, hence nothing is learned. Setting a high value such as 0.9 means that learning can occur quickly.
-	private static final double FUTURE_REWARD_DISCOUNT_RATE = 0.9; // discount factor, also set between 0 and 1. This models the fact that future rewards are worth less than immediate rewards. Mathematically, the discount factor needs to be set less than 0 for the algorithm to converge.
+	private static final double LEARNING_RATE = 0.1; // the learning rate, set between 0 and 1. Setting it to 0 means that the Q-values are never updated, hence nothing is learned. Setting a high value such as 0.9 means that learning can occur quickly.
+	private static final double FUTURE_REWARD_DISCOUNT_RATE = 0.99; // discount factor, also set between 0 and 1. This models the fact that future rewards are worth less than immediate rewards. Mathematically, the discount factor needs to be set less than 0 for the algorithm to converge.
 	
 	private StateActionPolicy policy;
 	private Random rnd;
-	private State state0;
-	private Action action0;
-	private State state1;
 	
 	public TDQLearningVacuumCleaner(int x, int y) {
 		super(x, y);
@@ -32,24 +29,21 @@ public class TDQLearningVacuumCleaner extends VacuumCleaner {
 	public void run() {
 		// Temporal difference algorithm based on: http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html
 		
-		if (state0 == null) {
-			// Initialize state
-			state0 = getCurrentState();
-		}
-		
 		log("============================================");
-		log("POLICY = " + policy);
-		log("STATE = " + state0);
+		log("POLICY: \n" + policy);
+		
+		State state0 = getCurrentState();
+		log("STATE: " + state0);
 		
 		// Choose action from state
-		action0 = getEGreedyAction(state0);
-		log("ACTION = " + action0);
+		Action action0 = getEGreedyAction(state0);
+		log("ACTION: " + action0);
 
 		// Take action, observe reward
 		double reward0 = doAction(action0);
-		log("REWARD = " + reward0);
+		log("REWARD: " + reward0);
 		// Observe new state'
-		state1 = getCurrentState();
+		State state1 = getCurrentState();
 		
 		Action action1 = policy.getActionWithMaxValue(state1, getPossibleActions());
 		
@@ -59,9 +53,6 @@ public class TDQLearningVacuumCleaner extends VacuumCleaner {
 		double valueDelta = LEARNING_RATE * (reward0 + (FUTURE_REWARD_DISCOUNT_RATE * value1) - value0);
 		double newValue0 = value0 + valueDelta;
 		policy.setValue(state0, action0, newValue0);
-		
-		state0 = state1;
-		action0 = action1;
 	}
 	
 	private void log(String text) {
@@ -70,7 +61,7 @@ public class TDQLearningVacuumCleaner extends VacuumCleaner {
 	
 	private State getCurrentState() {
 		//return getLookAroundState();
-		return getLookAheadState();
+		return getDustBelowState();
 	}
 	
 	private Action getEGreedyAction(State state) {
