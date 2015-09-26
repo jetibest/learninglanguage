@@ -5,7 +5,6 @@ package languagelearning.states;
  */
 public class DustTwoAheadBelowAndObstacleAheadState extends DustAheadBelowAndObstacleAheadState {
 	private boolean dustTwoAhead;
-	private boolean dustBelow;
 	
 	public DustTwoAheadBelowAndObstacleAheadState() {
 	}
@@ -20,7 +19,7 @@ public class DustTwoAheadBelowAndObstacleAheadState extends DustAheadBelowAndObs
 
 	@Override
 	public String toString() {
-		return "O-A="+isObstacleAhead() + " D-1A="+isDustAhead()  + " D-2A=" + dustTwoAhead + " D-B="+isDustBelow();
+		return "D-1A="+isDustAhead()  + " D-2A=" + dustTwoAhead + " D-B="+isDustBelow() + " O-A="+isObstacleAhead();
 	}
 	
 	@Override

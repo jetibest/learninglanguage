@@ -9,12 +9,12 @@ import languagelearning.policies.StateActionPolicy;
 import languagelearning.states.State;
 
 /*
- * Temporal difference learning agent (using SARSA algorithm)
+ * Temporal difference learning agent (using Q-Learning algorithm)
  */
 public class TDQLearningVacuumCleaner extends VacuumCleaner {
 	private static final double EXPLORATION_RATE = 0.1;
-	private static final double LEARNING_RATE = 0.1; // the learning rate, set between 0 and 1. Setting it to 0 means that the Q-values are never updated, hence nothing is learned. Setting a high value such as 0.9 means that learning can occur quickly.
-	private static final double FUTURE_REWARD_DISCOUNT_RATE = 0.9; // discount factor, also set between 0 and 1. This models the fact that future rewards are worth less than immediate rewards. Mathematically, the discount factor needs to be set less than 0 for the algorithm to converge.
+	private static final double LEARNING_RATE = 0.001; // the learning rate, set between 0 and 1. Setting it to 0 means that the Q-values are never updated, hence nothing is learned. Setting a high value such as 0.9 means that learning can occur quickly.
+	private static final double FUTURE_REWARD_DISCOUNT_RATE = 0.999; // discount factor, also set between 0 and 1. This models the fact that future rewards are worth less than immediate rewards. Mathematically, the discount factor needs to be set less than 0 for the algorithm to converge.
 	
 	private StateActionPolicy policy;
 	private Random rnd;

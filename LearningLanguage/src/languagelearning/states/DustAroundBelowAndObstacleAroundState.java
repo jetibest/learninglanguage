@@ -125,7 +125,7 @@ public class DustAroundBelowAndObstacleAroundState extends State {
 
 	@Override
 	public String toString() {
-		return "O-N="+obstacleNorth+" O-E="+obstacleEast+" O-S="+obstacleSouth+" O-W="+obstacleWest+" D-N="+dustNorth+" D-E="+dustEast+" D-S="+dustSouth+" D-W="+dustWest+" D-B="+dustBelow;
+		return "D-N="+dustNorth+" D-E="+dustEast+" D-S="+dustSouth+" D-W="+dustWest+" D-B="+dustBelow+" O-N="+obstacleNorth+" O-E="+obstacleEast+" O-S="+obstacleSouth+" O-W="+obstacleWest;
 	}
 	
 	@Override

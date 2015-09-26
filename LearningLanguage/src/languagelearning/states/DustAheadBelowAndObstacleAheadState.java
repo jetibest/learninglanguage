@@ -3,32 +3,23 @@ package languagelearning.states;
 /*
  * Basic environment/perception state - is there dust and/or obstacle ahead
  */
-public class DustAheadBelowAndObstacleAheadState extends DustBelowState {
-	private boolean obstacleAhead;
+public class DustAheadBelowAndObstacleAheadState extends DustBelowAndObstacleAheadState {
 	private boolean dustAhead;
 	
 	public DustAheadBelowAndObstacleAheadState() {
-	}
-
-	public boolean isObstacleAhead() {
-		return obstacleAhead;
 	}
 
 	public boolean isDustAhead() {
 		return dustAhead;
 	}
 	
-	public void setObstacleAhead(boolean obstacleAhead) {
-		this.obstacleAhead = obstacleAhead;
-	}
-
 	public void setDustAhead(boolean dustAhead) {
 		this.dustAhead = dustAhead;
 	}
 	
 	@Override
 	public String toString() {
-		return "O-A="+obstacleAhead + " D-A="+dustAhead  + " D-B="+isDustBelow();
+		return "D-A="+dustAhead  + " D-B="+isDustBelow() + " O-A="+isObstacleAhead();
 	}
 	
 	@Override
