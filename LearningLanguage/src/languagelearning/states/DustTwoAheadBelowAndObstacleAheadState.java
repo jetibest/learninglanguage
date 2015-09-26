@@ -3,11 +3,11 @@ package languagelearning.states;
 /*
  * Basic environment/perception state - is there dust and/or obstacle ahead
  */
-public class LookTwoAheadState extends LookAheadState {
+public class DustTwoAheadBelowAndObstacleAheadState extends DustAheadBelowAndObstacleAheadState {
 	private boolean dustTwoAhead;
 	private boolean dustBelow;
 	
-	public LookTwoAheadState() {
+	public DustTwoAheadBelowAndObstacleAheadState() {
 	}
 
 	public boolean isDustTwoAhead() {
@@ -30,8 +30,8 @@ public class LookTwoAheadState extends LookAheadState {
 	
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof LookTwoAheadState) {
-			LookTwoAheadState other = (LookTwoAheadState)o;
+		if (o instanceof DustTwoAheadBelowAndObstacleAheadState) {
+			DustTwoAheadBelowAndObstacleAheadState other = (DustTwoAheadBelowAndObstacleAheadState)o;
 			return toString().equals(other.toString());
 		}
 		return false;

@@ -3,9 +3,9 @@ package languagelearning.agents;
 import languagelearning.actions.Action;
 import languagelearning.env.Environment;
 import languagelearning.states.DustBelowState;
-import languagelearning.states.LookAheadState;
-import languagelearning.states.LookAroundState;
-import languagelearning.states.LookTwoAheadState;
+import languagelearning.states.DustAheadBelowAndObstacleAheadState;
+import languagelearning.states.DustAroundBelowAndObstacleAroundState;
+import languagelearning.states.DustTwoAheadBelowAndObstacleAheadState;
 
 public class VacuumCleaner extends Agent
 {
@@ -67,12 +67,12 @@ public class VacuumCleaner extends Agent
 		return state;
 	}
 
-	public LookAheadState getLookAheadState() {
+	public DustAheadBelowAndObstacleAheadState getDustAheadBelowAndObstacleAheadState() {
 		// Next grid square in direction of vacuum cleaner
 		int xAhead = getNewXInDirection(getDirection());
 		int yAhead = getNewYInDirection(getDirection());
 
-		LookAheadState state = new LookAheadState();
+		DustAheadBelowAndObstacleAheadState state = new DustAheadBelowAndObstacleAheadState();
 		state.setObstacleAhead(!getEnvironment().canMove(xAhead, yAhead));
 		state.setDustAhead(getEnvironment().getDustValue(xAhead, yAhead) > 0);
 		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
@@ -80,14 +80,14 @@ public class VacuumCleaner extends Agent
 		return state;
 	}
 
-	public LookTwoAheadState getLookTwoAheadState() {
+	public DustTwoAheadBelowAndObstacleAheadState getDustTwoAheadBelowAndObstacleAheadState() {
 		// Next grid square in direction of vacuum cleaner
 		int x1Ahead = getNewXInDirection(getDirection(),1);
 		int y1Ahead = getNewYInDirection(getDirection(),1);
 		int x2Ahead = getNewXInDirection(getDirection(),2);
 		int y2Ahead = getNewYInDirection(getDirection(),2);
 
-		LookTwoAheadState state = new LookTwoAheadState();
+		DustTwoAheadBelowAndObstacleAheadState state = new DustTwoAheadBelowAndObstacleAheadState();
 		state.setObstacleAhead(!getEnvironment().canMove(x1Ahead, y1Ahead));
 		state.setDustAhead(getEnvironment().getDustValue(x1Ahead, y1Ahead) > 0);
 		state.setDustTwoAhead(getEnvironment().getDustValue(x2Ahead, y2Ahead) > 0);
@@ -96,7 +96,7 @@ public class VacuumCleaner extends Agent
 		return state;
 	}
 
-	public LookAroundState getLookAroundState() {
+	public DustAroundBelowAndObstacleAroundState getDustAroundBelowAndObstacleAroundState() {
 		int xNorth = getNewXInDirection(Direction.NORTH);
 		int yNorth = getNewYInDirection(Direction.NORTH);
 
@@ -109,7 +109,7 @@ public class VacuumCleaner extends Agent
 		int xWest = getNewXInDirection(Direction.WEST);
 		int yWest = getNewYInDirection(Direction.WEST);
 		
-		LookAroundState state = new LookAroundState();
+		DustAroundBelowAndObstacleAroundState state = new DustAroundBelowAndObstacleAroundState();
 		state.setObstacleNorth(!getEnvironment().canMove(xNorth, yNorth));
 		state.setObstacleEast(!getEnvironment().canMove(xEast, yEast));
 		state.setObstacleSouth(!getEnvironment().canMove(xSouth, ySouth));

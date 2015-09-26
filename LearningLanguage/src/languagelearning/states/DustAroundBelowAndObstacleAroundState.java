@@ -3,7 +3,7 @@ package languagelearning.states;
 /*
  * Basic environment/perception state - is there dust and/or obstacle ahead
  */
-public class LookAroundState extends State {
+public class DustAroundBelowAndObstacleAroundState extends State {
 	private boolean obstacleNorth;
 	private boolean obstacleEast;
 	private boolean obstacleSouth;
@@ -14,7 +14,7 @@ public class LookAroundState extends State {
 	private boolean dustWest;
 	private boolean dustBelow;
 	
-	public LookAroundState() {
+	public DustAroundBelowAndObstacleAroundState() {
 	}
 
 
@@ -135,8 +135,8 @@ public class LookAroundState extends State {
 	
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof LookAroundState) {
-			LookAroundState other = (LookAroundState)o;
+		if (o instanceof DustAroundBelowAndObstacleAroundState) {
+			DustAroundBelowAndObstacleAroundState other = (DustAroundBelowAndObstacleAroundState)o;
 			return this.toString().equals(other.toString());
 		}
 		return false;
