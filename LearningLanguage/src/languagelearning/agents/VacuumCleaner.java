@@ -8,6 +8,7 @@ import languagelearning.states.StateVariable;
 public class VacuumCleaner extends Agent
 {
 	public static final int DUST_CLEAN_VALUE = 500;
+	private boolean internalStateA;
 	
 	public VacuumCleaner(int x, int y)
 	{
@@ -29,6 +30,10 @@ public class VacuumCleaner extends Agent
 		int reward = super.doAction(action);
 		if (action == Action.COLLECT_DUST) {
 			reward = reward + collectDust();
+		} else if (action == Action.SET_INTERNAL_STATE_A) {
+			reward = reward + setInternalStateA(true);
+		} else if (action == Action.CLEAR_INTERNAL_STATE_A) {
+			reward = reward + setInternalStateA(false);
 		}
 		return reward;
 	}
@@ -88,8 +93,19 @@ public class VacuumCleaner extends Agent
 			return isObstacleInDirection(Direction.SOUTH);
 		} else if (StateVariable.OBSTACLE_WEST == var) {
 			return isObstacleInDirection(Direction.WEST);
+		} else if (StateVariable.INTERNAL_STATE_A == var) {
+			return internalStateA;
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isInternalStateA() {
+		return internalStateA;
+	}
+
+	public int setInternalStateA(boolean internalStateA) {
+		this.internalStateA = internalStateA;
+		return 0; // Reward = 0
 	}
 }
