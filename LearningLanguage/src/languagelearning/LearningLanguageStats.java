@@ -5,9 +5,8 @@ import java.text.DecimalFormat;
 import languagelearning.actions.Action;
 import languagelearning.agents.Agent;
 import languagelearning.agents.AgentFactory;
-import languagelearning.agents.TDQLearningVacuumCleaner;
+import languagelearning.agents.TDSarsaVacuumCleaner;
 import languagelearning.agents.TDVacuumCleaner;
-import languagelearning.agents.VacuumCleaner;
 import languagelearning.env.Environment;
 import languagelearning.env.RunnableEnvironment;
 import languagelearning.states.StateVariable;
@@ -16,12 +15,12 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 
-public class LearningLanguageTester {
+public class LearningLanguageStats {
 	private final static DecimalFormat df = new DecimalFormat("#0.0");
 
 	public static void main(String[] args) {
 		int runs = 100;
-		int ticks = 1000;
+		int ticks = 5000;
 		
 		int gridHeight = LearningLanguage.GRID_HEIGHT;
 		int gridWidth = LearningLanguage.GRID_WIDTH;
@@ -43,7 +42,7 @@ public class LearningLanguageTester {
 		final AgentFactory agentFactory = new AgentFactory() {
 			@Override
 			public Agent produceAgent(int x, int y) {
-				TDVacuumCleaner agent = new TDQLearningVacuumCleaner(x,y);
+				TDVacuumCleaner agent = new TDSarsaVacuumCleaner(x,y);
 				agent.setExplorationRate(explorationRate);
 				agent.setLearningRate(learningRate);
 				agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
@@ -51,7 +50,9 @@ public class LearningLanguageTester {
 				agent.setPossibleStateVariables(possibleStateVariables);
 				return agent;
 				
-				//return new VacuumCleaner(x,y);
+				//return new SmartVacuumCleaner(x,y);
+				
+				//return new RandomVacuumCleaner(x,y);
 			}
 		};
 		
