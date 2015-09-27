@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Random;
 
 import languagelearning.actions.Action;
+import languagelearning.env.Environment;
 import languagelearning.policies.IncrementalStateActionPolicy;
 import languagelearning.states.State;
 
@@ -26,7 +27,7 @@ public class RL2VacuumCleaner extends VacuumCleaner {
 	
 	@Override
 	public void run() {
-		System.out.println("======================================");
+/*		System.out.println("======================================");
 		System.out.println("POLICY:");
 		System.out.println(policy);
 
@@ -62,7 +63,7 @@ public class RL2VacuumCleaner extends VacuumCleaner {
 		}
  		
 		prevState = state;
-		prevAction = action;
+		prevAction = action;*/
 	}
 	
 	private Action[] getAvailableActions() {

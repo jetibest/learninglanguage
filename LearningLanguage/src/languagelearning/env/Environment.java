@@ -51,7 +51,7 @@ public abstract class Environment {
 						* DUST_MAX
 						* dustVariancePercentage);
 			}
-			getDustGrid()[i] = row;
+			dustgrid[i] = row;
 		}
 	}
 	
@@ -59,16 +59,21 @@ public abstract class Environment {
 	
 	public void initRandomAgents(int agentInitCount,AgentFactory agentFactory) {
 		for (int i = 0; i < agentInitCount; i++) {
-			int initX = (int) (Math.random() * getGridWidth());
-			int initY = (int) (Math.random() * getGridHeight());
+			int initX = (int) (Math.random() * gridWidth);
+			int initY = (int) (Math.random() * gridHeight);
 			Agent agent = agentFactory.produceAgent(initX, initY);
-			getObjects().add(agent);
+			addObject(agent);
 		}
 	}
 	
+	public void addObject(GridObject gridObject) {
+		gridObject.setEnvironment(this);
+		objects.add(gridObject);
+	}
+	
 	public void start() {
-		for (int i = 0; i < getObjects().size(); i++) {
-			GridObject go = getObjects().get(i);
+		for (int i = 0; i < objects.size(); i++) {
+			GridObject go = objects.get(i);
 
 			// Check if we need to start gridobject
 			if (go instanceof Agent) {
@@ -78,8 +83,8 @@ public abstract class Environment {
 	}
 
 	public void stop() {
-		for (int i = 0; i < getObjects().size(); i++) {
-			GridObject go = getObjects().get(i);
+		for (int i = 0; i < objects.size(); i++) {
+			GridObject go = objects.get(i);
 
 			// Check if we need to start gridobject
 			if (go instanceof Agent) {
@@ -100,12 +105,18 @@ public abstract class Environment {
 		ticks++;
 	}
 	
+	public void tick(int numberOfTicks) {
+		for (int t = 0; t < numberOfTicks; t++) {
+			tick();
+		}
+	}
+	
 	public abstract void updateDust();
 	
 	public void updateDustWithConstantIncremenent(int dustIncrementValue) {
-		for (int i = 0; i < getGridHeight(); i++) {
-			int[] row = getDustGrid()[i];
-			for (int j = 0; j < getGridWidth(); j++) {
+		for (int i = 0; i < gridHeight; i++) {
+			int[] row = dustgrid[i];
+			for (int j = 0; j < gridWidth; j++) {
 				int val = Math.min(row[j] + dustIncrementValue, DUST_MAX);
 				row[j] = val;
 			}
@@ -117,7 +128,7 @@ public abstract class Environment {
 	public void updateObjectsInRandomOrder() {
 		// Call `run` for all objects in a random order
 		{
-			int n = getObjects().size();
+			int n = objects.size();
 			List<Integer> visited = new ArrayList<Integer>();
 			for (int i = 0; i < n; i++) {
 				visited.add(i);
@@ -125,7 +136,7 @@ public abstract class Environment {
 			int i = 0;
 			while (visited.size() > 0) {
 				i = (i + (int) (n * Math.random())) % n;
-				getObjects().get(visited.remove(i)).run();
+				objects.get(visited.remove(i)).run();
 				n--;
 			}
 		}
@@ -133,8 +144,8 @@ public abstract class Environment {
 	
 	public void updateStatus() {
 		if (statusUpdater != null) {
-			int gridCellsCount = getGridHeight()
-					* getGridWidth();
+			int gridCellsCount = gridHeight
+					* gridWidth;
 			long totalDust = getTotalDust();
 			getStatusUpdater().updateTotalDustPercentage(100.0D
 					* (totalDust - DUST_MIN * gridCellsCount)

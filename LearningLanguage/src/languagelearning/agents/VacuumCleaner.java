@@ -2,11 +2,8 @@ package languagelearning.agents;
 
 import languagelearning.actions.Action;
 import languagelearning.env.Environment;
-import languagelearning.states.DustAheadBelowAndObstacleAheadState;
-import languagelearning.states.DustAroundBelowAndObstacleAroundState;
-import languagelearning.states.DustBelowAndObstacleAheadState;
-import languagelearning.states.DustBelowState;
-import languagelearning.states.DustTwoAheadBelowAndObstacleAheadState;
+import languagelearning.states.PredicateState;
+import languagelearning.states.StateVariable;
 
 public class VacuumCleaner extends Agent
 {
@@ -61,80 +58,63 @@ public class VacuumCleaner extends Agent
 		return reward;
 	}
 	
-	public DustBelowState getDustBelowState() {
-		DustBelowState state = new DustBelowState();
-		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
+	public boolean isDustBelow() {
+		return getEnvironment().getDustValue(getX(), getY()) > 0;
+	}
+	
+	public boolean isDustInDirection(Direction direction,int step) {
+		int xAhead = getNewXInDirection(getDirection(),step);
+		int yAhead = getNewYInDirection(getDirection(),step);
+
+		return getEnvironment().getDustValue(xAhead, yAhead) > 0;
+	}
+	
+	public boolean isObstacleInDirection(Direction direction) {
+		int xAhead = getNewXInDirection(getDirection());
+		int yAhead = getNewYInDirection(getDirection());
+
+		return !getEnvironment().canMove(xAhead, yAhead);
+	}
+	
+	public PredicateState getPredicateState(StateVariable[] possibleVariables) {
+		PredicateState state = new PredicateState();
+		
+		for (StateVariable var: possibleVariables) {
+			if (hasStateVariable(var)) {
+				state.setVariable(var);
+			}
+		}
 		
 		return state;
 	}
 	
-	public DustBelowAndObstacleAheadState getDustBelowAndObstacleAheadState() {
-		// Next grid square in direction of vacuum cleaner
-		int xAhead = getNewXInDirection(getDirection());
-		int yAhead = getNewYInDirection(getDirection());
-
-		DustBelowAndObstacleAheadState state = new DustBelowAndObstacleAheadState();
-		state.setObstacleAhead(!getEnvironment().canMove(xAhead, yAhead));
-		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
-		
-		return state;
-	}
-
-	public DustAheadBelowAndObstacleAheadState getDustAheadBelowAndObstacleAheadState() {
-		// Next grid square in direction of vacuum cleaner
-		int xAhead = getNewXInDirection(getDirection());
-		int yAhead = getNewYInDirection(getDirection());
-
-		DustAheadBelowAndObstacleAheadState state = new DustAheadBelowAndObstacleAheadState();
-		state.setObstacleAhead(!getEnvironment().canMove(xAhead, yAhead));
-		state.setDustAhead(getEnvironment().getDustValue(xAhead, yAhead) > 0);
-		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
-		
-		return state;
-	}
-
-	public DustTwoAheadBelowAndObstacleAheadState getDustTwoAheadBelowAndObstacleAheadState() {
-		// Next grid square in direction of vacuum cleaner
-		int x1Ahead = getNewXInDirection(getDirection(),1);
-		int y1Ahead = getNewYInDirection(getDirection(),1);
-		int x2Ahead = getNewXInDirection(getDirection(),2);
-		int y2Ahead = getNewYInDirection(getDirection(),2);
-
-		DustTwoAheadBelowAndObstacleAheadState state = new DustTwoAheadBelowAndObstacleAheadState();
-		state.setObstacleAhead(!getEnvironment().canMove(x1Ahead, y1Ahead));
-		state.setDustAhead(getEnvironment().getDustValue(x1Ahead, y1Ahead) > 0);
-		state.setDustTwoAhead(getEnvironment().getDustValue(x2Ahead, y2Ahead) > 0);
-		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
-		
-		return state;
-	}
-
-	public DustAroundBelowAndObstacleAroundState getDustAroundBelowAndObstacleAroundState() {
-		int xNorth = getNewXInDirection(Direction.NORTH);
-		int yNorth = getNewYInDirection(Direction.NORTH);
-
-		int xEast = getNewXInDirection(Direction.EAST);
-		int yEast = getNewYInDirection(Direction.EAST);
-
-		int xSouth = getNewXInDirection(Direction.SOUTH);
-		int ySouth = getNewYInDirection(Direction.SOUTH);
-		
-		int xWest = getNewXInDirection(Direction.WEST);
-		int yWest = getNewYInDirection(Direction.WEST);
-		
-		DustAroundBelowAndObstacleAroundState state = new DustAroundBelowAndObstacleAroundState();
-		state.setObstacleNorth(!getEnvironment().canMove(xNorth, yNorth));
-		state.setObstacleEast(!getEnvironment().canMove(xEast, yEast));
-		state.setObstacleSouth(!getEnvironment().canMove(xSouth, ySouth));
-		state.setObstacleWest(!getEnvironment().canMove(xWest, yWest));
-
-		state.setDustNorth(getEnvironment().getDustValue(xNorth, yNorth) > 0);
-		state.setDustEast(getEnvironment().getDustValue(xEast, yEast) > 0);
-		state.setDustSouth(getEnvironment().getDustValue(xSouth, ySouth) > 0);
-		state.setDustWest(getEnvironment().getDustValue(xWest, yWest) > 0);
-
-		state.setDustBelow(getEnvironment().getDustValue(getX(), getY()) > 0);
-		
-		return state;
+	public boolean hasStateVariable(StateVariable var) {
+		if (StateVariable.DUST_BELOW == var) {
+			return isDustBelow();
+		} else if (StateVariable.DUST_AHEAD == var) {
+			return isDustInDirection(getDirection(),1);
+		} else if (StateVariable.DUST_TWO_AHEAD == var) {
+			return isDustInDirection(getDirection(),2);
+		} else if (StateVariable.DUST_NORTH == var) {
+			return isDustInDirection(Direction.NORTH, 1);
+		} else if (StateVariable.DUST_EAST == var) {
+			return isDustInDirection(Direction.EAST, 1);
+		} else if (StateVariable.DUST_SOUTH == var) {
+			return isDustInDirection(Direction.SOUTH, 1);
+		} else if (StateVariable.DUST_WEST == var) {
+			return isDustInDirection(Direction.WEST, 1);
+		} else if (StateVariable.OBSTACLE_AHEAD == var) {
+			return isObstacleInDirection(getDirection());
+		} else if (StateVariable.OBSTACLE_NORTH == var) {
+			return isObstacleInDirection(Direction.NORTH);
+		} else if (StateVariable.OBSTACLE_EAST == var) {
+			return isObstacleInDirection(Direction.EAST);
+		} else if (StateVariable.OBSTACLE_SOUTH == var) {
+			return isObstacleInDirection(Direction.SOUTH);
+		} else if (StateVariable.OBSTACLE_WEST == var) {
+			return isObstacleInDirection(Direction.WEST);
+		} else {
+			return false;
+		}
 	}
 }

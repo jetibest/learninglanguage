@@ -1,6 +1,5 @@
 package languagelearning.agents;
 
-import languagelearning.LearningLanguage;
 import languagelearning.env.Environment;
 
 public abstract class GridObject {
@@ -11,7 +10,10 @@ public abstract class GridObject {
 	public GridObject(int x, int y) {
 		this.x = x;
 		this.y = y;
-		env = LearningLanguage.MAIN.getEnvironment();
+	}
+	
+	public void setEnvironment(Environment env) {
+		this.env = env;
 	}
 
 	public void start() {

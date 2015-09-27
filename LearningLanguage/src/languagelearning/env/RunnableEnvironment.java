@@ -1,9 +1,11 @@
 package languagelearning.env;
 
 import languagelearning.LearningLanguage;
+import languagelearning.actions.Action;
 import languagelearning.agents.Agent;
 import languagelearning.agents.AgentFactory;
 import languagelearning.agents.TDQLearningVacuumCleaner;
+import languagelearning.states.StateVariable;
 
 public class RunnableEnvironment extends Environment implements Runnable {
 	public static final long SIMULATION_INTERVAL = 1000; // is affected by
@@ -41,7 +43,12 @@ public class RunnableEnvironment extends Environment implements Runnable {
 
 			@Override
 			public Agent produceAgent(int x, int y) {
-				return new TDQLearningVacuumCleaner(x, y);
+				TDQLearningVacuumCleaner agent = new TDQLearningVacuumCleaner(x, y);
+				
+				agent.setPossibleActions(new Action[]{Action.TURN_LEFT,Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST});
+				agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_AHEAD,StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD});
+				
+				return agent;
 			}});
 	}
 	

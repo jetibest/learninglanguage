@@ -13,8 +13,8 @@ public class LearningLanguage implements Logger {
 	 */
 
 	public static final LearningLanguage MAIN = new LearningLanguage();
-	private static final int GRID_WIDTH = 32;
-	private static final int GRID_HEIGHT = 20;
+	public static final int GRID_WIDTH = 32;
+	public static final int GRID_HEIGHT = 20;
 	public static final int GRID_SIZE = 20;
 
 	private boolean isRunning;

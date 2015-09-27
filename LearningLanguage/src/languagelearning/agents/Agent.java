@@ -1,6 +1,7 @@
 package languagelearning.agents;
 
 import languagelearning.actions.Action;
+import languagelearning.env.Environment;
 
 public class Agent extends GridObject
 {
@@ -12,8 +13,6 @@ public class Agent extends GridObject
 	public Agent(int x, int y)
 	{
 		super(x, y);
-		
-		init();
 	}
 	
 	private void init()

@@ -1,5 +1,7 @@
 package languagelearning.agents;
 
+import languagelearning.env.Environment;
+
 /**
  *
  * @author simon
