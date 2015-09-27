@@ -33,7 +33,8 @@ public class LearningLanguageTester {
 		final double futureRewardDiscountRate = 0.9;
 		
 		final Action[] possibleActions = new Action[]{Action.TURN_LEFT,Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST};
-		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD};
+		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD};
+		final StateVariable[] possibleStateVariables = new StateVariable[]{};
 		
 		final AgentFactory agentFactory = new AgentFactory() {
 			@Override

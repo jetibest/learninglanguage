@@ -63,15 +63,15 @@ public class VacuumCleaner extends Agent
 	}
 	
 	public boolean isDustInDirection(Direction direction,int step) {
-		int xAhead = getNewXInDirection(getDirection(),step);
-		int yAhead = getNewYInDirection(getDirection(),step);
+		int xAhead = getNewXInDirection(direction,step);
+		int yAhead = getNewYInDirection(direction,step);
 
 		return getEnvironment().getDustValue(xAhead, yAhead) > 0;
 	}
 	
 	public boolean isObstacleInDirection(Direction direction) {
-		int xAhead = getNewXInDirection(getDirection());
-		int yAhead = getNewYInDirection(getDirection());
+		int xAhead = getNewXInDirection(direction);
+		int yAhead = getNewYInDirection(direction);
 
 		return !getEnvironment().canMove(xAhead, yAhead);
 	}

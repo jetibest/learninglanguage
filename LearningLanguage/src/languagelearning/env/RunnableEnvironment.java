@@ -44,9 +44,11 @@ public class RunnableEnvironment extends Environment implements Runnable {
 			@Override
 			public Agent produceAgent(int x, int y) {
 				TDQLearningVacuumCleaner agent = new TDQLearningVacuumCleaner(x, y);
+				agent.setDebug(true);
 				
-				agent.setPossibleActions(new Action[]{Action.TURN_LEFT,Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST});
-				agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_AHEAD,StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD});
+				agent.setPossibleActions(new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST});
+				//agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_AHEAD,StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD});
+				agent.setPossibleStateVariables(StateVariable.values());
 				
 				return agent;
 			}});
