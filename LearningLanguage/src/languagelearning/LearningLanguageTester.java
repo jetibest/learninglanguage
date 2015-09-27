@@ -20,21 +20,25 @@ public class LearningLanguageTester {
 	private final static DecimalFormat df = new DecimalFormat("#0.0");
 
 	public static void main(String[] args) {
+		int runs = 100;
+		int ticks = 1000;
+		
 		int gridHeight = LearningLanguage.GRID_HEIGHT;
 		int gridWidth = LearningLanguage.GRID_WIDTH;
 		
 		final double dustStartPercentage = RunnableEnvironment.DUST_START_PERCENTAGE;
-		final double dustVariancePercentage = RunnableEnvironment.DUST_START_PERCENTAGE;
+		final double dustVariancePercentage = RunnableEnvironment.DUST_VARIANCE_PERCENTAGE;
 		
 		final int agentInitCount = 1;
 		
-		final double explorationRate = 0.1;
+		final double explorationRate = 0.05;
 		final double learningRate = 0.1;
 		final double futureRewardDiscountRate = 0.9;
 		
-		final Action[] possibleActions = new Action[]{Action.TURN_LEFT,Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST};
+		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST};
 		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD};
-		final StateVariable[] possibleStateVariables = new StateVariable[]{};
+		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD};
+		//final StateVariable[] possibleStateVariables = StateVariable.values();
 		
 		final AgentFactory agentFactory = new AgentFactory() {
 			@Override
@@ -51,10 +55,8 @@ public class LearningLanguageTester {
 			}
 		};
 		
-		int runs = 100;
-		int ticks = 1000;
-		
 		DescriptiveStatistics collectedDustStats = new DescriptiveStatistics();
+		
 		for (int run = 0; run < runs; run++) {
 			final Environment environment = new Environment(gridHeight,gridWidth) {
 

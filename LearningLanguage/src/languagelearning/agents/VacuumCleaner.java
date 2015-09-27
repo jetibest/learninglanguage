@@ -23,31 +23,6 @@ public class VacuumCleaner extends Agent
 		int reward = dustBefore - dustAfter;
 		return reward;
 	}
-	
-        @Override
-	public void run()
-	{	
-                // Move around, and sometimes randomly change direction
-                // And collect dust on the way
-                collectDust();
-
-                if(Math.random() < 0.1)
-                {
-                        if(Math.random() < 0.5)
-                        {
-                                turnLeft();
-                        }
-                        else
-                        {
-                                turnRight();
-                        }
-                }
-                else
-                {
-                        moveForward();
-                }
-			
-	}
         
 	@Override
 	public int doAction(Action action) {
