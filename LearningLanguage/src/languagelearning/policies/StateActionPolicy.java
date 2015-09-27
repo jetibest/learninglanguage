@@ -57,7 +57,7 @@ public class StateActionPolicy {
 		Iterator<State> statesIt = states.iterator();
 		while (statesIt.hasNext()) {
 			State state = statesIt.next();
-			buffer.append("STATE = " + state + "\n");
+			buffer.append("State = " + state + "\n");
 			
 			Set<Action> actions = values.get(state).keySet();
 			Iterator<Action> actionsIt = actions.iterator();
@@ -65,7 +65,7 @@ public class StateActionPolicy {
 				Action action = actionsIt.next();
 				
 				double value = getValue(state,action);
-				buffer.append("   ACTION = " + action + " VALUE = " + value + "\n");
+				buffer.append("   Action = " + action + " Value = " + value + "\n");
 			}
 		}
 		

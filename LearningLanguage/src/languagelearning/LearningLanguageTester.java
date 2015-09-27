@@ -2,11 +2,15 @@ package languagelearning;
 
 import java.text.DecimalFormat;
 
+import languagelearning.actions.Action;
 import languagelearning.agents.Agent;
 import languagelearning.agents.AgentFactory;
+import languagelearning.agents.TDQLearningVacuumCleaner;
+import languagelearning.agents.TDVacuumCleaner;
 import languagelearning.agents.VacuumCleaner;
 import languagelearning.env.Environment;
 import languagelearning.env.RunnableEnvironment;
+import languagelearning.states.StateVariable;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
@@ -23,10 +27,26 @@ public class LearningLanguageTester {
 		final double dustVariancePercentage = RunnableEnvironment.DUST_START_PERCENTAGE;
 		
 		final int agentInitCount = 1;
+		
+		final double explorationRate = 0.1;
+		final double learningRate = 0.1;
+		final double futureRewardDiscountRate = 0.9;
+		
+		final Action[] possibleActions = new Action[]{Action.TURN_LEFT,Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST};
+		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD};
+		
 		final AgentFactory agentFactory = new AgentFactory() {
 			@Override
 			public Agent produceAgent(int x, int y) {
-				return new VacuumCleaner(x,y);
+				TDVacuumCleaner agent = new TDQLearningVacuumCleaner(x,y);
+				agent.setExplorationRate(explorationRate);
+				agent.setLearningRate(learningRate);
+				agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
+				agent.setPossibleActions(possibleActions);
+				agent.setPossibleStateVariables(possibleStateVariables);
+				return agent;
+				
+				//return new VacuumCleaner(x,y);
 			}
 		};
 		

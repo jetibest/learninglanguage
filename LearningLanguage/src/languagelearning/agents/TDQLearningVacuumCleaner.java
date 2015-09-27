@@ -23,18 +23,18 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 		// Temporal difference algorithm based on: http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html
 		
 		log("============================================");
-		log("POLICY: \n" + policy);
+		log("Policy: \n" + policy);
 		
 		State state0 = getCurrentState();
-		log("STATE: " + state0);
+		log("Current state: " + state0);
 		
 		// Choose action from state
 		Action action0 = getEGreedyAction(state0);
-		log("ACTION: " + action0);
+		log("Action: " + action0);
 
 		// Take action, observe reward
 		double reward0 = doAction(action0);
-		log("REWARD: " + reward0);
+		log("Reward: " + reward0);
 		// Observe new state'
 		State state1 = getCurrentState();
 		
@@ -44,7 +44,7 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 		double value0 = policy.getValue(state0, action0);
 		double value1 = policy.getValue(state1, action1);
 		double valueDelta = getLearningRate() * (reward0 + (getFutureRewardDiscountRate() * value1) - value0);
-		log("VALUE DELTA: " + valueDelta);
+		log("Value difference: " + valueDelta);
 		double newValue0 = value0 + valueDelta;
 		policy.setValue(state0, action0, newValue0);
 	}
