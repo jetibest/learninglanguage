@@ -47,8 +47,8 @@ public class RunnableEnvironment extends Environment implements Runnable {
 				agent.setDebug(true);
 				
 				agent.setPossibleActions(new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST});
-				//agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_AHEAD,StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD});
-				agent.setPossibleStateVariables(StateVariable.values());
+				agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_AHEAD,StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD});
+				//agent.setPossibleStateVariables(StateVariable.values());
 				
 				return agent;
 			}});
