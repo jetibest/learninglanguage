@@ -8,11 +8,12 @@ import languagelearning.LearningLanguage;
 import languagelearning.Logger;
 import languagelearning.StatusUpdater;
 import languagelearning.agents.Agent;
+import languagelearning.agents.AgentFactory;
 import languagelearning.agents.GridObject;
 import languagelearning.agents.SmartVacuumCleaner;
 import languagelearning.gui.LLControlPanel;
 
-public class Environment {
+public abstract class Environment {
 	public static final int DUST_MAX = 1000;
 	public static final int DUST_MIN = 0;
 	public static final int DUST_INCREMENT_VALUE = 0;
@@ -36,15 +37,33 @@ public class Environment {
 	
 	public void init() {
 		initDust();
-		initAgents();
+		initObjects();
 	}
 
-	public void initDust() {
-		// To be implemented in subclasses
+	public abstract void initDust();
+	
+	public void initRandomDust(double dustStartPercentage, double dustVariancePercentage) {
+		for (int i = 0; i < getGridHeight(); i++) {
+			int[] row = new int[getGridWidth()];
+			for (int j = 0; j < getGridWidth(); j++) {
+				row[j] = (int) (DUST_MAX * dustStartPercentage + (Math
+						.random() * 2 - 1)
+						* DUST_MAX
+						* dustVariancePercentage);
+			}
+			getDustGrid()[i] = row;
+		}
 	}
 	
-	public void initAgents() {
-		// To be implemented in subclasses
+	public abstract void initObjects();
+	
+	public void initRandomAgents(int agentInitCount,AgentFactory agentFactory) {
+		for (int i = 0; i < agentInitCount; i++) {
+			int initX = (int) (Math.random() * getGridWidth());
+			int initY = (int) (Math.random() * getGridHeight());
+			Agent agent = agentFactory.produceAgent(initX, initY);
+			getObjects().add(agent);
+		}
 	}
 	
 	public void start() {
@@ -81,16 +100,47 @@ public class Environment {
 		ticks++;
 	}
 	
-	public void updateDust() {
-		// To be implemented in subclasses
+	public abstract void updateDust();
+	
+	public void updateDustWithConstantIncremenent(int dustIncrementValue) {
+		for (int i = 0; i < getGridHeight(); i++) {
+			int[] row = getDustGrid()[i];
+			for (int j = 0; j < getGridWidth(); j++) {
+				int val = Math.min(row[j] + dustIncrementValue, DUST_MAX);
+				row[j] = val;
+			}
+		}
 	}
 	
-	public void updateObjects() {
-		// To be implemented in subclasses
+	public abstract void updateObjects();
+	
+	public void updateObjectsInRandomOrder() {
+		// Call `run` for all objects in a random order
+		{
+			int n = getObjects().size();
+			List<Integer> visited = new ArrayList<Integer>();
+			for (int i = 0; i < n; i++) {
+				visited.add(i);
+			}
+			int i = 0;
+			while (visited.size() > 0) {
+				i = (i + (int) (n * Math.random())) % n;
+				getObjects().get(visited.remove(i)).run();
+				n--;
+			}
+		}
 	}
 	
 	public void updateStatus() {
-		// To be implemented in subclasses
+		if (statusUpdater != null) {
+			int gridCellsCount = getGridHeight()
+					* getGridWidth();
+			long totalDust = getTotalDust();
+			getStatusUpdater().updateTotalDustPercentage(100.0D
+					* (totalDust - DUST_MIN * gridCellsCount)
+					/ ((DUST_MAX - DUST_MIN) * gridCellsCount));
+			getStatusUpdater().updateTime(getTicks());
+		}
 	}
 	
 	public void setLogger(Logger logger) {

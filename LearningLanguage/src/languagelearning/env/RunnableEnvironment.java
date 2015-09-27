@@ -1,9 +1,8 @@
 package languagelearning.env;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import languagelearning.LearningLanguage;
+import languagelearning.agents.Agent;
+import languagelearning.agents.AgentFactory;
 import languagelearning.agents.TDQLearningVacuumCleaner;
 
 public class RunnableEnvironment extends Environment implements Runnable {
@@ -33,28 +32,19 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	
 	@Override
 	public void initDust() {
-		for (int i = 0; i < getGridHeight(); i++) {
-			int[] row = new int[getGridWidth()];
-			for (int j = 0; j < getGridWidth(); j++) {
-				row[j] = (int) (DUST_MAX * DUST_START_PERCENTAGE + (Math
-						.random() * 2 - 1)
-						* DUST_MAX
-						* DUST_VARIANCE_PERCENTAGE);
-			}
-			getDustGrid()[i] = row;
-		}
+		initRandomDust(DUST_START_PERCENTAGE, DUST_VARIANCE_PERCENTAGE);
 	}
 	
 	@Override
-	public void initAgents() {
-		for (int i = 0; i < AGENTS_INIT_COUNT; i++) {
-			int initX = (int) (Math.random() * getGridWidth());
-			int initY = (int) (Math.random() * getGridHeight());
-			// objects.add(new VacuumCleaner(initX, initY));
-			getObjects().add(new TDQLearningVacuumCleaner(initX, initY));
-		}
-	}
+	public void initObjects() {
+		initRandomAgents(AGENTS_INIT_COUNT,new AgentFactory() {
 
+			@Override
+			public Agent produceAgent(int x, int y) {
+				return new TDQLearningVacuumCleaner(x, y);
+			}});
+	}
+	
 	@Override
 	public void start() {
 		t.start();
@@ -86,42 +76,12 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	
 	@Override
 	public void updateDust() {
-		for (int i = 0; i < getGridHeight(); i++) {
-			int[] row = getDustGrid()[i];
-			for (int j = 0; j < getGridWidth(); j++) {
-				int val = Math.min(row[j] + DUST_INCREMENT_VALUE, DUST_MAX);
-				row[j] = val;
-			}
-		}
-	}
-
-	@Override
-	public void updateObjects() {
-		// Call `run` for all objects in a random order
-		{
-			int n = getObjects().size();
-			List<Integer> visited = new ArrayList<Integer>();
-			for (int i = 0; i < n; i++) {
-				visited.add(i);
-			}
-			int i = 0;
-			while (visited.size() > 0) {
-				i = (i + (int) (n * Math.random())) % n;
-				getObjects().get(visited.remove(i)).run();
-				n--;
-			}
-		}
+		updateDustWithConstantIncremenent(DUST_INCREMENT_VALUE);
 	}
 	
 	@Override
-	public void updateStatus() {
-		int gridCellsCount = getGridHeight()
-				* getGridWidth();
-		long totalDust = getTotalDust();
-		getStatusUpdater().updateTotalDustPercentage(100.0D
-				* (totalDust - DUST_MIN * gridCellsCount)
-				/ ((DUST_MAX - DUST_MIN) * gridCellsCount));
-		getStatusUpdater().updateTime(getTicks());
+	public void updateObjects() {
+		updateObjectsInRandomOrder();
 	}
 	
 	public double getSimulationSpeedMultiplier() {
