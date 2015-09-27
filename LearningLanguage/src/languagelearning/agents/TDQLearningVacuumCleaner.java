@@ -38,7 +38,7 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 		// Observe new state'
 		State state1 = getCurrentState();
 		
-		Action action1 = policy.getActionWithMaxValue(state1, getPossibleActions());
+		Action action1 = policy.getActionWithMaxValue(state1, getPossibleActionsInRandomOrder());
 		
 		// Update policy
 		double value0 = policy.getValue(state0, action0);
