@@ -32,16 +32,16 @@ public class LearningLanguageStats {
 		
 		final int agentInitCount = 1;
 		
-		final double explorationRate = 0.1;
+		final double explorationRate = 0.5;
 		final double learningRate = 0.1;
-		final double futureRewardDiscountRate = 0.999;
+		final double futureRewardDiscountRate = 0.9;
 		
-		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.SET_INTERNAL_STATE_A,Action.CLEAR_INTERNAL_STATE_A};
-		//final Action[] possibleActions = new Action[]{Action.MOVE_NORTH,Action.MOVE_EAST,Action.MOVE_SOUTH,Action.MOVE_WEST,Action.COLLECT_DUST};
+		//final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.SET_INTERNAL_STATE_A,Action.CLEAR_INTERNAL_STATE_A};
+		final Action[] possibleActions = new Action[]{Action.MOVE_NORTH,Action.MOVE_EAST,Action.MOVE_SOUTH,Action.MOVE_WEST,Action.COLLECT_DUST,Action.SET_INTERNAL_STATE_A,Action.CLEAR_INTERNAL_STATE_A};
 		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD};
-		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD,StateVariable.INTERNAL_STATE_A};
+		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.INTERNAL_STATE_A};
 		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_NORTH,StateVariable.DUST_EAST,StateVariable.DUST_SOUTH,StateVariable.DUST_WEST,StateVariable.OBSTACLE_NORTH,StateVariable.OBSTACLE_EAST,StateVariable.OBSTACLE_SOUTH,StateVariable.OBSTACLE_WEST};
-		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_NORTH,StateVariable.DUST_EAST,StateVariable.DUST_SOUTH,StateVariable.DUST_WEST};
+		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.INTERNAL_STATE_A};
 		//final StateVariable[] possibleStateVariables = StateVariable.values();
 		
 		final AgentFactory agentFactory = new AgentFactory() {

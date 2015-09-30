@@ -14,7 +14,7 @@ import languagelearning.agents.SmartVacuumCleaner;
 import languagelearning.gui.LLControlPanel;
 
 public abstract class Environment {
-	public static final int DUST_MAX = 1000;
+	public static final int DUST_MAX = 10000;
 	public static final int DUST_MIN = 0;
 	public static final int DUST_INCREMENT_VALUE = 1;
 

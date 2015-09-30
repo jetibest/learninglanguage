@@ -47,7 +47,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 				agent.setDebug(true);
 				agent.setExplorationRate(0.1);
 				agent.setLearningRate(0.1);
-				agent.setFutureRewardDiscountRate(0.999);
+				agent.setFutureRewardDiscountRate(0.9);
 				agent.setPossibleActions(new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST});
 				agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD});
 				

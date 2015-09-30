@@ -7,7 +7,8 @@ import languagelearning.states.StateVariable;
 
 public class VacuumCleaner extends Agent
 {
-	public static final int DUST_CLEAN_VALUE = 500;
+	public static final int DUST_CLEAN_VALUE = 5000;
+	public static final int DUST_PERCEPTION_THRESHOLD = 1000;
 	private boolean internalStateA;
 	
 	public VacuumCleaner(int x, int y)
@@ -39,14 +40,14 @@ public class VacuumCleaner extends Agent
 	}
 	
 	public boolean isDustBelow() {
-		return getEnvironment().getDustValue(getX(), getY()) > 0;
+		return getEnvironment().getDustValue(getX(), getY()) > DUST_PERCEPTION_THRESHOLD;
 	}
 	
 	public boolean isDustInDirection(Direction direction,int step) {
 		int xAhead = getNewXInDirection(direction,step);
 		int yAhead = getNewYInDirection(direction,step);
 
-		return getEnvironment().getDustValue(xAhead, yAhead) > 0;
+		return getEnvironment().getDustValue(xAhead, yAhead) > DUST_PERCEPTION_THRESHOLD;
 	}
 	
 	public boolean isObstacleInDirection(Direction direction) {
