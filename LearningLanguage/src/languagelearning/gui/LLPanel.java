@@ -79,6 +79,19 @@ public class LLPanel extends JPanel implements Runnable
 					g.fillRect(j*gridSize, i*gridSize, gridSize, gridSize);
 				}
 			}
+                        
+                        int[][] soundgrid = LearningLanguage.MAIN.getEnvironment().getSoundGrid();
+			for(int i=0;i<gridHeight;i++)
+			{
+				int[] soundrow = soundgrid[i];
+				for(int j=0;j<gridWidth;j++)
+				{
+					int value = soundrow[j];
+					Color c = new Color((int) (255.0D*value/Environment.SOUND_MAX), (int) (255.0D*value/Environment.SOUND_MAX), (int) (255.0D*value/Environment.SOUND_MAX));
+					g.setColor(c);
+					g.drawOval(j*gridSize, i*gridSize, gridSize, gridSize);
+				}
+			}
 			
 			List<GridObject> gridObjects = LearningLanguage.MAIN.getEnvironment().getGridObjects();
 			for(int i=0;i<gridObjects.size();i++)

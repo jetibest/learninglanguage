@@ -16,12 +16,63 @@ public class VacuumCleaner extends Agent
 		super(x, y);
 	}
 	
+        // Listen for now only to the square it is at
+        // But we can also listen in squares around us, and then we would know a distance as well, and calculate intensity of the sound as the agent hears it
+        public int listenToCloseSound()
+        {
+            return getEnvironment().getSoundValue(getX(), getY());
+        }
+        
+        public void produceSound(int symbol)
+        {
+            Direction d = getDirection();
+            Environment env = getEnvironment();
+            int x = getX();
+            int y = getY();
+            if(d == Direction.EAST || d == Direction.WEST)
+            {
+                // this is now hardcoded, but this should be transferred into representation in 2-D table around the agent with 1 and 0 representing if there is sound or not
+                // default direction is north, so turn matrix relative to direction
+                // then just loop through the matrix
+                int x1 = getNewXInDirection(d, 1);
+                int x2 = getNewXInDirection(d, 2);
+                int x3 = getNewXInDirection(d, 3);
+                env.setSoundValue(x1, y, symbol);
+                env.setSoundValue(x2, y, symbol);
+                env.setSoundValue(x3, y, symbol);
+                env.setSoundValue(x2, y + 1, symbol);
+                env.setSoundValue(x2, y - 1, symbol);
+                env.setSoundValue(x3, y + 1, symbol);
+                env.setSoundValue(x3, y - 1, symbol);
+                env.setSoundValue(x3, y + 2, symbol);
+                env.setSoundValue(x3, y - 2, symbol);
+            }
+            else
+            {
+                int y1 = getNewYInDirection(d, 1);
+                int y2 = getNewYInDirection(d, 2);
+                int y3 = getNewYInDirection(d, 3);
+                env.setSoundValue(x, y1, symbol);
+                env.setSoundValue(x, y2, symbol);
+                env.setSoundValue(x, y3, symbol);
+                env.setSoundValue(x + 1, y2, symbol);
+                env.setSoundValue(x - 1, y2, symbol);
+                env.setSoundValue(x + 1, y3, symbol);
+                env.setSoundValue(x - 1, y3, symbol);
+                env.setSoundValue(x + 2, y3, symbol);
+                env.setSoundValue(x - 2, y3, symbol);
+            }
+        }
+        
 	public int collectDust()
 	{
 		int dustBefore = getEnvironment().getDustValue(getX(), getY());
 		int dustAfter = Math.max(Environment.DUST_MIN, getEnvironment().getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
 		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 		
+                // on collecting dust, produce sound in direction it is headed
+                produceSound(3);
+                
 		int reward = dustBefore - dustAfter;
 		return reward;
 	}
@@ -36,6 +87,18 @@ public class VacuumCleaner extends Agent
 		} else if (action == Action.CLEAR_INTERNAL_STATE_A) {
 			reward = reward + setInternalStateA(false);
 		}
+                else if(action == Action.PRODUCE_SOUND_A)
+                {
+                    produceSound(1);
+                }
+                else if(action == Action.PRODUCE_SOUND_B)
+                {
+                    produceSound(2);
+                }
+                else if(action == Action.PRODUCE_SOUND_C)
+                {
+                    produceSound(3);
+                }
 		return reward;
 	}
 	

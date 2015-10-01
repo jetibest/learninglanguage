@@ -18,8 +18,11 @@ public abstract class Environment {
 	public static final int DUST_MIN = 0;
 	public static final int DUST_INCREMENT_VALUE = 1;
 
+        public static final int SOUND_MAX = 3;
+        
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid;
+        private int[][] soundgrid;
 	private boolean bounded = true; // with walls
 	private int gridHeight;
 	private int gridWidth;
@@ -33,6 +36,7 @@ public abstract class Environment {
 		this.gridWidth = gridWidth;
 		
 		this.dustgrid = new int[gridHeight][gridWidth];
+                soundgrid = new int[gridHeight][gridWidth];
 	}
 	
 	public void init() {
@@ -94,15 +98,30 @@ public abstract class Environment {
 
 		// No interrupt required here
 	}
+        
+        private void resetSound()
+        {
+            for(int i=0;i<gridHeight;i++)
+            {
+                int[] soundrow = soundgrid[i];
+                for(int j=0;j<gridWidth;j++)
+                {
+                    soundrow[j] = 0;
+                }
+            }
+        }
 	
 	public void tick() {
-		updateDust();
-		
-		updateObjects();
-		
-		updateStatus();
-		
-		ticks++;
+            
+            resetSound();
+            
+            updateDust();
+
+            updateObjects();
+
+            updateStatus();
+
+            ticks++;
 	}
 	
 	public void tick(int numberOfTicks) {
@@ -187,6 +206,23 @@ public abstract class Environment {
 		return true;
 	}
 
+        public void setSoundValue(int x, int y, int value)
+        {
+            if(x >= 0 && y >= 0 && x < gridWidth && y < gridHeight)
+            {
+                soundgrid[y][x] = value;
+            }
+        }
+        
+        public int getSoundValue(int x, int y)
+        {
+            if(x >= 0 && x < gridWidth && y >= 0 && y < gridHeight)
+            {
+                return soundgrid[y][x];
+            }
+            return 0;
+        }
+        
 	public void setDustValue(int x, int y, int value) {
 		dustgrid[y][x] = value;
 	}
@@ -203,6 +239,11 @@ public abstract class Environment {
 		return objects;
 	}
 
+        public int[][] getSoundGrid()
+        {
+            return soundgrid;
+        }
+        
 	public int[][] getDustGrid() {
 		return dustgrid;
 	}
