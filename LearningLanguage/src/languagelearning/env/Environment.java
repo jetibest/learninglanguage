@@ -18,7 +18,6 @@ public abstract class Environment {
         
 	private int dustMax = 10000;
 	private int dustMin = 0;
-	private int dustIncrementValue = 1;
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid;
         private int[][] soundgrid;
@@ -130,7 +129,7 @@ public abstract class Environment {
 	
 	public abstract void updateDust();
 	
-	public void updateDustWithConstantIncremenent() {
+	public void updateDustWithConstantIncremenent(int dustIncrementValue) {
 		for (int i = 0; i < gridHeight; i++) {
 			int[] row = dustgrid[i];
 			for (int j = 0; j < gridWidth; j++) {
@@ -299,14 +298,4 @@ public abstract class Environment {
 	public void setDustMin(int dustMin) {
 		this.dustMin = dustMin;
 	}
-
-	public int getDustIncrementValue() {
-		return dustIncrementValue;
-	}
-
-	public void setDustIncrementValue(int dustIncrementValue) {
-		this.dustIncrementValue = dustIncrementValue;
-	}
-	
-	
 }

@@ -58,6 +58,7 @@ public class StateActionPolicy {
 		while (statesIt.hasNext()) {
 			State state = statesIt.next();
 			buffer.append("State = " + state + "\n");
+			Action maxAction = getActionWithMaxValue(state,Action.values());
 			
 			Set<Action> actions = values.get(state).keySet();
 			Iterator<Action> actionsIt = actions.iterator();
@@ -65,7 +66,11 @@ public class StateActionPolicy {
 				Action action = actionsIt.next();
 				
 				double value = getValue(state,action);
-				buffer.append("   Action = " + action + " Value = " + value + "\n");
+				buffer.append("   Action = " + action + " Value = " + value);
+				if (action.equals(maxAction)) {
+					buffer.append(" ***");
+				}
+				buffer.append("\n");
 			}
 		}
 		

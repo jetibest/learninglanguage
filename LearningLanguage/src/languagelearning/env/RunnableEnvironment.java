@@ -18,12 +18,18 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	public static final int SIM_SPEED_MIN = 0;
 	public static final int SIM_SPEED_MAX = 1000;
 	public static final int SIM_SPEED_DEFAULT = 500;
+	
+	public static final int DUST_MIN = 0;
+	public static final int DUST_MAX = 10000;
+	public static final int DUST_INCREMENT_VALUE = 20;
 
 	private Thread t;
 	private int simulationSpeed = SIM_SPEED_DEFAULT;
 
 	public RunnableEnvironment(int getGridHeight, int getGridWidth) {
 		super(getGridHeight, getGridWidth);
+		setDustMin(DUST_MIN);
+		setDustMax(DUST_MAX);
 	}
 	
 	public void init() {
@@ -86,7 +92,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	
 	@Override
 	public void updateDust() {
-		updateDustWithConstantIncremenent();
+		updateDustWithConstantIncremenent(DUST_INCREMENT_VALUE);
 	}
 	
 	@Override

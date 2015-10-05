@@ -7,8 +7,8 @@ import languagelearning.states.StateVariable;
 
 public class VacuumCleaner extends Agent
 {
-	public static final int DUST_CLEAN_VALUE = 5000;
-	public static final int DUST_PERCEPTION_THRESHOLD = 1000;
+	private int dustCleanValue = 5000;
+	private int dustPerceptionThreshold = 1000;
 	private boolean internalStateA;
 	
 	public VacuumCleaner(int x, int y)
@@ -67,7 +67,7 @@ public class VacuumCleaner extends Agent
 	public int collectDust()
 	{
 		int dustBefore = getEnvironment().getDustValue(getX(), getY());
-		int dustAfter = Math.max(getEnvironment().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
+		int dustAfter = Math.max(getEnvironment().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - dustCleanValue);
 		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 		
         // on collecting dust, produce sound in direction it is headed
@@ -103,14 +103,14 @@ public class VacuumCleaner extends Agent
 	}
 	
 	public boolean isDustBelow() {
-		return getEnvironment().getDustValue(getX(), getY()) > DUST_PERCEPTION_THRESHOLD;
+		return getEnvironment().getDustValue(getX(), getY()) > dustPerceptionThreshold;
 	}
 	
 	public boolean isDustInDirection(Direction direction,int step) {
 		int xAhead = getNewXInDirection(direction,step);
 		int yAhead = getNewYInDirection(direction,step);
 
-		return getEnvironment().getDustValue(xAhead, yAhead) > DUST_PERCEPTION_THRESHOLD;
+		return getEnvironment().getDustValue(xAhead, yAhead) > dustPerceptionThreshold;
 	}
 	
 	public boolean isObstacleInDirection(Direction direction) {
@@ -182,4 +182,22 @@ public class VacuumCleaner extends Agent
 		this.internalStateA = internalStateA;
 		return 0; // Reward = 0
 	}
+
+	public int getDustCleanValue() {
+		return dustCleanValue;
+	}
+
+	public void setDustCleanValue(int dustCleanValue) {
+		this.dustCleanValue = dustCleanValue;
+	}
+
+	public int getDustPerceptionThreshold() {
+		return dustPerceptionThreshold;
+	}
+
+	public void setDustPerceptionThreshold(int dustPerceptionThreshold) {
+		this.dustPerceptionThreshold = dustPerceptionThreshold;
+	}
+	
+	
 }
