@@ -5,92 +5,89 @@ import languagelearning.env.Environment;
 import languagelearning.states.PredicateState;
 import languagelearning.states.StateVariable;
 
-public class VacuumCleaner extends Agent
-{
+public class VacuumCleaner extends Agent {
 	private int dustCleanValue = 5000;
 	private int dustPerceptionThreshold = 1000;
-	private int soundSymbolOnEveryDustCollected = 0;
 	private boolean internalStateA;
-	
-	public VacuumCleaner(int x, int y)
-	{
+
+	public VacuumCleaner(int x, int y) {
 		super(x, y);
 	}
-	
-        // Listen for now only to the square it is at
-        // But we can also listen in squares around us, and then we would know a distance as well, and calculate intensity of the sound as the agent hears it
-        public int getSoundSymbolBelow()
-        {
-            return getEnvironment().getSoundValue(getX(), getY());
-        }
-        
-    	public int getSoundSymbolInDirection(Direction direction,int step) {
-    		int xAhead = getNewXInDirection(direction,step);
-    		int yAhead = getNewYInDirection(direction,step);
 
-    		return getEnvironment().getSoundValue(xAhead, yAhead);
-    	}
-        
-        public void produceSound(int symbol)
-        {
-            Direction d = getDirection();
-            Environment env = getEnvironment();
-            int x = getX();
-            int y = getY();
-            if(d == Direction.EAST || d == Direction.WEST)
-            {
-                // this is now hardcoded, but this should be transferred into representation in 2-D table around the agent with 1 and 0 representing if there is sound or not
-                // default direction is north, so turn matrix relative to direction
-                // then just loop through the matrix
-                int x1 = getNewXInDirection(d, 1);
-                int x2 = getNewXInDirection(d, 2);
-                int x3 = getNewXInDirection(d, 3);
-                env.setSoundValue(x1, y, symbol);
-                env.setSoundValue(x2, y, symbol);
-                env.setSoundValue(x3, y, symbol);
-                env.setSoundValue(x2, y + 1, symbol);
-                env.setSoundValue(x2, y - 1, symbol);
-                env.setSoundValue(x3, y + 1, symbol);
-                env.setSoundValue(x3, y - 1, symbol);
-                env.setSoundValue(x3, y + 2, symbol);
-                env.setSoundValue(x3, y - 2, symbol);
-            }
-            else
-            {
-                int y1 = getNewYInDirection(d, 1);
-                int y2 = getNewYInDirection(d, 2);
-                int y3 = getNewYInDirection(d, 3);
-                env.setSoundValue(x, y1, symbol);
-                env.setSoundValue(x, y2, symbol);
-                env.setSoundValue(x, y3, symbol);
-                env.setSoundValue(x + 1, y2, symbol);
-                env.setSoundValue(x - 1, y2, symbol);
-                env.setSoundValue(x + 1, y3, symbol);
-                env.setSoundValue(x - 1, y3, symbol);
-                env.setSoundValue(x + 2, y3, symbol);
-                env.setSoundValue(x - 2, y3, symbol);
-            }
-        }
-        
-	public int collectDust()
-	{
-		int dustBefore = getEnvironment().getDustValue(getX(), getY());
-		int dustAfter = Math.max(getEnvironment().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - dustCleanValue);
-		getEnvironment().setDustValue(getX(), getY(), dustAfter);
-		
-        // on collecting dust, produce sound in direction it is headed
-		if (soundSymbolOnEveryDustCollected > 0) {
-	        produceSound(soundSymbolOnEveryDustCollected);
+	// Listen for now only to the square it is at
+	// But we can also listen in squares around us, and then we would know a
+	// distance as well, and calculate intensity of the sound as the agent hears
+	// it
+	public int getSoundSymbolBelow() {
+		return getEnvironment().getSoundValue(getX(), getY());
+	}
+
+	public int getSoundSymbolInDirection(Direction direction, int step) {
+		int xAhead = getNewXInDirection(direction, step);
+		int yAhead = getNewYInDirection(direction, step);
+
+		return getEnvironment().getSoundValue(xAhead, yAhead);
+	}
+
+	public int produceSound(int symbol) {
+		Direction d = getDirection();
+		Environment env = getEnvironment();
+		int x = getX();
+		int y = getY();
+		if (d == Direction.EAST || d == Direction.WEST) {
+			// this is now hardcoded, but this should be transferred into
+			// representation in 2-D table around the agent with 1 and 0
+			// representing if there is sound or not
+			// default direction is north, so turn matrix relative to direction
+			// then just loop through the matrix
+			int x1 = getNewXInDirection(d, 1);
+			int x2 = getNewXInDirection(d, 2);
+			int x3 = getNewXInDirection(d, 3);
+			env.setSoundValue(x1, y, symbol);
+			env.setSoundValue(x2, y, symbol);
+			env.setSoundValue(x3, y, symbol);
+			env.setSoundValue(x2, y + 1, symbol);
+			env.setSoundValue(x2, y - 1, symbol);
+			env.setSoundValue(x3, y + 1, symbol);
+			env.setSoundValue(x3, y - 1, symbol);
+			env.setSoundValue(x3, y + 2, symbol);
+			env.setSoundValue(x3, y - 2, symbol);
+		} else {
+			int y1 = getNewYInDirection(d, 1);
+			int y2 = getNewYInDirection(d, 2);
+			int y3 = getNewYInDirection(d, 3);
+			env.setSoundValue(x, y1, symbol);
+			env.setSoundValue(x, y2, symbol);
+			env.setSoundValue(x, y3, symbol);
+			env.setSoundValue(x + 1, y2, symbol);
+			env.setSoundValue(x - 1, y2, symbol);
+			env.setSoundValue(x + 1, y3, symbol);
+			env.setSoundValue(x - 1, y3, symbol);
+			env.setSoundValue(x + 2, y3, symbol);
+			env.setSoundValue(x - 2, y3, symbol);
 		}
-                
+		return 0; // No reward
+	}
+
+	public int collectDust() {
+		return collectDustAndProduceSignal(0);
+	}
+
+	public int collectDustAndProduceSignal(int symbol) {
+		int dustBefore = getEnvironment().getDustValue(getX(), getY());
+		int dustAfter = Math.max(getEnvironment().getDustMin(),
+				getEnvironment().getDustValue(getX(), getY()) - dustCleanValue);
+		getEnvironment().setDustValue(getX(), getY(), dustAfter);
+
 		int reward = dustBefore - dustAfter;
+
+		if (reward > 0 && symbol > 0) {
+			produceSound(symbol);
+		}
+
 		return reward;
 	}
-	
-	public void setSoundSymbolOnEveryDustCollected(int symbol) {
-		this.soundSymbolOnEveryDustCollected = symbol;
-	}
-        
+
 	@Override
 	public int doAction(Action action) {
 		int reward = super.doAction(action);
@@ -100,67 +97,67 @@ public class VacuumCleaner extends Agent
 			reward = reward + setInternalStateA(true);
 		} else if (action == Action.CLEAR_INTERNAL_STATE_A) {
 			reward = reward + setInternalStateA(false);
+		} else if (action == Action.PRODUCE_SOUND_A) {
+			reward = reward + produceSound(1);
+		} else if (action == Action.PRODUCE_SOUND_B) {
+			reward = reward + produceSound(2);
+		} else if (action == Action.PRODUCE_SOUND_C) {
+			reward = reward + produceSound(3);
+		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_A) {
+			reward = reward + collectDustAndProduceSignal(1);
+		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_B) {
+			reward = reward + collectDustAndProduceSignal(2);
+		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_C) {
+			reward = reward + collectDustAndProduceSignal(3);
 		}
-                else if(action == Action.PRODUCE_SOUND_A)
-                {
-                    produceSound(1);
-                }
-                else if(action == Action.PRODUCE_SOUND_B)
-                {
-                    produceSound(2);
-                }
-                else if(action == Action.PRODUCE_SOUND_C)
-                {
-                    produceSound(3);
-                }
 		return reward;
 	}
-	
+
 	public boolean isDustBelow() {
 		return getEnvironment().getDustValue(getX(), getY()) > dustPerceptionThreshold;
 	}
-	
-	public boolean isDustInDirection(Direction direction,int step) {
-		int xAhead = getNewXInDirection(direction,step);
-		int yAhead = getNewYInDirection(direction,step);
+
+	public boolean isDustInDirection(Direction direction, int step) {
+		int xAhead = getNewXInDirection(direction, step);
+		int yAhead = getNewYInDirection(direction, step);
 
 		return getEnvironment().getDustValue(xAhead, yAhead) > dustPerceptionThreshold;
 	}
-	
+
 	public boolean isObstacleInDirection(Direction direction) {
 		int xAhead = getNewXInDirection(direction);
 		int yAhead = getNewYInDirection(direction);
 
 		return !getEnvironment().canMove(xAhead, yAhead);
 	}
-	
+
 	public boolean isSoundBelow(int symbol) {
 		return getSoundSymbolBelow() == symbol;
 	}
-	
-	public boolean isSoundInDirectionBelow(int symbol,int step) {
+
+	public boolean isSoundInDirectionBelow(int symbol, int step) {
 		return getSoundSymbolInDirection(getDirection(), step) == symbol;
 	}
-	
+
 	public PredicateState getPredicateState(StateVariable[] possibleVariables) {
 		PredicateState state = new PredicateState();
-		
-		for (StateVariable var: possibleVariables) {
+
+		for (StateVariable var : possibleVariables) {
 			if (hasStateVariable(var)) {
 				state.setVariable(var);
 			}
 		}
-		
+
 		return state;
 	}
-	
+
 	public boolean hasStateVariable(StateVariable var) {
 		if (StateVariable.DUST_BELOW == var) {
 			return isDustBelow();
 		} else if (StateVariable.DUST_AHEAD == var) {
-			return isDustInDirection(getDirection(),1);
+			return isDustInDirection(getDirection(), 1);
 		} else if (StateVariable.DUST_TWO_AHEAD == var) {
-			return isDustInDirection(getDirection(),2);
+			return isDustInDirection(getDirection(), 2);
 		} else if (StateVariable.DUST_NORTH == var) {
 			return isDustInDirection(Direction.NORTH, 1);
 		} else if (StateVariable.DUST_EAST == var) {
@@ -222,6 +219,5 @@ public class VacuumCleaner extends Agent
 	public void setDustPerceptionThreshold(int dustPerceptionThreshold) {
 		this.dustPerceptionThreshold = dustPerceptionThreshold;
 	}
-	
-	
+
 }
