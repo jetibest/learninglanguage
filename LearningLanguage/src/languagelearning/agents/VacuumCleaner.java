@@ -19,10 +19,17 @@ public class VacuumCleaner extends Agent
 	
         // Listen for now only to the square it is at
         // But we can also listen in squares around us, and then we would know a distance as well, and calculate intensity of the sound as the agent hears it
-        public int listenToCloseSound()
+        public int getSoundSymbolBelow()
         {
             return getEnvironment().getSoundValue(getX(), getY());
         }
+        
+    	public int getSoundSymbolInDirection(Direction direction,int step) {
+    		int xAhead = getNewXInDirection(direction,step);
+    		int yAhead = getNewYInDirection(direction,step);
+
+    		return getEnvironment().getSoundValue(xAhead, yAhead);
+    	}
         
         public void produceSound(int symbol)
         {
@@ -128,7 +135,11 @@ public class VacuumCleaner extends Agent
 	}
 	
 	public boolean isSoundBelow(int symbol) {
-		return listenToCloseSound() == symbol;
+		return getSoundSymbolBelow() == symbol;
+	}
+	
+	public boolean isSoundInDirectionBelow(int symbol,int step) {
+		return getSoundSymbolInDirection(getDirection(), step) == symbol;
 	}
 	
 	public PredicateState getPredicateState(StateVariable[] possibleVariables) {
@@ -176,6 +187,12 @@ public class VacuumCleaner extends Agent
 			return isSoundBelow(2);
 		} else if (StateVariable.SOUND_C_BELOW == var) {
 			return isSoundBelow(3);
+		} else if (StateVariable.SOUND_A_AHEAD == var) {
+			return isSoundInDirectionBelow(1, 1);
+		} else if (StateVariable.SOUND_B_AHEAD == var) {
+			return isSoundInDirectionBelow(2, 1);
+		} else if (StateVariable.SOUND_C_AHEAD == var) {
+			return isSoundInDirectionBelow(3, 1);
 		} else {
 			return false;
 		}
