@@ -4,16 +4,22 @@ import languagelearning.actions.Action;
 import languagelearning.env.Environment;
 import languagelearning.states.PredicateState;
 import languagelearning.states.StateVariable;
+import languagelearning.util.BooleanMatrix;
 
 public class VacuumCleaner extends Agent {
 	private int dustCleanValue = 5000;
 	private int dustPerceptionThreshold = 1000;
 	private boolean internalStateA;
+	private BooleanMatrix soundMatrix; // Pattern of sounds around agent (in north direction)
 
 	public VacuumCleaner(int x, int y) {
 		super(x, y);
 	}
 
+	public void setSoundMatrix(BooleanMatrix soundMatrix) {
+		this.soundMatrix = soundMatrix;
+	}
+	
 	// Listen for now only to the square it is at
 	// But we can also listen in squares around us, and then we would know a
 	// distance as well, and calculate intensity of the sound as the agent hears
@@ -27,6 +33,24 @@ public class VacuumCleaner extends Agent {
 		int yAhead = getNewYInDirection(direction, step);
 
 		return getEnvironment().getSoundValue(xAhead, yAhead);
+	}
+	
+	public int produceSoundWithSoundMatrix(int symbol) {
+		if (this.soundMatrix != null) {
+			Environment env = getEnvironment();
+			BooleanMatrix localMatrix = this.soundMatrix.rotateInDirection(getDirection());
+			for (int deltaX = localMatrix.getMinRelativeX(); deltaX <= localMatrix.getMaxRelativeX(); deltaX++) {
+				for (int deltaY = localMatrix.getMinRelativeY(); deltaY <= localMatrix.getMaxRelativeY(); deltaY++) {
+					boolean value = localMatrix.getValueRelativeToMiddlePoint(deltaX, deltaY);
+					if (value) {
+						int xx = getNewX(deltaX);
+						int yy = getNewY(deltaY);
+						env.setSoundValue(xx, yy, symbol);
+					}
+				}				
+			}
+		}
+		return 0; // No reward
 	}
 
 	public int produceSound(int symbol) {
@@ -82,7 +106,7 @@ public class VacuumCleaner extends Agent {
 		int reward = dustBefore - dustAfter;
 
 		if (reward >= rewardThreshold && symbol > 0) {
-			produceSound(symbol);
+			produceSoundWithSoundMatrix(symbol);
 		}
 
 		return reward;
@@ -98,11 +122,11 @@ public class VacuumCleaner extends Agent {
 		} else if (action == Action.CLEAR_INTERNAL_STATE_A) {
 			reward = reward + setInternalStateA(false);
 		} else if (action == Action.PRODUCE_SOUND_A) {
-			reward = reward + produceSound(1);
+			reward = reward + produceSoundWithSoundMatrix(1);
 		} else if (action == Action.PRODUCE_SOUND_B) {
-			reward = reward + produceSound(2);
+			reward = reward + produceSoundWithSoundMatrix(2);
 		} else if (action == Action.PRODUCE_SOUND_C) {
-			reward = reward + produceSound(3);
+			reward = reward + produceSoundWithSoundMatrix(3);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_A) {
 			reward = reward + collectDustAndProduceSignal(1,-1);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_B) {
