@@ -70,8 +70,8 @@ public class VacuumCleaner extends Agent
 		int dustAfter = Math.max(Environment.DUST_MIN, getEnvironment().getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
 		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 		
-                // on collecting dust, produce sound in direction it is headed
-                produceSound(3);
+        // on collecting dust, produce sound in direction it is headed
+        // produceSound(3);
                 
 		int reward = dustBefore - dustAfter;
 		return reward;
@@ -120,6 +120,10 @@ public class VacuumCleaner extends Agent
 		return !getEnvironment().canMove(xAhead, yAhead);
 	}
 	
+	public boolean isSoundBelow(int symbol) {
+		return listenToCloseSound() == symbol;
+	}
+	
 	public PredicateState getPredicateState(StateVariable[] possibleVariables) {
 		PredicateState state = new PredicateState();
 		
@@ -159,6 +163,12 @@ public class VacuumCleaner extends Agent
 			return isObstacleInDirection(Direction.WEST);
 		} else if (StateVariable.INTERNAL_STATE_A == var) {
 			return internalStateA;
+		} else if (StateVariable.SOUND_A_BELOW == var) {
+			return isSoundBelow(1);
+		} else if (StateVariable.SOUND_B_BELOW == var) {
+			return isSoundBelow(2);
+		} else if (StateVariable.SOUND_C_BELOW == var) {
+			return isSoundBelow(3);
 		} else {
 			return false;
 		}

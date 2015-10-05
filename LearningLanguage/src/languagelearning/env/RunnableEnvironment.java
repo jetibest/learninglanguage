@@ -14,7 +14,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 															// `getSimulationSpeedMultiplier()`
 	public static final double DUST_START_PERCENTAGE = 0.6;
 	public static final double DUST_VARIANCE_PERCENTAGE = 0.1;
-	public static final int AGENTS_INIT_COUNT = 1;
+	public static final int AGENTS_INIT_COUNT = 20;
 	public static final int SIM_SPEED_MIN = 0;
 	public static final int SIM_SPEED_MAX = 1000;
 	public static final int SIM_SPEED_DEFAULT = 500;
@@ -44,12 +44,12 @@ public class RunnableEnvironment extends Environment implements Runnable {
 			@Override
 			public Agent produceAgent(int x, int y) {
 				TDQLearningVacuumCleaner agent = new TDQLearningVacuumCleaner(x, y);
-				agent.setDebug(true);
+				//agent.setDebug(true);
 				agent.setExplorationRate(0.1);
 				agent.setLearningRate(0.1);
 				agent.setFutureRewardDiscountRate(0.9);
-				agent.setPossibleActions(new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST});
-				agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD});
+				agent.setPossibleActions(new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.PRODUCE_SOUND_C});
+				agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD,StateVariable.SOUND_C_BELOW});
 				
 				return agent;
 			}});
