@@ -5,9 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import languagelearning.actions.Action;
-import static languagelearning.agents.VacuumCleaner.DUST_CLEAN_VALUE;
-import languagelearning.env.Environment;
 
 /**
  *
@@ -89,7 +88,7 @@ public class YetiVacuumCleaner extends VacuumCleaner
     public int collectDust()
     {
         int dustBefore = getEnvironment().getDustValue(getX(), getY());
-        int dustAfter = Math.max(Environment.DUST_MIN, getEnvironment().getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
+        int dustAfter = Math.max(getEnvironment().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - getDustCleanValue());
         getEnvironment().setDustValue(getX(), getY(), dustAfter);
         
         

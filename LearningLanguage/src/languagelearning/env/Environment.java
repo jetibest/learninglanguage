@@ -14,12 +14,10 @@ import languagelearning.agents.SmartVacuumCleaner;
 import languagelearning.gui.LLControlPanel;
 
 public abstract class Environment {
-	public static final int DUST_MAX = 10000;
-	public static final int DUST_MIN = 0;
-	public static final int DUST_INCREMENT_VALUE = 1;
-
-        public static final int SOUND_MAX = 3;
+    public static final int SOUND_MAX = 3;
         
+	private int dustMax = 10000;
+	private int dustMin = 0;
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid;
         private int[][] soundgrid;
@@ -29,7 +27,6 @@ public abstract class Environment {
 	private long ticks = 0;
 	private Logger logger;
 	private StatusUpdater statusUpdater;
-
 
 	public Environment(int gridHeight, int gridWidth) {
 		this.gridHeight = gridHeight;
@@ -50,9 +47,9 @@ public abstract class Environment {
 		for (int i = 0; i < getGridHeight(); i++) {
 			int[] row = new int[getGridWidth()];
 			for (int j = 0; j < getGridWidth(); j++) {
-				row[j] = (int) (DUST_MAX * dustStartPercentage + (Math
+				row[j] = (int) (dustMax * dustStartPercentage + (Math
 						.random() * 2 - 1)
-						* DUST_MAX
+						* dustMax
 						* dustVariancePercentage);
 			}
 			dustgrid[i] = row;
@@ -136,7 +133,7 @@ public abstract class Environment {
 		for (int i = 0; i < gridHeight; i++) {
 			int[] row = dustgrid[i];
 			for (int j = 0; j < gridWidth; j++) {
-				int val = Math.min(row[j] + dustIncrementValue, DUST_MAX);
+				int val = Math.min(row[j] + dustIncrementValue, dustMax);
 				row[j] = val;
 			}
 		}
@@ -167,8 +164,8 @@ public abstract class Environment {
 					* gridWidth;
 			long totalDust = getTotalDust();
 			getStatusUpdater().updateTotalDustPercentage(100.0D
-					* (totalDust - DUST_MIN * gridCellsCount)
-					/ ((DUST_MAX - DUST_MIN) * gridCellsCount));
+					* (totalDust - dustMin * gridCellsCount)
+					/ ((dustMax - dustMin) * gridCellsCount));
 			getStatusUpdater().updateTime(getTicks());
 		}
 	}
@@ -284,5 +281,21 @@ public abstract class Environment {
 	
 	public long getTicks() {
 		return ticks;
+	}
+
+	public int getDustMax() {
+		return dustMax;
+	}
+
+	public void setDustMax(int dustMax) {
+		this.dustMax = dustMax;
+	}
+
+	public int getDustMin() {
+		return dustMin;
+	}
+
+	public void setDustMin(int dustMin) {
+		this.dustMin = dustMin;
 	}
 }

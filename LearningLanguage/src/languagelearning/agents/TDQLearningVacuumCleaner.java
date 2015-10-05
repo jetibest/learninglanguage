@@ -13,8 +13,12 @@ import languagelearning.states.State;
  * Temporal difference learning agent (using Q-Learning algorithm)
  */
 public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
+	public TDQLearningVacuumCleaner(StateActionPolicy sharedPolicy,int x, int y) {
+		super(sharedPolicy, x, y);
+	}
+	
 	public TDQLearningVacuumCleaner(int x, int y) {
-		super(x, y);
+		super(null, x, y);
 	}
 	
 	@Override

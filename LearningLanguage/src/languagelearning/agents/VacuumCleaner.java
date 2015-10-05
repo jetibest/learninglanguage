@@ -7,8 +7,9 @@ import languagelearning.states.StateVariable;
 
 public class VacuumCleaner extends Agent
 {
-	public static final int DUST_CLEAN_VALUE = 5000;
-	public static final int DUST_PERCEPTION_THRESHOLD = 1000;
+	private int dustCleanValue = 5000;
+	private int dustPerceptionThreshold = 1000;
+	private int soundSymbolOnEveryDustCollected = 0;
 	private boolean internalStateA;
 	
 	public VacuumCleaner(int x, int y)
@@ -18,10 +19,17 @@ public class VacuumCleaner extends Agent
 	
         // Listen for now only to the square it is at
         // But we can also listen in squares around us, and then we would know a distance as well, and calculate intensity of the sound as the agent hears it
-        public int listenToCloseSound()
+        public int getSoundSymbolBelow()
         {
             return getEnvironment().getSoundValue(getX(), getY());
         }
+        
+    	public int getSoundSymbolInDirection(Direction direction,int step) {
+    		int xAhead = getNewXInDirection(direction,step);
+    		int yAhead = getNewYInDirection(direction,step);
+
+    		return getEnvironment().getSoundValue(xAhead, yAhead);
+    	}
         
         public void produceSound(int symbol)
         {
@@ -67,14 +75,20 @@ public class VacuumCleaner extends Agent
 	public int collectDust()
 	{
 		int dustBefore = getEnvironment().getDustValue(getX(), getY());
-		int dustAfter = Math.max(Environment.DUST_MIN, getEnvironment().getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
+		int dustAfter = Math.max(getEnvironment().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - dustCleanValue);
 		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 		
-                // on collecting dust, produce sound in direction it is headed
-                produceSound(3);
+        // on collecting dust, produce sound in direction it is headed
+		if (soundSymbolOnEveryDustCollected > 0) {
+	        produceSound(soundSymbolOnEveryDustCollected);
+		}
                 
 		int reward = dustBefore - dustAfter;
 		return reward;
+	}
+	
+	public void setSoundSymbolOnEveryDustCollected(int symbol) {
+		this.soundSymbolOnEveryDustCollected = symbol;
 	}
         
 	@Override
@@ -103,14 +117,14 @@ public class VacuumCleaner extends Agent
 	}
 	
 	public boolean isDustBelow() {
-		return getEnvironment().getDustValue(getX(), getY()) > DUST_PERCEPTION_THRESHOLD;
+		return getEnvironment().getDustValue(getX(), getY()) > dustPerceptionThreshold;
 	}
 	
 	public boolean isDustInDirection(Direction direction,int step) {
 		int xAhead = getNewXInDirection(direction,step);
 		int yAhead = getNewYInDirection(direction,step);
 
-		return getEnvironment().getDustValue(xAhead, yAhead) > DUST_PERCEPTION_THRESHOLD;
+		return getEnvironment().getDustValue(xAhead, yAhead) > dustPerceptionThreshold;
 	}
 	
 	public boolean isObstacleInDirection(Direction direction) {
@@ -118,6 +132,14 @@ public class VacuumCleaner extends Agent
 		int yAhead = getNewYInDirection(direction);
 
 		return !getEnvironment().canMove(xAhead, yAhead);
+	}
+	
+	public boolean isSoundBelow(int symbol) {
+		return getSoundSymbolBelow() == symbol;
+	}
+	
+	public boolean isSoundInDirectionBelow(int symbol,int step) {
+		return getSoundSymbolInDirection(getDirection(), step) == symbol;
 	}
 	
 	public PredicateState getPredicateState(StateVariable[] possibleVariables) {
@@ -159,6 +181,18 @@ public class VacuumCleaner extends Agent
 			return isObstacleInDirection(Direction.WEST);
 		} else if (StateVariable.INTERNAL_STATE_A == var) {
 			return internalStateA;
+		} else if (StateVariable.SOUND_A_BELOW == var) {
+			return isSoundBelow(1);
+		} else if (StateVariable.SOUND_B_BELOW == var) {
+			return isSoundBelow(2);
+		} else if (StateVariable.SOUND_C_BELOW == var) {
+			return isSoundBelow(3);
+		} else if (StateVariable.SOUND_A_AHEAD == var) {
+			return isSoundInDirectionBelow(1, 1);
+		} else if (StateVariable.SOUND_B_AHEAD == var) {
+			return isSoundInDirectionBelow(2, 1);
+		} else if (StateVariable.SOUND_C_AHEAD == var) {
+			return isSoundInDirectionBelow(3, 1);
 		} else {
 			return false;
 		}
@@ -172,4 +206,22 @@ public class VacuumCleaner extends Agent
 		this.internalStateA = internalStateA;
 		return 0; // Reward = 0
 	}
+
+	public int getDustCleanValue() {
+		return dustCleanValue;
+	}
+
+	public void setDustCleanValue(int dustCleanValue) {
+		this.dustCleanValue = dustCleanValue;
+	}
+
+	public int getDustPerceptionThreshold() {
+		return dustPerceptionThreshold;
+	}
+
+	public void setDustPerceptionThreshold(int dustPerceptionThreshold) {
+		this.dustPerceptionThreshold = dustPerceptionThreshold;
+	}
+	
+	
 }

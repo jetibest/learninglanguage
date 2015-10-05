@@ -6,10 +6,9 @@ import languagelearning.actions.Action;
 import languagelearning.agents.Agent;
 import languagelearning.agents.AgentFactory;
 import languagelearning.agents.GridObject;
-import languagelearning.agents.TDSarsaVacuumCleaner;
+import languagelearning.agents.TDQLearningVacuumCleaner;
 import languagelearning.agents.TDVacuumCleaner;
 import languagelearning.env.Environment;
-import languagelearning.env.RunnableEnvironment;
 import languagelearning.policies.StateActionPolicy;
 import languagelearning.states.StateVariable;
 
@@ -21,51 +20,49 @@ public class LearningLanguageStats {
 	private final static DecimalFormat df = new DecimalFormat("#0.0");
 
 	public static void main(String[] args) {
-		int runs = 100;
+		int runs = 20;
 		int ticks = 5000;
 		
 		int gridHeight = LearningLanguage.GRID_HEIGHT;
 		int gridWidth = LearningLanguage.GRID_WIDTH;
 		
-		final double dustStartPercentage = RunnableEnvironment.DUST_START_PERCENTAGE;
-		final double dustVariancePercentage = RunnableEnvironment.DUST_VARIANCE_PERCENTAGE;
+		final int dustMin = 0;
+		final int dustMax = 10000;
+		final int dustIncrement = 10;
 		
-		final int agentInitCount = 1;
+		final double dustStartPercentage = 0.6;
+		final double dustVariancePercentage = 0.1;
 		
-		final double explorationRate = 0.5;
+		final int agentInitCount = 10;
+		
+		final double explorationRate = 0.1;
 		final double learningRate = 0.1;
-		final double futureRewardDiscountRate = 0.9;
+		final double futureRewardDiscountRate = 0.99;
 		
-		//final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.SET_INTERNAL_STATE_A,Action.CLEAR_INTERNAL_STATE_A};
-		final Action[] possibleActions = new Action[]{Action.MOVE_NORTH,Action.MOVE_EAST,Action.MOVE_SOUTH,Action.MOVE_WEST,Action.COLLECT_DUST,Action.SET_INTERNAL_STATE_A,Action.CLEAR_INTERNAL_STATE_A};
-		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD};
-		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.INTERNAL_STATE_A};
-		//final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_NORTH,StateVariable.DUST_EAST,StateVariable.DUST_SOUTH,StateVariable.DUST_WEST,StateVariable.OBSTACLE_NORTH,StateVariable.OBSTACLE_EAST,StateVariable.OBSTACLE_SOUTH,StateVariable.OBSTACLE_WEST};
-		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.INTERNAL_STATE_A};
-		//final StateVariable[] possibleStateVariables = StateVariable.values();
-		
-		final AgentFactory agentFactory = new AgentFactory() {
-			@Override
-			public Agent produceAgent(int x, int y) {
-				TDVacuumCleaner agent = new TDSarsaVacuumCleaner(x,y);
-				agent.setExplorationRate(explorationRate);
-				agent.setLearningRate(learningRate);
-				agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
-				agent.setPossibleActions(possibleActions);
-				agent.setPossibleStateVariables(possibleStateVariables);
-				return agent;
-				
-				//return new SmartVacuumCleaner(x,y);
-				
-				//return new RandomVacuumCleaner(x,y);
-			}
-		};
-		
+		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.PRODUCE_SOUND_C};
+		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD,StateVariable.SOUND_C_BELOW};
+
 		DescriptiveStatistics collectedDustStats = new DescriptiveStatistics();
 		StateActionPolicy bestPolicy = null;
 		double maxCollectedDustRatio = 0;
 		
 		for (int run = 0; run < runs; run++) {
+			final StateActionPolicy sharedPolicy = new StateActionPolicy();
+			
+			final AgentFactory agentFactory = new AgentFactory() {
+				@Override
+				public Agent produceAgent(int x, int y) {
+					TDVacuumCleaner agent = new TDQLearningVacuumCleaner(sharedPolicy,x,y);
+					agent.setExplorationRate(explorationRate);
+					agent.setLearningRate(learningRate);
+					agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
+					agent.setPossibleActions(possibleActions);
+					agent.setPossibleStateVariables(possibleStateVariables);
+					//agent.setSoundSymbolOnEveryDustCollected(3);
+					return agent;
+				}
+			};
+			
 			final Environment environment = new Environment(gridHeight,gridWidth) {
 
 				@Override
@@ -80,7 +77,7 @@ public class LearningLanguageStats {
 
 				@Override
 				public void updateDust() {
-					// Do not add dust
+					updateDustWithConstantIncremenent(dustIncrement);
 				}
 
 				@Override
@@ -88,6 +85,8 @@ public class LearningLanguageStats {
 					updateObjectsInRandomOrder();
 				}
 			};
+			environment.setDustMin(dustMin);
+			environment.setDustMax(dustMax);
 			environment.init();
 			
 			long totalDustBefore = environment.getTotalDust();
@@ -120,7 +119,6 @@ public class LearningLanguageStats {
 		double collectedDustRatioSD = collectedDustStats.getStandardDeviation();
 		
 		System.out.println("Dust collected average = " + df.format(collectedDustRatioAverage*100.0) + "%");
-		StandardDeviation sampleSD = new StandardDeviation();
 		System.out.println("Dust collected standard deviation = " + df.format(collectedDustRatioSD*100.0) + "%");
 	}
 

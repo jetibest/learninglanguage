@@ -20,9 +20,13 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 	private StateVariable[] possibleStateVariables = new StateVariable[]{};
 	private boolean debug = false;
 	
-	public TDVacuumCleaner(int x, int y) {
+	public TDVacuumCleaner(StateActionPolicy sharedPolicy,int x, int y) {
 		super(x, y);
-		this.policy = new StateActionPolicy();
+		if (sharedPolicy != null) {
+			this.policy = sharedPolicy;
+		} else {
+			this.policy = new StateActionPolicy();
+		}
 		this.rnd = new Random();
 	}
 	
