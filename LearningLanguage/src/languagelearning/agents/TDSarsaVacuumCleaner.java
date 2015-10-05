@@ -18,8 +18,12 @@ public class TDSarsaVacuumCleaner extends TDVacuumCleaner {
 	private State state1;
 	private Action action1;
 	
+	public TDSarsaVacuumCleaner(StateActionPolicy sharedPolicy, int x, int y) {
+		super(sharedPolicy, x, y);
+	}
+	
 	public TDSarsaVacuumCleaner(int x, int y) {
-		super(x, y);
+		super(null, x, y);
 	}
 	
 	@Override
