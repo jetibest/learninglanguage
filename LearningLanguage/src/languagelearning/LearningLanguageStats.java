@@ -20,8 +20,8 @@ public class LearningLanguageStats {
 	private final static DecimalFormat df = new DecimalFormat("#0.0");
 
 	public static void main(String[] args) {
-		int runs = 100;
-		int ticks = 1000;
+		int runs = 20;
+		int ticks = 5000;
 		
 		int gridHeight = LearningLanguage.GRID_HEIGHT;
 		int gridWidth = LearningLanguage.GRID_WIDTH;
@@ -39,8 +39,8 @@ public class LearningLanguageStats {
 		final double learningRate = 0.1;
 		final double futureRewardDiscountRate = 0.9;
 		
-		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.PRODUCE_SOUND_C};
-		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD,StateVariable.SOUND_C_BELOW};
+		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST};
+		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD/*,StateVariable.SOUND_C_BELOW*/};
 
 		final AgentFactory agentFactory = new AgentFactory() {
 			@Override
@@ -51,6 +51,7 @@ public class LearningLanguageStats {
 				agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
 				agent.setPossibleActions(possibleActions);
 				agent.setPossibleStateVariables(possibleStateVariables);
+				agent.setSoundSymbolOnEveryDustCollected(3);
 				return agent;
 			}
 		};

@@ -9,6 +9,7 @@ public class VacuumCleaner extends Agent
 {
 	private int dustCleanValue = 5000;
 	private int dustPerceptionThreshold = 1000;
+	private int soundSymbolOnEveryDustCollected = 0;
 	private boolean internalStateA;
 	
 	public VacuumCleaner(int x, int y)
@@ -71,10 +72,16 @@ public class VacuumCleaner extends Agent
 		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 		
         // on collecting dust, produce sound in direction it is headed
-        // produceSound(3);
+		if (soundSymbolOnEveryDustCollected > 0) {
+	        produceSound(soundSymbolOnEveryDustCollected);
+		}
                 
 		int reward = dustBefore - dustAfter;
 		return reward;
+	}
+	
+	public void setSoundSymbolOnEveryDustCollected(int symbol) {
+		this.soundSymbolOnEveryDustCollected = symbol;
 	}
         
 	@Override
