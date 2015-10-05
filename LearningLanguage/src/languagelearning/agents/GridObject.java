@@ -89,19 +89,27 @@ public abstract class GridObject {
 	}
 	
 	public int getNewX(int deltaX) {
+		int newX = x + deltaX;
 		if (env.isBoundless()) {
-			return (x + deltaX) % env.getGridWidth();
-		} else {
-			return x + deltaX;
+			if (newX < 0) {
+				return env.getGridWidth() + newX;
+			} else if (newX >= env.getGridWidth()) {
+				return newX - env.getGridWidth();
+			}
 		}
+		return newX;
 	}
 	
 	public int getNewY(int deltaY) {
+		int newY = y + deltaY;
 		if (env.isBoundless()) {
-			return (y + deltaY) % env.getGridHeight();
-		} else {
-			return y + deltaY;
+			if (newY < 0) {
+				return env.getGridHeight() + newY;
+			} else if (newY >= env.getGridHeight()) {
+				return newY - env.getGridHeight();
+			}
 		}
+		return newY;
 	}
 
 	public int getX() {
