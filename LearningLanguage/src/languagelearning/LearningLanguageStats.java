@@ -35,32 +35,34 @@ public class LearningLanguageStats {
 		
 		final int agentInitCount = 10;
 		
-		final double explorationRate = 0.5;
+		final double explorationRate = 0.1;
 		final double learningRate = 0.1;
-		final double futureRewardDiscountRate = 0.9;
+		final double futureRewardDiscountRate = 0.99;
 		
-		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST};
-		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD/*,StateVariable.SOUND_C_BELOW*/};
+		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.PRODUCE_SOUND_C};
+		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD,StateVariable.SOUND_C_BELOW};
 
-		final AgentFactory agentFactory = new AgentFactory() {
-			@Override
-			public Agent produceAgent(int x, int y) {
-				TDVacuumCleaner agent = new TDQLearningVacuumCleaner(x,y);
-				agent.setExplorationRate(explorationRate);
-				agent.setLearningRate(learningRate);
-				agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
-				agent.setPossibleActions(possibleActions);
-				agent.setPossibleStateVariables(possibleStateVariables);
-				agent.setSoundSymbolOnEveryDustCollected(3);
-				return agent;
-			}
-		};
-		
 		DescriptiveStatistics collectedDustStats = new DescriptiveStatistics();
 		StateActionPolicy bestPolicy = null;
 		double maxCollectedDustRatio = 0;
 		
 		for (int run = 0; run < runs; run++) {
+			final StateActionPolicy sharedPolicy = new StateActionPolicy();
+			
+			final AgentFactory agentFactory = new AgentFactory() {
+				@Override
+				public Agent produceAgent(int x, int y) {
+					TDVacuumCleaner agent = new TDQLearningVacuumCleaner(sharedPolicy,x,y);
+					agent.setExplorationRate(explorationRate);
+					agent.setLearningRate(learningRate);
+					agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
+					agent.setPossibleActions(possibleActions);
+					agent.setPossibleStateVariables(possibleStateVariables);
+					//agent.setSoundSymbolOnEveryDustCollected(3);
+					return agent;
+				}
+			};
+			
 			final Environment environment = new Environment(gridHeight,gridWidth) {
 
 				@Override
