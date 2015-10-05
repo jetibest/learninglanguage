@@ -80,7 +80,7 @@ public class LearningLanguageStats {
 
 				@Override
 				public void updateDust() {
-					// Do not add dust
+					updateDustWithConstantIncremenent();
 				}
 
 				@Override

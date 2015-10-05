@@ -67,7 +67,7 @@ public class VacuumCleaner extends Agent
 	public int collectDust()
 	{
 		int dustBefore = getEnvironment().getDustValue(getX(), getY());
-		int dustAfter = Math.max(Environment.DUST_MIN, getEnvironment().getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
+		int dustAfter = Math.max(getEnvironment().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - DUST_CLEAN_VALUE);
 		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 		
         // on collecting dust, produce sound in direction it is headed

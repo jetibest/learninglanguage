@@ -86,7 +86,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	
 	@Override
 	public void updateDust() {
-		updateDustWithConstantIncremenent(DUST_INCREMENT_VALUE);
+		updateDustWithConstantIncremenent();
 	}
 	
 	@Override

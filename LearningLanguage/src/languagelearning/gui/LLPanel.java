@@ -74,7 +74,7 @@ public class LLPanel extends JPanel implements Runnable
 				for(int j=0;j<gridWidth;j++)
 				{
 					int value = dustrow[j];
-					Color c = new Color((int) (255.0D*value/Environment.DUST_MAX), 0, 0);
+					Color c = new Color((int) (255.0D*value/LearningLanguage.MAIN.getEnvironment().getDustMax()), 0, 0);
 					g.setColor(c);
 					g.fillRect(j*gridSize, i*gridSize, gridSize, gridSize);
 				}
