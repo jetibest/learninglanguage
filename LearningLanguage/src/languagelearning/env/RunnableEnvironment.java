@@ -57,7 +57,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 				agent.setFutureRewardDiscountRate(0.9);
 				agent.setPossibleActions(new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C});
 				agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD,StateVariable.SOUND_C_BELOW});
-				agent.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
+				agent.setSoundMatrix(BooleanMatrix.TRIANGLE_7x5);
 				
 				return agent;
 			}});
