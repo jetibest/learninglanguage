@@ -70,10 +70,10 @@ public class VacuumCleaner extends Agent {
 	}
 
 	public int collectDust() {
-		return collectDustAndProduceSignal(0);
+		return collectDustAndProduceSignal(0,-1);
 	}
 
-	public int collectDustAndProduceSignal(int symbol) {
+	public int collectDustAndProduceSignal(int symbol,int rewardThreshold) {
 		int dustBefore = getEnvironment().getDustValue(getX(), getY());
 		int dustAfter = Math.max(getEnvironment().getDustMin(),
 				getEnvironment().getDustValue(getX(), getY()) - dustCleanValue);
@@ -81,7 +81,7 @@ public class VacuumCleaner extends Agent {
 
 		int reward = dustBefore - dustAfter;
 
-		if (reward > 0 && symbol > 0) {
+		if (reward >= rewardThreshold && symbol > 0) {
 			produceSound(symbol);
 		}
 
@@ -104,11 +104,11 @@ public class VacuumCleaner extends Agent {
 		} else if (action == Action.PRODUCE_SOUND_C) {
 			reward = reward + produceSound(3);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_A) {
-			reward = reward + collectDustAndProduceSignal(1);
+			reward = reward + collectDustAndProduceSignal(1,-1);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_B) {
-			reward = reward + collectDustAndProduceSignal(2);
+			reward = reward + collectDustAndProduceSignal(2,-1);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_C) {
-			reward = reward + collectDustAndProduceSignal(3);
+			reward = reward + collectDustAndProduceSignal(3,-1);
 		}
 		return reward;
 	}
