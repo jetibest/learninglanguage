@@ -15,6 +15,31 @@ import languagelearning.env.Environment;
  */
 public class YetiVacuumCleaner extends VacuumCleaner
 {
+    /*
+    State:
+        -> Multiple sensory inputs.
+        -> One possible action output.
+        -> One possible reward, 0 or 1.
+    
+    Sensors:
+        -> Dust-sensor.
+        -> Bumper-sensor.
+    
+    Actions:
+        -> Do Nothing.
+        -> Turn Left.
+        -> Turn Right.
+        -> Move Forward.
+        -> Collect Dust.
+    
+    Reward:
+        -> 0.
+        -> 1 of hoger.
+    
+    
+    
+    */
+    
     private static final Action[] ACTIONS = new Action[]
     {
         Action.DO_NOTHING,
@@ -152,6 +177,26 @@ public class YetiVacuumCleaner extends VacuumCleaner
         
         // find reward
         int reward = getReward();
+        
+        // We can give a reward to the action-list
+        // And based on that see if the action-list is a good action-list
+        // But we need to combine the reward with a certain sensory input state
+        // While sorting the list
+        // Sort on both highest reward, but highest reward in combination with input state
+        // So per input state, we have a set of action-lists!
+        // So we need to make this algorithm generic.
+        // And use it double-wise.
+        // Architecture:
+        
+        // YetiVacuumCleaner: YVC
+        // 
+        // Data structure: Graph with nodes
+        // 
+        // every node represents a certain sensory state
+        // every connection represents a certain action
+        // every connection also has a reward memory
+        // there are no hard states
+        // rather, soft approximations of states, 
         
         // update previous actionList's last action
         if(previousActionList != null)

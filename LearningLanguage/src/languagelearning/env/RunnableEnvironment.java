@@ -1,11 +1,9 @@
 package languagelearning.env;
 
 import languagelearning.LearningLanguage;
-import languagelearning.actions.Action;
 import languagelearning.agents.Agent;
 import languagelearning.agents.AgentFactory;
-import languagelearning.agents.TDQLearningVacuumCleaner;
-import languagelearning.states.StateVariable;
+import languagelearning.agents.YetiVacuumCleaner;
 
 public class RunnableEnvironment extends Environment implements Runnable {
 	public static final long SIMULATION_INTERVAL = 1000; // is affected by
@@ -43,14 +41,15 @@ public class RunnableEnvironment extends Environment implements Runnable {
 
 			@Override
 			public Agent produceAgent(int x, int y) {
-				TDQLearningVacuumCleaner agent = new TDQLearningVacuumCleaner(x, y);
+				/*TDQLearningVacuumCleaner agent = new TDQLearningVacuumCleaner(x, y);
 				agent.setDebug(true);
 				agent.setExplorationRate(0.1);
 				agent.setLearningRate(0.1);
 				agent.setFutureRewardDiscountRate(0.9);
 				agent.setPossibleActions(new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST});
 				agent.setPossibleStateVariables(new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD});
-				
+				*/
+                                YetiVacuumCleaner agent = new YetiVacuumCleaner(x, y);
 				return agent;
 			}});
 	}
