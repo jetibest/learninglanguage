@@ -69,6 +69,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
                                 agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
                                 agent.setPossibleActions(possibleActions);
                                 agent.setPossibleStateVariables(possibleStateVariables);
+                                agent.setSoundMatrix(BooleanMatrix.TRIANGLE_7x5);
 				//agent.setDebug(true);
 				/*agent.setExplorationRate(0.1);
 				agent.setLearningRate(0.1);

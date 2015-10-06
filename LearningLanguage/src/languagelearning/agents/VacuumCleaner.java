@@ -10,7 +10,7 @@ public class VacuumCleaner extends Agent {
 	private int dustCleanValue = 5000;
 	private int dustPerceptionThreshold = 1000;
 	private boolean internalStateA;
-	private BooleanMatrix soundMatrix; // Pattern of sounds around agent (in north direction)
+	private BooleanMatrix soundMatrix = BooleanMatrix.TRIANGLE_7x5; // Pattern of sounds around agent (in north direction)
 
 	public VacuumCleaner(int x, int y) {
 		super(x, y);
