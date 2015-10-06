@@ -1,7 +1,12 @@
 package languagelearning.agents;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Random;
 
 import languagelearning.actions.Action;
@@ -13,8 +18,9 @@ import languagelearning.states.State;
  * Temporal difference learning agent (using Q-Learning algorithm)
  */
 public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
+	
 	public TDQLearningVacuumCleaner(StateActionPolicy sharedPolicy,int x, int y) {
-		super(sharedPolicy, x, y);
+		super(sharedPolicy, x, y);	
 	}
 	
 	public TDQLearningVacuumCleaner(int x, int y) {
@@ -28,7 +34,9 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 		
 		log("============================================");
 		log("Policy: \n" + policy);
-		
+
+		log("Exploration rate: " + getExplorationRate());
+
 		State state0 = getCurrentState();
 		log("Current state: " + state0);
 		
@@ -51,5 +59,12 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 		log("Value difference: " + valueDelta);
 		double newValue0 = value0 + valueDelta;
 		policy.setValue(state0, action0, newValue0);
+		
+		// Decay exploration
+		setExplorationRate(getExplorationRate() * getExplorationRateDecay());
+		
+		if (isDebug()) {
+			policy.write(getPossibleActions());
+		}
 	}
 }

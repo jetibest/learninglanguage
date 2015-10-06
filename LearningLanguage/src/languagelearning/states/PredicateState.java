@@ -28,7 +28,7 @@ public class PredicateState extends State {
 		for (StateVariable var: StateVariable.values()) {
 			if (vars.contains(var)) {
 				if (buffer.length() > 0) {
-					buffer.append(",");
+					buffer.append(" ");
 				}
 				buffer.append(var.toString());
 			}

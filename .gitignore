@@ -18,3 +18,5 @@ hs_err_pid*
 /LearningLanguage/build.xml
 /LearningLanguage/build/
 /LearningLanguage/dist/
+
+#*.csv

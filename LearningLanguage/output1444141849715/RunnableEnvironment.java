@@ -59,14 +59,14 @@ public class RunnableEnvironment extends Environment implements Runnable {
                 		,Action.TURN_LEFT
                 		,Action.MOVE_FORWARD
                 		,Action.COLLECT_DUST
-                		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+                		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
                 		//,Action.PRODUCE_SOUND_C
                 };
                 final StateVariable[] possibleStateVariables = new StateVariable[]{
                 		StateVariable.DUST_BELOW
                 		//,StateVariable.DUST_AHEAD
                 		,StateVariable.OBSTACLE_AHEAD
-                		,StateVariable.SOUND_C_AHEAD
+                		//,StateVariable.SOUND_C_AHEAD
                 	};
                 
 		initRandomAgents(AGENTS_INIT_COUNT,new AgentFactory() {

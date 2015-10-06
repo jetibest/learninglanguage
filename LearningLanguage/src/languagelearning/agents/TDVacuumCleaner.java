@@ -1,5 +1,6 @@
 package languagelearning.agents;
 
+import java.io.BufferedWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
@@ -14,6 +15,7 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 	private Random rnd;
 
 	private double explorationRate = 0.1;
+	private double explorationRateDecay = 1;
 	private double learningRate = 0.1;  // the learning rate, set between 0 and 1. Setting it to 0 means that the Q-values are never updated, hence nothing is learned. Setting a high value such as 0.9 means that learning can occur quickly.
 	private double futureRewardDiscountRate = 0.9; // discount factor, also set between 0 and 1. This models the fact that future rewards are worth less than immediate rewards. Mathematically, the discount factor needs to be set less than 0 for the algorithm to converge.
 	private Action[] possibleActions = new Action[]{Action.DO_NOTHING};
@@ -97,16 +99,35 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 
 	protected Action[] getPossibleActionsInRandomOrder() {
 		Action[] actions = getPossibleActions();
-		Arrays.sort(actions,new Comparator<Action>() {
+		/*Action[] actions2 = new Action[actions.length];
+		for (int i = 0; i < actions.length; i++) {
+			ac
+		}*/
+		Action[] actions2 = Arrays.copyOf(actions, actions.length);
+		Arrays.sort(actions2,new Comparator<Action>() {
 
 			@Override
 			public int compare(Action o1, Action o2) {
 				return (int)(rnd.nextInt(3) - 1);
 			}});
-		return actions;
+		return actions2;
 	}
 	
 	public State getCurrentState() {
 		return getPredicateState(possibleStateVariables);
 	}
+
+	public double getExplorationRateDecay() {
+		return explorationRateDecay;
+	}
+
+	public void setExplorationRateDecay(double explorationRateDecay) {
+		this.explorationRateDecay = explorationRateDecay;
+	}
+
+	public boolean isDebug() {
+		return debug;
+	}
+	
+
 }
