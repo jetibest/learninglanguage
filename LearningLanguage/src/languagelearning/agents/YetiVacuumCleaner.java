@@ -21,8 +21,8 @@ public class YetiVacuumCleaner extends VacuumCleaner
         -> One possible reward, 0 or 1.
     
     Sensors:
-        -> Dust-sensor.
-        -> Bumper-sensor.
+        -> Dust-sensor.     (look ahead one cell for dust)
+        -> Bumper-sensor.   (look ahead one cell for obstactle)
     
     Actions:
         -> Do Nothing.
@@ -30,13 +30,80 @@ public class YetiVacuumCleaner extends VacuumCleaner
         -> Turn Right.
         -> Move Forward.
         -> Collect Dust.
+        -> Produce Sound A.
     
     Reward:
         -> 0.
         -> 1 of hoger.
     
+    State U
+    {
+        dust-sensor:    1
+        bumper-sensor:  0
+        sound-sensor:   0
+    }
+    State V
+    {
+        dust-sensor:    1
+        bumper-sensor:  0
+        sound-sensor:   0
+    }
+    State W
+    {
+        dust-sensor:    1
+        bumper-sensor:  0
+        sound-sensor:   0
+    }
+    State X
+    {
+        dust-sensor:    0
+        bumper-sensor:  0
+        sound-sensor:   0
+    }
+    State Y
+    {
+        dust-sensor:    0
+        bumper-sensor:  0
+        sound-sensor:   0
+    }
+    State Z
+    {
+        dust-sensor:    1
+        bumper-sensor:  0
+        sound-sensor:   0
+    }
+    ,-------------------.
+    | O- | ## | .. | .. |
+    |----+----+----+----|
+    | .. | ## | ## | ## |
+    |----+----+----+----|
+    | .. | .. | ## | ## |
+    `-------------------'
     
+    Rule:
+        If reward is zero, and the state did not change, move back to begin state that matches current sensory values.
+        If reward is zero, and the state did change, create a new State-node with current sensory values, and continue.
+        If reward is non-zero, move back to begin state that matches current sensory values.
     
+      _______                                            
+     /       \       Action=[Do Nothing], Reward=0       
+    | State U |  --------------------------------------> Back to State U
+     \_______/                                           
+         |                                                 _______                                                                                                      _______
+         |          Action=[Move Forward], Reward=0       /       \     Action=[Collect Dust], Reward=1                                                                /       \
+         |\_____,--------------------------------------> | State X | ---------------------------------------> REWARD, THUS BACK TO A BEGIN STATE THAT MATCHES {0,0,0} | State U |
+         |                                                \_______/                                                                                                    \_______/
+         |                                               
+         |          Action=[Collect Dust], Reward=0      
+          \_____,--------------------------------------> Back to State U
+
+      _______
+     /       \       Action=[Do Nothing], Reward=0
+    | State Y |  --------------------------------------->
+     \_______/
+    
+    New states are made after every new action, or new states for new sensor-values
+    However, if a certain state with existing sensor-values already exist, and there were previous actions, and reward is zero, insert the begin-pointer at that state
     */
     
     private static final Action[] ACTIONS = new Action[]
@@ -45,13 +112,15 @@ public class YetiVacuumCleaner extends VacuumCleaner
         Action.TURN_LEFT,
         Action.TURN_RIGHT,
         Action.MOVE_FORWARD,
-        Action.COLLECT_DUST
+        Action.COLLECT_DUST,
+        Action.PRODUCE_SOUND_A
     };
     private static final int SENSOR_DUST = 0;       // See if there is dust ahead
     private static final int SENSOR_BUMPER = 1;     // See if bumper collided
     private static final int[] SENSORS = new int[2];
     private int reward = 0;
-    private List<ActionList> actionLists = new ArrayList<ActionList>();
+    // static, because this actionlist should hold for every YetiVacuumCleaner instance
+    private static List<ActionList> actionLists = new ArrayList<ActionList>();
     private ActionList currentActionList = null;
     private ActionList previousActionList = null;
     
@@ -60,7 +129,6 @@ public class YetiVacuumCleaner extends VacuumCleaner
         super(xp, yp);
         
         // generate first actionlists, at length of 1
-        
         for(int i=0;i<ACTIONS.length;i++)
         {
             ActionList aList = new ActionList();
