@@ -23,7 +23,7 @@ public class SmartVacuumCleaner extends VacuumCleaner
             int DustWest = getEnvironment().getDustValue(getX()-1, getY()); 
             
                 // Move to direction with most dust
-                collectDust();             
+                collectDustWithoutSound();             
                         
                 if(DustNorth > DustEast && DustNorth > DustWest && DustNorth > DustSouth)
                 {

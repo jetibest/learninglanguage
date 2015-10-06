@@ -153,7 +153,7 @@ public class YetiVacuumCleaner extends VacuumCleaner
     }
     
     @Override
-    public int collectDust()
+    public int collectDustWithoutSound()
     {
         int dustBefore = getEnvironment().getDustValue(getX(), getY());
         int dustAfter = Math.max(getEnvironment().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - getDustCleanValue());
@@ -173,7 +173,7 @@ public class YetiVacuumCleaner extends VacuumCleaner
     {
         if(a == Action.COLLECT_DUST)
         {
-            collectDust();
+            collectDustWithoutSound();
             return 0;
         }
         return super.doAction(a);

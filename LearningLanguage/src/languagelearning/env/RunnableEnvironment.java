@@ -18,7 +18,7 @@ public class RunnableEnvironment extends Environment implements Runnable {
 															// `getSimulationSpeedMultiplier()`
 	public static final double DUST_START_PERCENTAGE = 0.6;
 	public static final double DUST_VARIANCE_PERCENTAGE = 0.1;
-	public static final int AGENTS_INIT_COUNT = 4;
+	public static final int AGENTS_INIT_COUNT = 10;
 	public static final int SIM_SPEED_MIN = 0;
 	public static final int SIM_SPEED_MAX = 1000;
 	public static final int SIM_SPEED_DEFAULT = 500;
@@ -53,11 +53,11 @@ public class RunnableEnvironment extends Environment implements Runnable {
                 final double explorationRate = 0.1;
                 final double learningRate = 0.1;
                 final double futureRewardDiscountRate = 0.99;
-                final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.TURN_LEFT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.PRODUCE_SOUND_C};
-                final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD,StateVariable.SOUND_C_BELOW};//new StateVariable[]{};
+                final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.TURN_LEFT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C,Action.PRODUCE_SOUND_C};
+                final StateVariable[] possibleStateVariables = new StateVariable[]{/*StateVariable.DUST_BELOW,StateVariable.OBSTACLE_AHEAD,StateVariable.SOUND_C_BELOW,*/StateVariable.SOUND_C_AHEAD};
                 
 		initRandomAgents(AGENTS_INIT_COUNT,new AgentFactory() {
-
+			private boolean debug = true;
 			@Override
 			public Agent produceAgent(int x, int y) {
                             boolean tdq = true;
@@ -69,8 +69,9 @@ public class RunnableEnvironment extends Environment implements Runnable {
                                 agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
                                 agent.setPossibleActions(possibleActions);
                                 agent.setPossibleStateVariables(possibleStateVariables);
-                                agent.setSoundMatrix(BooleanMatrix.TRIANGLE_7x5);
-				//agent.setDebug(true);
+                                agent.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
+				agent.setDebug(debug);
+				debug = false;
 				/*agent.setExplorationRate(0.1);
 				agent.setLearningRate(0.1);
 				agent.setFutureRewardDiscountRate(0.9);

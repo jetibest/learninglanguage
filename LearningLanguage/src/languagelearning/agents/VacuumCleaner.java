@@ -93,8 +93,8 @@ public class VacuumCleaner extends Agent {
 		return 0; // No reward
 	}
 
-	public int collectDust() {
-		return collectDustAndProduceSignal(0,-1);
+	public int collectDustWithoutSound() {
+		return collectDustAndProduceSignal(0,Integer.MAX_VALUE);
 	}
 
 	public int collectDustAndProduceSignal(int symbol,int rewardThreshold) {
@@ -116,7 +116,7 @@ public class VacuumCleaner extends Agent {
 	public int doAction(Action action) {
 		int reward = super.doAction(action);
 		if (action == Action.COLLECT_DUST) {
-			reward = reward + collectDust();
+			reward = reward + collectDustWithoutSound();
 		} else if (action == Action.SET_INTERNAL_STATE_A) {
 			reward = reward + setInternalStateA(true);
 		} else if (action == Action.CLEAR_INTERNAL_STATE_A) {
@@ -128,11 +128,11 @@ public class VacuumCleaner extends Agent {
 		} else if (action == Action.PRODUCE_SOUND_C) {
 			reward = reward + produceSoundWithSoundMatrix(3);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_A) {
-			reward = reward + collectDustAndProduceSignal(1,-1);
+			reward = reward + collectDustAndProduceSignal(1,1);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_B) {
-			reward = reward + collectDustAndProduceSignal(2,-1);
+			reward = reward + collectDustAndProduceSignal(2,1);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_C) {
-			reward = reward + collectDustAndProduceSignal(3,-1);
+			reward = reward + collectDustAndProduceSignal(3,1);
 		}
 		return reward;
 	}

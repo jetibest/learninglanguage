@@ -10,7 +10,7 @@ public class RandomVacuumCleaner extends VacuumCleaner {
 	public void run() {
 		// Move around, and sometimes randomly change direction
 		// And collect dust on the way
-		collectDust();
+		collectDustWithoutSound();
 
 		if (Math.random() < 0.1) {
 			if (Math.random() < 0.5) {
