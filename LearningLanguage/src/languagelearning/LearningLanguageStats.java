@@ -33,18 +33,18 @@ public class LearningLanguageStats {
 		final double dustStartPercentage = 0.6;
 		final double dustVariancePercentage = 0.1;
 		
-		final int agentInitCount = 10;
+		final int agentInitCount = 20;
 		
 		final double explorationRate = 0.1;
 		final double learningRate = 0.1;
 		final double futureRewardDiscountRate = 0.99;
 		
-		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.PRODUCE_SOUND_C};
-		final StateVariable[] possibleStateVariables = new StateVariable[]{StateVariable.DUST_BELOW,StateVariable.DUST_AHEAD,StateVariable.OBSTACLE_AHEAD,StateVariable.SOUND_C_BELOW};
+		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.TURN_LEFT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.PRODUCE_SOUND_C};
+		final StateVariable[] possibleStateVariables = new StateVariable[]{};
 
 		DescriptiveStatistics collectedDustStats = new DescriptiveStatistics();
 		StateActionPolicy bestPolicy = null;
-		double maxCollectedDustRatio = 0;
+		double maxCollectedDustRatio = -999999;
 		
 		for (int run = 0; run < runs; run++) {
 			final StateActionPolicy sharedPolicy = new StateActionPolicy();
@@ -58,7 +58,6 @@ public class LearningLanguageStats {
 					agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
 					agent.setPossibleActions(possibleActions);
 					agent.setPossibleStateVariables(possibleStateVariables);
-					//agent.setSoundSymbolOnEveryDustCollected(3);
 					return agent;
 				}
 			};
