@@ -25,14 +25,14 @@ public class VacuumCleaner extends Agent {
 	// distance as well, and calculate intensity of the sound as the agent hears
 	// it
 	public int getSoundSymbolBelow() {
-		return getEnvironment().getSoundValuePrev(getX(), getY());
+		return getEnvironment().getCurrentSoundValue(getX(), getY());
 	}
 
 	public int getSoundSymbolInDirection(Direction direction, int step) {
 		int xAhead = getNewXInDirection(direction, step);
 		int yAhead = getNewYInDirection(direction, step);
 
-		return getEnvironment().getSoundValuePrev(xAhead, yAhead);
+		return getEnvironment().getCurrentSoundValue(xAhead, yAhead);
 	}
 	
 	public int produceSoundWithSoundMatrix(int symbol) {

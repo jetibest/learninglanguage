@@ -16,7 +16,7 @@ public abstract class Environment {
 
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid;
-	private int[][] soundgridPrev;
+	private int[][] soundgridCurrent;
 	private int[][] soundgridNew;
 	private long ticks = 0;
 	private Logger logger;
@@ -42,7 +42,7 @@ public abstract class Environment {
 		this.bounded = config.isBounded();
 
 		this.dustgrid = new int[gridHeight][gridWidth];
-		this.soundgridPrev = new int[gridHeight][gridWidth];
+		this.soundgridCurrent = new int[gridHeight][gridWidth];
 		this.soundgridNew = new int[gridHeight][gridWidth];
 	}
 	
@@ -112,10 +112,10 @@ public abstract class Environment {
 	}
 
 	private void resetSound() {
-		// Copy new sounds to prev sounds
+		// Copy new sounds to current sounds
 		for (int i = 0; i < gridHeight; i++) {
 			for (int j = 0; j < gridWidth; j++) {
-				soundgridPrev[i][j] = soundgridNew[i][j];
+				soundgridCurrent[i][j] = soundgridNew[i][j];
 			}
 		}
 		
@@ -216,9 +216,9 @@ public abstract class Environment {
 		}
 	}
 
-	public int getSoundValuePrev(int x, int y) {
+	public int getCurrentSoundValue(int x, int y) {
 		if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
-			return soundgridPrev[y][x];
+			return soundgridCurrent[y][x];
 		}
 		return 0;
 	}
@@ -238,11 +238,11 @@ public abstract class Environment {
 		return objects;
 	}
 
-	public int[][] getSoundGridPrev() {
-		return soundgridPrev;
+	public int[][] getCurrentSoundGrid() {
+		return soundgridCurrent;
 	}
 
-	public int[][] getSoundGridNew() {
+	public int[][] getNewSoundGrid() {
 		return soundgridNew;
 	}
 

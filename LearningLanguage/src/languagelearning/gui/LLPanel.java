@@ -80,7 +80,7 @@ public class LLPanel extends JPanel implements Runnable
 				}
 			}
                         
-                        int[][] soundgrid = LearningLanguage.MAIN.getEnvironment().getSoundGridNew();
+                        int[][] soundgrid = LearningLanguage.MAIN.getEnvironment().getNewSoundGrid();
 			for(int i=0;i<gridHeight;i++)
 			{
 				int[] soundrow = soundgrid[i];
