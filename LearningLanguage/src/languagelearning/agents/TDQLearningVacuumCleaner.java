@@ -18,6 +18,7 @@ import languagelearning.states.State;
  * Temporal difference learning agent (using Q-Learning algorithm)
  */
 public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
+	private long lastLogTimestamp;
 	
 	public TDQLearningVacuumCleaner(StateActionPolicy sharedPolicy,int x, int y) {
 		super(sharedPolicy, x, y);	
@@ -29,11 +30,16 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 	
 	@Override
 	public void run() {
-		boolean debug = isDebug();
+		boolean debug = false;
+		if (System.currentTimeMillis() - lastLogTimestamp > 1000) {
+			debug = isDebug();
+			lastLogTimestamp = System.currentTimeMillis();
+		}
+		
 		StateActionPolicy policy = getPolicy();
 		// Temporal difference algorithm based on: http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html
 		
-		if (isDebug()) {
+		if (debug) {
 			log("============================================");
 			log("Policy: \n" + policy);
 
@@ -76,7 +82,7 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 			setExplorationRate(getExplorationRate() * getExplorationRateDecay());
 		}
 		
-		if (debug) {
+		if (isDebug()) {
 			policy.write(getPossibleActions());
 		}
 	}
