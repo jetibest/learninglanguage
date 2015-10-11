@@ -3,93 +3,74 @@ package languagelearning;
 import java.text.DecimalFormat;
 
 import languagelearning.actions.Action;
-import languagelearning.agents.Agent;
-import languagelearning.agents.AgentFactory;
+import languagelearning.agents.AgentType;
+import languagelearning.agents.AgentsConfig;
 import languagelearning.agents.GridObject;
-import languagelearning.agents.TDQLearningVacuumCleaner;
 import languagelearning.agents.TDVacuumCleaner;
 import languagelearning.env.Environment;
+import languagelearning.env.EnvironmentConfig;
+import languagelearning.env.SimulationEnvironment;
 import languagelearning.policies.StateActionPolicy;
 import languagelearning.states.StateVariable;
+import languagelearning.util.BooleanMatrix;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 
 public class LearningLanguageStats {
 	private final static DecimalFormat df = new DecimalFormat("#0.0");
 
 	public static void main(String[] args) {
-		int runs = 20;
-		int ticks = 5000;
+		SimulationConfig simulationConfig = new SimulationConfig();
+		simulationConfig.setRuns(20);
+		simulationConfig.setTicks(5000);
 		
-		int gridHeight = LearningLanguage.GRID_HEIGHT;
-		int gridWidth = LearningLanguage.GRID_WIDTH;
+		EnvironmentConfig environmentConfig = new EnvironmentConfig();
+		environmentConfig.setGridWidth(32);
+		environmentConfig.setGridHeight(20);
+		environmentConfig.setDustMin(0);
+		environmentConfig.setDustMax(10000);
+		environmentConfig.setDustIncrement(10);
+		environmentConfig.setDustStartPercentage(0.6);
+		environmentConfig.setDustVariancePercentage(0.1);
 		
-		final int dustMin = 0;
-		final int dustMax = 10000;
-		final int dustIncrement = 10;
+		AgentsConfig agentsConfig = new AgentsConfig();
+		agentsConfig.setAgentType(AgentType.QLEARNING);
+		agentsConfig.setAgentInitCount(10);
+		agentsConfig.setExplorationRate(0.1);
+		agentsConfig.setExplorationRateDecay(1.0);
+		agentsConfig.setDustCleanValue(5000);
+		agentsConfig.setDustPerceptionThreshold(1000);
+		agentsConfig.setLearningRate(0.1);
+		agentsConfig.setFutureRewardDiscountRate(0.95);
+		agentsConfig.setSharedPolicy(true);
+		agentsConfig.setPossibleActions(new Action[]{
+        		Action.TURN_RIGHT
+        		,Action.TURN_LEFT
+        		,Action.MOVE_FORWARD
+        		,Action.COLLECT_DUST
+        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+		});
+		agentsConfig.setPossibleStateVariables(new StateVariable[]{
+        		StateVariable.DUST_BELOW
+        		,StateVariable.OBSTACLE_AHEAD
+        		,StateVariable.SOUND_C_AHEAD
+		});
+		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
+		agentsConfig.setDebug(false);
 		
-		final double dustStartPercentage = 0.6;
-		final double dustVariancePercentage = 0.1;
-		
-		final int agentInitCount = 20;
-		
-		final double explorationRate = 0.1;
-		final double learningRate = 0.1;
-		final double futureRewardDiscountRate = 0.99;
-		
-		final Action[] possibleActions = new Action[]{Action.TURN_RIGHT,Action.TURN_LEFT,Action.MOVE_FORWARD,Action.COLLECT_DUST,Action.PRODUCE_SOUND_C};
-		final StateVariable[] possibleStateVariables = new StateVariable[]{};
-
 		DescriptiveStatistics collectedDustStats = new DescriptiveStatistics();
 		StateActionPolicy bestPolicy = null;
 		double maxCollectedDustRatio = -999999;
 		
-		for (int run = 0; run < runs; run++) {
-			final StateActionPolicy sharedPolicy = new StateActionPolicy();
-			
-			final AgentFactory agentFactory = new AgentFactory() {
-				@Override
-				public Agent produceAgent(int x, int y) {
-					TDVacuumCleaner agent = new TDQLearningVacuumCleaner(sharedPolicy,x,y);
-					agent.setExplorationRate(explorationRate);
-					agent.setLearningRate(learningRate);
-					agent.setFutureRewardDiscountRate(futureRewardDiscountRate);
-					agent.setPossibleActions(possibleActions);
-					agent.setPossibleStateVariables(possibleStateVariables);
-					return agent;
-				}
-			};
-			
-			final Environment environment = new Environment(gridHeight,gridWidth) {
-
-				@Override
-				public void initDust() {
-					initRandomDust(dustStartPercentage, dustVariancePercentage);
-				}
-
-				@Override
-				public void initObjects() {
-					initRandomAgents(agentInitCount, agentFactory);
-				}
-
-				@Override
-				public void updateDust() {
-					updateDustWithConstantIncremenent(dustIncrement);
-				}
-
-				@Override
-				public void updateObjects() {
-					updateObjectsInRandomOrder();
-				}
-			};
-			environment.setDustMin(dustMin);
-			environment.setDustMax(dustMax);
+		for (int run = 0; run < simulationConfig.getRuns(); run++) {
+			Environment environment = new SimulationEnvironment(environmentConfig);
 			environment.init();
 			
+			agentsConfig.produceAgents(environment);
+			
 			long totalDustBefore = environment.getTotalDust();
-			environment.tick(ticks);
+			environment.tick(simulationConfig.getTicks());
 			long totalDustAfter = environment.getTotalDust();
 			long totalDustCollected = totalDustBefore - totalDustAfter;
 			double collectedDustRatio = (double)totalDustCollected / (double)totalDustBefore;

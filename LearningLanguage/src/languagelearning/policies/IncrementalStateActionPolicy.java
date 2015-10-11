@@ -7,7 +7,7 @@ import java.util.Set;
 import languagelearning.actions.Action;
 import languagelearning.states.State;
 
-public class IncrementalStateActionPolicy {
+public class IncrementalStateActionPolicy extends Policy {
 	private HashMap<State,HashMap<Action,int[]>> values;
 	
 	public IncrementalStateActionPolicy() {

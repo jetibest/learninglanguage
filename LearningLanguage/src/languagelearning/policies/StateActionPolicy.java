@@ -13,7 +13,7 @@ import languagelearning.states.State;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-public class StateActionPolicy {
+public class StateActionPolicy extends Policy {
 	private HashMap<State,HashMap<Action,Double>> values;
 	private static final double NULL_VALUE = 0;
 	private static final double INF_SMALL_VALUE = -999999999;

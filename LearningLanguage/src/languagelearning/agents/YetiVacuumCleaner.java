@@ -156,7 +156,7 @@ public class YetiVacuumCleaner extends VacuumCleaner
     public int collectDustWithoutSound()
     {
         int dustBefore = getEnvironment().getDustValue(getX(), getY());
-        int dustAfter = Math.max(getEnvironment().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - getDustCleanValue());
+        int dustAfter = Math.max(getEnvironment().getConfig().getDustMin(), getEnvironment().getDustValue(getX(), getY()) - getDustCleanValue());
         getEnvironment().setDustValue(getX(), getY(), dustAfter);
         
         
