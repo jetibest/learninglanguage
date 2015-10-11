@@ -82,17 +82,22 @@ public class LLPanel extends JPanel implements Runnable {
 				int[] soundrowCurrent = soundgridCurrent[i];
 				for (int j = 0; j < gridWidth; j++) {
 					int valueNew = soundrowNew[j];
-					Color c = new Color(
-							(int) (255.0D * valueNew / Environment.SOUND_MAX),
-							(int) (255.0D * valueNew / Environment.SOUND_MAX),
-							(int) (255.0D * valueNew / Environment.SOUND_MAX));
-					g.setColor(c);
 					if (valueNew > 0) {
+						Color c = new Color(
+								(int) (255.0D * valueNew / Environment.SOUND_MAX),
+								(int) (255.0D * valueNew / Environment.SOUND_MAX),
+								(int) (255.0D * valueNew / Environment.SOUND_MAX));
+						g.setColor(c);
 						g.drawOval(j * gridSize, i * gridSize, gridSize, gridSize);
 					}
 					
 					int valueCurrent = soundrowCurrent[j];
 					if (valueCurrent > 0) {
+						Color c = new Color(
+								(int) (255.0D * valueCurrent / Environment.SOUND_MAX),
+								(int) (255.0D * valueCurrent / Environment.SOUND_MAX),
+								(int) (255.0D * valueCurrent / Environment.SOUND_MAX));
+						g.setColor(c);
 						g.drawOval((int)((j * gridSize)+(gridSize*0.25)), (int)((i * gridSize)+(gridSize*0.25)), (int)(gridSize/2), (int)(gridSize/2));
 					}
 				}
