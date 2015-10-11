@@ -28,10 +28,10 @@ public abstract class Environment {
 	private boolean bounded;
 
 	public Environment(EnvironmentConfig config) {
-		this.gridWidth = gridWidth;
-		this.gridHeight = gridHeight;
+		this.gridWidth = config.getGridWidth();
+		this.gridHeight = config.getGridHeight();
 		this.dustMin = config.getDustMin();
-		this.dustMax = dustMax;
+		this.dustMax = config.getDustMax();
 		this.dustIncrement = config.getDustIncrement();
 		this.dustStartPercentage = config.getDustStartPercentage();
 		this.dustVariancePercentage = config.getDustVariancePercentage();

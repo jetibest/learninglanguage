@@ -51,7 +51,7 @@ public class LearningLanguageStats {
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
-        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW
@@ -78,7 +78,7 @@ public class LearningLanguageStats {
 
 			// Test
 			environment.initMaxDust(); // Fill everything with dust
-			environmentConfig.setDustIncrement(0); // No new dust
+			environment.setDustIncrement(0); // No new dust
 			environment.setLearning(false); // Switch off policy updates
 			
 			double metricBefore = environment.getDustinessRatio();
