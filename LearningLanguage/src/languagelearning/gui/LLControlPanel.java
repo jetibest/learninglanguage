@@ -34,7 +34,7 @@ public class LLControlPanel extends JPanel implements StatusUpdater
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JCheckBox checkBox = (JCheckBox) e.getSource();
-				LearningLanguage.MAIN.getEnvironment().getConfig().setBounded(checkBox.isSelected());
+				LearningLanguage.MAIN.getEnvironment().setBounded(checkBox.isSelected());
 			}});
 		boundedCheckBox.setText("Bounded (with walls)");
 		boundedCheckBox.setSelected(true); // should take from environment, but MAIN not yet created...

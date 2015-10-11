@@ -1,7 +1,7 @@
 package languagelearning.env;
 
 
-public class EnvironmentConfig {
+public class EnvironmentConfig implements Cloneable {
 	private int gridWidth;
 	private int gridHeight;
 	private int dustMin;

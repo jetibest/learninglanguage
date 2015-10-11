@@ -37,8 +37,8 @@ public class LLPanel extends JPanel implements Runnable
 	private void init()
 	{
 		gridSize = LearningLanguage.GRID_SIZE;
-		gridWidth = LearningLanguage.MAIN.getEnvironment().getConfig().getGridWidth();
-		gridHeight = LearningLanguage.MAIN.getEnvironment().getConfig().getGridHeight();
+		gridWidth = LearningLanguage.MAIN.getEnvironment().getGridWidth();
+		gridHeight = LearningLanguage.MAIN.getEnvironment().getGridHeight();
 		panelWidth = gridWidth*LearningLanguage.GRID_SIZE;
 		panelHeight = gridHeight*LearningLanguage.GRID_SIZE;
 		panelSize = new Dimension(panelWidth, panelHeight);
@@ -74,7 +74,7 @@ public class LLPanel extends JPanel implements Runnable
 				for(int j=0;j<gridWidth;j++)
 				{
 					int value = dustrow[j];
-					Color c = new Color((int) (255.0D*value/LearningLanguage.MAIN.getEnvironment().getConfig().getDustMax()), 0, 0);
+					Color c = new Color((int) (255.0D*value/LearningLanguage.MAIN.getEnvironment().getDustMax()), 0, 0);
 					g.setColor(c);
 					g.fillRect(j*gridSize, i*gridSize, gridSize, gridSize);
 				}

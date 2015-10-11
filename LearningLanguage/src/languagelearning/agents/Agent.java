@@ -9,6 +9,7 @@ public class Agent extends GridObject
 	// Direction-based vs Sensors and move in any direction
 	
 	private Direction direction = Direction.NORTH;
+	private boolean learning = true;
 	
 	public Agent(int x, int y)
 	{
@@ -99,4 +100,14 @@ public class Agent extends GridObject
 		// Reward = 0
 		return 0;
 	}
+
+	public boolean isLearning() {
+		return learning;
+	}
+
+	public void setLearning(boolean learning) {
+		this.learning = learning;
+	}
+	
+	
 }

@@ -61,18 +61,20 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 		
 		Action action1 = policy.getActionWithMaxValue(state1, getPossibleActionsInRandomOrder());
 		
-		// Update policy
-		double value0 = policy.getValue(state0, action0);
-		double value1 = policy.getValue(state1, action1);
-		double valueDelta = getLearningRate() * (reward0 + (getFutureRewardDiscountRate() * value1) - value0);
-		if (debug) {
-			log("Value difference: " + valueDelta);
+		if (isLearning()) {
+			// Update policy
+			double value0 = policy.getValue(state0, action0);
+			double value1 = policy.getValue(state1, action1);
+			double valueDelta = getLearningRate() * (reward0 + (getFutureRewardDiscountRate() * value1) - value0);
+			if (debug) {
+				log("Value difference: " + valueDelta);
+			}
+			double newValue0 = value0 + valueDelta;
+
+			policy.setValue(state0, action0, newValue0);
+			// Decay exploration
+			setExplorationRate(getExplorationRate() * getExplorationRateDecay());
 		}
-		double newValue0 = value0 + valueDelta;
-		policy.setValue(state0, action0, newValue0);
-		
-		// Decay exploration
-		setExplorationRate(getExplorationRate() * getExplorationRateDecay());
 		
 		if (debug) {
 			policy.write(getPossibleActions());

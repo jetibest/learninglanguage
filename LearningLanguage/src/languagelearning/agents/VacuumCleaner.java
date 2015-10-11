@@ -99,7 +99,7 @@ public class VacuumCleaner extends Agent {
 
 	public int collectDustAndProduceSignal(int symbol,int rewardThreshold) {
 		int dustBefore = getEnvironment().getDustValue(getX(), getY());
-		int dustAfter = Math.max(getEnvironment().getConfig().getDustMin(),
+		int dustAfter = Math.max(getEnvironment().getDustMin(),
 				getEnvironment().getDustValue(getX(), getY()) - dustCleanValue);
 		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 

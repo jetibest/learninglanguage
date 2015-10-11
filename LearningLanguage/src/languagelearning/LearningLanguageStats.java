@@ -18,12 +18,13 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 
 public class LearningLanguageStats {
-	private final static DecimalFormat df = new DecimalFormat("#0.0");
+	private final static DecimalFormat df = new DecimalFormat("#0.00");
 
 	public static void main(String[] args) {
 		SimulationConfig simulationConfig = new SimulationConfig();
 		simulationConfig.setRuns(30);
-		simulationConfig.setTicks(200000);
+		simulationConfig.setTrainingTicks(200000);
+		simulationConfig.setTestTicks(1000);
 		
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setGridWidth(32);
@@ -62,7 +63,7 @@ public class LearningLanguageStats {
 		
 		DescriptiveStatistics collectedDustStats = new DescriptiveStatistics();
 		StateActionPolicy bestPolicy = null;
-		double maxCollectedDustRatio = -999999;
+		double maxMetric = Double.MIN_VALUE;
 		
 		for (int run = 0; run < simulationConfig.getRuns(); run++) {
 			Environment environment = new SimulationEnvironment(environmentConfig);
@@ -70,16 +71,29 @@ public class LearningLanguageStats {
 			
 			agentsConfig.produceAgents(environment);
 			
-			long totalDustBefore = environment.getTotalDust();
-			environment.tick(simulationConfig.getTicks());
-			long totalDustAfter = environment.getTotalDust();
-			long totalDustCollected = totalDustBefore - totalDustAfter;
-			double collectedDustRatio = (double)totalDustCollected / (double)totalDustBefore;
-			collectedDustStats.addValue(collectedDustRatio);
-			System.out.println("before = " + totalDustBefore + " after = " + totalDustAfter + " collected = " + totalDustCollected + " " + df.format(collectedDustRatio*100.0) + "%");
+			// Train first
+			for (int tick = 0; tick < simulationConfig.getTrainingTicks(); tick++) {
+				environment.tick();
+			}
+
+			// Test
+			environment.initMaxDust(); // Fill everything with dust
+			environmentConfig.setDustIncrement(0); // No new dust
+			environment.setLearning(false); // Switch off policy updates
+			
+			double metricBefore = environment.getDustinessRatio();
+			for (int tick = 0; tick < simulationConfig.getTestTicks(); tick++) {
+				environment.tick();
+			}
+			double metricAfter = environment.getDustinessRatio();
+			
+			double metric = metricBefore - metricAfter;
+			
+			collectedDustStats.addValue(metric);
+			System.out.println((run+1) + ") before = " + df.format(metricBefore) + " after = " + df.format(metricAfter) + " collecting rate = " + df.format(metric));
 		
-			if (collectedDustRatio > maxCollectedDustRatio) {
-				maxCollectedDustRatio = collectedDustRatio;
+			if (metric > maxMetric) {
+				maxMetric = metric;
 				GridObject obj = environment.getObjects().get(0);
 				if (obj instanceof TDVacuumCleaner) {
 					TDVacuumCleaner td = (TDVacuumCleaner)obj;
@@ -90,7 +104,7 @@ public class LearningLanguageStats {
 
 		if (bestPolicy != null) {
 			System.out.println();
-			System.out.println("Best policy with " + df.format(maxCollectedDustRatio*100.0) + "% dust collected:");
+			System.out.println("Best policy with " + df.format(maxMetric*100.0) + "% dust collected:");
 			System.out.println(bestPolicy.toString());
 		}
 		

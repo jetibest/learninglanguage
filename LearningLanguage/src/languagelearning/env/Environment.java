@@ -17,17 +17,28 @@ public abstract class Environment {
 	private long ticks = 0;
 	private Logger logger;
 	private StatusUpdater statusUpdater;
-	private EnvironmentConfig config;
 
-	public Environment(EnvironmentConfig environmentConfig) {
-		this.config = environmentConfig;
+	private int gridWidth;
+	private int gridHeight;
+	private int dustMin;
+	private int dustMax;
+	private int dustIncrement;
+	private double dustStartPercentage;
+	private double dustVariancePercentage;
+	private boolean bounded;
 
-		this.dustgrid = new int[this.config.getGridHeight()][this.config.getGridWidth()];
-		this.soundgrid = new int[this.config.getGridHeight()][this.config.getGridWidth()];
-	}
-	
-	public EnvironmentConfig getConfig() {
-		return config;
+	public Environment(EnvironmentConfig config) {
+		this.gridWidth = gridWidth;
+		this.gridHeight = gridHeight;
+		this.dustMin = config.getDustMin();
+		this.dustMax = dustMax;
+		this.dustIncrement = config.getDustIncrement();
+		this.dustStartPercentage = config.getDustStartPercentage();
+		this.dustVariancePercentage = config.getDustVariancePercentage();
+		this.bounded = config.isBounded();
+
+		this.dustgrid = new int[gridHeight][gridWidth];
+		this.soundgrid = new int[gridHeight][gridWidth];
 	}
 	
 	public void init() {
@@ -35,11 +46,21 @@ public abstract class Environment {
 	}
 
 	public void initRandomDust() {
-		for (int i = 0; i < config.getGridHeight(); i++) {
-			int[] row = new int[config.getGridWidth()];
-			for (int j = 0; j < config.getGridWidth(); j++) {
-				row[j] = (int) (this.config.getDustMax() * config.getDustStartPercentage() + (Math.random() * 2 - 1)
-						* this.config.getDustMax() * config.getDustVariancePercentage());
+		for (int i = 0; i < gridHeight; i++) {
+			int[] row = new int[gridWidth];
+			for (int j = 0; j < gridWidth; j++) {
+				row[j] = (int) (dustMax * dustStartPercentage + (Math.random() * 2 - 1)
+						* dustMax * dustVariancePercentage);
+			}
+			dustgrid[i] = row;
+		}
+	}
+	
+	public void initMaxDust() {
+		for (int i = 0; i < gridHeight; i++) {
+			int[] row = new int[gridWidth];
+			for (int j = 0; j < gridWidth; j++) {
+				row[j] = dustMax;
 			}
 			dustgrid[i] = row;
 		}
@@ -49,8 +70,8 @@ public abstract class Environment {
 
 /*	public void initRandomAgents(int agentInitCount, AgentFactory agentFactory) {
 		for (int i = 0; i < agentInitCount; i++) {
-			int initX = (int) (Math.random() * this.config.getGridWidth());
-			int initY = (int) (Math.random() * this.config.getGridHeight());
+			int initX = (int) (Math.random() * gridWidth);
+			int initY = (int) (Math.random() * gridHeight);
 			Agent agent = agentFactory.produceAgent(initX, initY);
 			addObject(agent);
 		}
@@ -86,9 +107,9 @@ public abstract class Environment {
 	}
 
 	private void resetSound() {
-		for (int i = 0; i < this.config.getGridHeight(); i++) {
+		for (int i = 0; i < gridHeight; i++) {
 			int[] soundrow = soundgrid[i];
-			for (int j = 0; j < this.config.getGridWidth(); j++) {
+			for (int j = 0; j < gridWidth; j++) {
 				soundrow[j] = 0;
 			}
 		}
@@ -107,17 +128,11 @@ public abstract class Environment {
 		ticks++;
 	}
 
-	public void tick(int numberOfTicks) {
-		for (int t = 0; t < numberOfTicks; t++) {
-			tick();
-		}
-	}
-
 	public void updateDust() {
-		for (int i = 0; i < config.getGridHeight(); i++) {
+		for (int i = 0; i < gridHeight; i++) {
 			int[] row = dustgrid[i];
-			for (int j = 0; j < config.getGridWidth(); j++) {
-				int val = Math.min(row[j] + config.getDustIncrement(), config.getDustMax());
+			for (int j = 0; j < gridWidth; j++) {
+				int val = Math.min(row[j] + dustIncrement, dustMax);
 				row[j] = val;
 			}
 		}
@@ -142,11 +157,11 @@ public abstract class Environment {
 
 	public void updateStatus() {
 		if (statusUpdater != null) {
-			int gridCellsCount = config.getGridHeight() * config.getGridWidth();
+			int gridCellsCount = gridHeight * gridWidth;
 			long totalDust = getTotalDust();
 			getStatusUpdater().updateTotalDustPercentage(
-					100.0D * (totalDust - config.getDustMin() * gridCellsCount)
-							/ ((config.getDustMax() - config.getDustMin()) * gridCellsCount));
+					100.0D * (totalDust - dustMin * gridCellsCount)
+							/ ((dustMax - dustMin) * gridCellsCount));
 			getStatusUpdater().updateTime(getTicks());
 		}
 	}
@@ -169,7 +184,7 @@ public abstract class Environment {
 
 	public boolean canMove(int x, int y) {
 		// Check boundaries of environment
-		if (x < 0 || x >= config.getGridWidth() || y < 0 || y >= config.getGridHeight()) {
+		if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
 			return false;
 		}
 
@@ -183,13 +198,13 @@ public abstract class Environment {
 	}
 
 	public void setSoundValue(int x, int y, int value) {
-		if (x >= 0 && y >= 0 && x < config.getGridWidth() && y < config.getGridHeight()) {
+		if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {
 			soundgrid[y][x] = value;
 		}
 	}
 
 	public int getSoundValue(int x, int y) {
-		if (x >= 0 && x < config.getGridWidth() && y >= 0 && y < config.getGridHeight()) {
+		if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
 			return soundgrid[y][x];
 		}
 		return 0;
@@ -200,7 +215,7 @@ public abstract class Environment {
 	}
 
 	public int getDustValue(int x, int y) {
-		if (x >= 0 && x < config.getGridWidth() && y >= 0 && y < config.getGridHeight()) {
+		if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
 			return dustgrid[y][x];
 		}
 		return 0;
@@ -224,15 +239,108 @@ public abstract class Environment {
 
 	public long getTotalDust() {
 		long totalDust = 0;
-		for (int i = 0; i < config.getGridHeight(); i++) {
-			for (int j = 0; j < config.getGridWidth(); j++) {
+		for (int i = 0; i < gridHeight; i++) {
+			for (int j = 0; j < gridWidth; j++) {
 				totalDust += dustgrid[i][j];
 			}
 		}
 		return totalDust;
 	}
+	
+	public double getDustinessRatio() {
+		long totalDust = getTotalDust();
+		long maxDust = dustMax * gridHeight * gridWidth;
+		
+		return (double)totalDust / (double)maxDust;
+	}
 
 	public long getTicks() {
 		return ticks;
 	}
+	
+	public void setLearning(boolean learning) {
+		for (GridObject go: objects) {
+			if (go instanceof Agent) {
+				((Agent)go).setLearning(learning);
+			}
+		}
+	}
+
+	public int[][] getDustgrid() {
+		return dustgrid;
+	}
+
+	public void setDustgrid(int[][] dustgrid) {
+		this.dustgrid = dustgrid;
+	}
+
+	public int getGridWidth() {
+		return gridWidth;
+	}
+
+	public void setGridWidth(int gridWidth) {
+		this.gridWidth = gridWidth;
+	}
+
+	public int getGridHeight() {
+		return gridHeight;
+	}
+
+	public void setGridHeight(int gridHeight) {
+		this.gridHeight = gridHeight;
+	}
+
+	public int getDustMin() {
+		return dustMin;
+	}
+
+	public void setDustMin(int dustMin) {
+		this.dustMin = dustMin;
+	}
+
+	public int getDustMax() {
+		return dustMax;
+	}
+
+	public void setDustMax(int dustMax) {
+		this.dustMax = dustMax;
+	}
+
+	public int getDustIncrement() {
+		return dustIncrement;
+	}
+
+	public void setDustIncrement(int dustIncrement) {
+		this.dustIncrement = dustIncrement;
+	}
+
+	public double getDustStartPercentage() {
+		return dustStartPercentage;
+	}
+
+	public void setDustStartPercentage(double dustStartPercentage) {
+		this.dustStartPercentage = dustStartPercentage;
+	}
+
+	public double getDustVariancePercentage() {
+		return dustVariancePercentage;
+	}
+
+	public void setDustVariancePercentage(double dustVariancePercentage) {
+		this.dustVariancePercentage = dustVariancePercentage;
+	}
+
+	public boolean isBounded() {
+		return bounded;
+	}
+	
+	public boolean isBoundless() {
+		return !bounded;
+	}
+
+	public void setBounded(boolean bounded) {
+		this.bounded = bounded;
+	}
+	
+	
 }

@@ -107,8 +107,8 @@ public class AgentsConfig {
 		}
 		
 		for (int i = 0; i < agentInitCount; i++) {
-			int initX = (int) (Math.random() * env.getConfig().getGridWidth());
-			int initY = (int) (Math.random() * env.getConfig().getGridHeight());
+			int initX = (int) (Math.random() * env.getGridWidth());
+			int initY = (int) (Math.random() * env.getGridHeight());
 			
 			Agent agent = agentType.produceAgent(policy, initX, initY);
 

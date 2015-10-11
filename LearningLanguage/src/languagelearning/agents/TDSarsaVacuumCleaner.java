@@ -46,12 +46,14 @@ public class TDSarsaVacuumCleaner extends TDVacuumCleaner {
 		// Choose action' from state' 
 		action1 = getEGreedyAction(state1);
 		
-		// Update policy
-		double value0 = policy.getValue(state0, action0);
-		double value1 = policy.getValue(state1, action1);
-		double valueDelta = getLearningRate() * (reward0 + (getFutureRewardDiscountRate() * value1) - value0);
-		double newValue0 = value0 + valueDelta;
-		policy.setValue(state0, action0, newValue0);
+		if (isLearning()) {
+			// Update policy
+			double value0 = policy.getValue(state0, action0);
+			double value1 = policy.getValue(state1, action1);
+			double valueDelta = getLearningRate() * (reward0 + (getFutureRewardDiscountRate() * value1) - value0);
+			double newValue0 = value0 + valueDelta;
+			policy.setValue(state0, action0, newValue0);
+		}
 		
 		state0 = state1;
 		action0 = action1;
