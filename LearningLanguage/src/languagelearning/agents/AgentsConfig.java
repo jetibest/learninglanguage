@@ -125,7 +125,10 @@ public class AgentsConfig {
 				tdVacuumCleaner.setPossibleActions(possibleActions);
 				tdVacuumCleaner.setPossibleStateVariables(possibleStateVariables);
 				tdVacuumCleaner.setSoundMatrix(soundMatrix);
-				tdVacuumCleaner.setDebug(debug);
+				if (i == 0) {
+					// Debug only for first agent
+					tdVacuumCleaner.setDebug(debug);
+				}
 				tdVacuumCleaner.setDustCleanValue(dustCleanValue);
 				tdVacuumCleaner.setDustPerceptionThreshold(dustPerceptionThreshold);
 				tdVacuumCleaner.setExplorationRateDecay(explorationRateDecay);

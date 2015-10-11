@@ -60,7 +60,7 @@ public class LearningLanguage implements Logger {
         		,StateVariable.SOUND_C_AHEAD
 		});
 		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
-		agentsConfig.setDebug(false);
+		agentsConfig.setDebug(true);
 		
 		env = new RunnableEnvironment(environmentConfig);
 		win = new LLWindow();
