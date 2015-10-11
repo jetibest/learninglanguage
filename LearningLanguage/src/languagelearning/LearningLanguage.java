@@ -35,6 +35,7 @@ public class LearningLanguage implements Logger {
 		environmentConfig.setDustIncrement(10);
 		environmentConfig.setDustStartPercentage(0.6);
 		environmentConfig.setDustVariancePercentage(0.1);
+		environmentConfig.setBounded(true);
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
 		agentsConfig.setAgentType(AgentType.QLEARNING);

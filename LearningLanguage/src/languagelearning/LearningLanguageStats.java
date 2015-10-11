@@ -23,7 +23,7 @@ public class LearningLanguageStats {
 	public static void main(String[] args) {
 		SimulationConfig simulationConfig = new SimulationConfig();
 		simulationConfig.setRuns(30);
-		simulationConfig.setTicks(50000);
+		simulationConfig.setTicks(200000);
 		
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setGridWidth(32);
@@ -33,6 +33,7 @@ public class LearningLanguageStats {
 		environmentConfig.setDustIncrement(10);
 		environmentConfig.setDustStartPercentage(0.6);
 		environmentConfig.setDustVariancePercentage(0.1);
+		environmentConfig.setBounded(true);
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
 		agentsConfig.setAgentType(AgentType.QLEARNING);
@@ -49,7 +50,7 @@ public class LearningLanguageStats {
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
-        		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW
