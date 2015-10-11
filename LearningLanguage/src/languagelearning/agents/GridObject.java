@@ -120,6 +120,11 @@ public abstract class GridObject {
 		return y;
 	}
 	
+	public void setXY(int x,int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	public Environment getEnvironment() {
 		return env;
 	}

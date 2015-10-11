@@ -1,9 +1,7 @@
 package languagelearning.agents;
 
-import java.io.BufferedWriter;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Random;
 
 import languagelearning.actions.Action;
 import languagelearning.policies.StateActionPolicy;
@@ -12,7 +10,6 @@ import languagelearning.states.StateVariable;
 
 public abstract class TDVacuumCleaner extends VacuumCleaner {
 	private StateActionPolicy policy;
-	private Random rnd;
 
 	private double explorationRate = 0.1;
 	private double explorationRateDecay = 1;
@@ -29,7 +26,6 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 		} else {
 			this.policy = new StateActionPolicy();
 		}
-		this.rnd = new Random();
 	}
 	
 	protected void log(String text) {
@@ -71,9 +67,9 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 	protected Action getEGreedyAction(State state) {
 		Action[] possibleActions = getPossibleActionsInRandomOrder();
 
-		if (rnd.nextDouble() <= getExplorationRate()) {
+		if (getEnvironment().getRandom().nextDouble() <= getExplorationRate()) {
 			// Explore	
-			return possibleActions[rnd.nextInt(possibleActions.length)];
+			return possibleActions[getEnvironment().getRandom().nextInt(possibleActions.length)];
 		} else {
 			return policy.getActionWithMaxValue(state, possibleActions);
 		}
@@ -106,7 +102,7 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 
 			@Override
 			public int compare(Action o1, Action o2) {
-				return (int)(rnd.nextInt(3) - 1);
+				return (int)(getEnvironment().getRandom().nextInt(3) - 1);
 			}});
 		return actions2;
 	}

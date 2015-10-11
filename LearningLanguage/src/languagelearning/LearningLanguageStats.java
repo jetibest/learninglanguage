@@ -24,7 +24,7 @@ public class LearningLanguageStats {
 		SimulationConfig simulationConfig = new SimulationConfig();
 		simulationConfig.setRuns(30);
 		simulationConfig.setTrainingTicks(200000);
-		simulationConfig.setTestTicks(1000);
+		simulationConfig.setTestTicks(100);
 		
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setGridWidth(32);
@@ -37,7 +37,7 @@ public class LearningLanguageStats {
 		environmentConfig.setBounded(true);
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
-		agentsConfig.setAgentType(AgentType.QLEARNING);
+		agentsConfig.setAgentType(AgentType.RANDOM);
 		agentsConfig.setAgentInitCount(10);
 		agentsConfig.setExplorationRate(0.1);
 		agentsConfig.setExplorationRateDecay(1.0);
@@ -51,7 +51,7 @@ public class LearningLanguageStats {
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
-        		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW
@@ -77,8 +77,10 @@ public class LearningLanguageStats {
 			}
 
 			// Test
-			environment.initMaxDust(); // Fill everything with dust
-			environment.setDustIncrement(0); // No new dust
+			//environment.initMaxDust(); // Fill everything with dust
+			//environment.setDustIncrement(0); // No new dust
+			environment.initRandomDust();
+			environment.repositionObjectsInRandom();
 			environment.setLearning(false); // Switch off policy updates
 			
 			double metricBefore = environment.getDustinessRatio();

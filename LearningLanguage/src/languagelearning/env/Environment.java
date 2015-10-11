@@ -2,6 +2,7 @@ package languagelearning.env;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import languagelearning.Logger;
 import languagelearning.StatusUpdater;
@@ -10,10 +11,13 @@ import languagelearning.agents.GridObject;
 
 public abstract class Environment {
 	public static final int SOUND_MAX = 3;
+	
+	private Random rnd = new Random();
 
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid;
-	private int[][] soundgrid;
+	private int[][] soundgridPrev;
+	private int[][] soundgridNew;
 	private long ticks = 0;
 	private Logger logger;
 	private StatusUpdater statusUpdater;
@@ -38,7 +42,8 @@ public abstract class Environment {
 		this.bounded = config.isBounded();
 
 		this.dustgrid = new int[gridHeight][gridWidth];
-		this.soundgrid = new int[gridHeight][gridWidth];
+		this.soundgridPrev = new int[gridHeight][gridWidth];
+		this.soundgridNew = new int[gridHeight][gridWidth];
 	}
 	
 	public void init() {
@@ -107,8 +112,16 @@ public abstract class Environment {
 	}
 
 	private void resetSound() {
+		// Copy new sounds to prev sounds
 		for (int i = 0; i < gridHeight; i++) {
-			int[] soundrow = soundgrid[i];
+			for (int j = 0; j < gridWidth; j++) {
+				soundgridPrev[i][j] = soundgridNew[i][j];
+			}
+		}
+		
+		// Clear new sounds
+		for (int i = 0; i < gridHeight; i++) {
+			int[] soundrow = soundgridNew[i];
 			for (int j = 0; j < gridWidth; j++) {
 				soundrow[j] = 0;
 			}
@@ -199,13 +212,13 @@ public abstract class Environment {
 
 	public void setSoundValue(int x, int y, int value) {
 		if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {
-			soundgrid[y][x] = value;
+			soundgridNew[y][x] = value;
 		}
 	}
 
-	public int getSoundValue(int x, int y) {
+	public int getSoundValuePrev(int x, int y) {
 		if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
-			return soundgrid[y][x];
+			return soundgridPrev[y][x];
 		}
 		return 0;
 	}
@@ -225,8 +238,12 @@ public abstract class Environment {
 		return objects;
 	}
 
-	public int[][] getSoundGrid() {
-		return soundgrid;
+	public int[][] getSoundGridPrev() {
+		return soundgridPrev;
+	}
+
+	public int[][] getSoundGridNew() {
+		return soundgridNew;
 	}
 
 	public int[][] getDustGrid() {
@@ -342,5 +359,13 @@ public abstract class Environment {
 		this.bounded = bounded;
 	}
 	
+	public Random getRandom() {
+		return rnd;
+	}
 	
+	public void repositionObjectsInRandom() {
+		for (GridObject go: objects) {
+			go.setXY((int) (Math.random() * gridWidth), (int) (Math.random() * gridHeight));
+		}
+	}
 }
