@@ -22,8 +22,8 @@ public class LearningLanguageStats {
 
 	public static void main(String[] args) {
 		SimulationConfig simulationConfig = new SimulationConfig();
-		simulationConfig.setRuns(20);
-		simulationConfig.setTicks(5000);
+		simulationConfig.setRuns(30);
+		simulationConfig.setTicks(50000);
 		
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setGridWidth(32);
@@ -49,7 +49,7 @@ public class LearningLanguageStats {
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
-        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW

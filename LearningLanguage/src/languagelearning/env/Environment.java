@@ -174,8 +174,7 @@ public abstract class Environment {
 		}
 
 		// Physical properties of moving (thus not for sensing purposes!)
-		for (int i = 0; i < objects.size(); i++) {
-			GridObject go = objects.get(i);
+		for (GridObject go: objects) {
 			if (go.getX() == x && go.getY() == y) {
 				return false;
 			}

@@ -29,24 +29,33 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 	
 	@Override
 	public void run() {
+		boolean debug = isDebug();
 		StateActionPolicy policy = getPolicy();
 		// Temporal difference algorithm based on: http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html
 		
-		log("============================================");
-		log("Policy: \n" + policy);
+		if (isDebug()) {
+			log("============================================");
+			log("Policy: \n" + policy);
 
-		log("Exploration rate: " + getExplorationRate());
+			log("Exploration rate: " + getExplorationRate());
+		}
 
 		State state0 = getCurrentState();
-		log("Current state: " + state0);
+		if (debug) {
+			log("Current state: " + state0);
+		}
 		
 		// Choose action from state
 		Action action0 = getEGreedyAction(state0);
-		log("Action: " + action0);
+		if (debug) {
+			log("Action: " + action0);
+		}
 
 		// Take action, observe reward
 		double reward0 = doAction(action0);
-		log("Reward: " + reward0);
+		if (debug) {
+			log("Reward: " + reward0);
+		}
 		// Observe new state'
 		State state1 = getCurrentState();
 		
@@ -56,14 +65,16 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 		double value0 = policy.getValue(state0, action0);
 		double value1 = policy.getValue(state1, action1);
 		double valueDelta = getLearningRate() * (reward0 + (getFutureRewardDiscountRate() * value1) - value0);
-		log("Value difference: " + valueDelta);
+		if (debug) {
+			log("Value difference: " + valueDelta);
+		}
 		double newValue0 = value0 + valueDelta;
 		policy.setValue(state0, action0, newValue0);
 		
 		// Decay exploration
 		setExplorationRate(getExplorationRate() * getExplorationRateDecay());
 		
-		if (isDebug()) {
+		if (debug) {
 			policy.write(getPossibleActions());
 		}
 	}

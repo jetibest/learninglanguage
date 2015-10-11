@@ -33,9 +33,7 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 	}
 	
 	protected void log(String text) {
-		if (debug) {
-			System.out.println(text);
-		}
+		System.out.println(text);
 	}
 	
 	public void setDebug(boolean debug) {

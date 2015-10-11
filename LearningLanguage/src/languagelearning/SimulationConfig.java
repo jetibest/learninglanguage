@@ -1,5 +1,6 @@
 package languagelearning;
 
+
 public class SimulationConfig {
 	private int runs;
 	private int ticks;
@@ -15,6 +16,4 @@ public class SimulationConfig {
 	public void setTicks(int ticks) {
 		this.ticks = ticks;
 	}
-	
-	
 }
