@@ -1,5 +1,8 @@
 package languagelearning.env;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class EnvironmentConfig implements Cloneable {
 	private int gridWidth;
@@ -10,6 +13,7 @@ public class EnvironmentConfig implements Cloneable {
 	private double dustStartPercentage;
 	private double dustVariancePercentage;
 	private boolean bounded;
+	private List<DustMultiplierConfig> dustMultipliers = new ArrayList<DustMultiplierConfig>();
 	
 	public int getGridWidth() {
 		return gridWidth;
@@ -61,6 +65,12 @@ public class EnvironmentConfig implements Cloneable {
 	}
 	public void setBounded(boolean bounded) {
 		this.bounded = bounded;
+	}
+	public List<DustMultiplierConfig> getDustMultipliers() {
+		return dustMultipliers;
+	}
+	public void setDustMultipliers(List<DustMultiplierConfig> dustMultipliers) {
+		this.dustMultipliers = dustMultipliers;
 	}
 	
 	

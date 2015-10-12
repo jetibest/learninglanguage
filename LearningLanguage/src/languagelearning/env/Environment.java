@@ -45,13 +45,17 @@ public abstract class Environment {
 
 		this.dustgrid = new int[gridHeight][gridWidth];
 		this.dustMultGrid = new double[gridHeight][gridWidth];
+		initDustMultipliers();
 		this.soundgridCurrent = new int[gridHeight][gridWidth];
 		this.soundgridNew = new int[gridHeight][gridWidth];
 		this.pheromoneGrid = new int[gridHeight][gridWidth];
+		
+		for (DustMultiplierConfig dmc: config.getDustMultipliers()) {
+			this.setDustMultiplier(dmc.getFromX(), dmc.getFromY(), dmc.getWidth(), dmc.getHeight(), dmc.getMultiplier());
+		}
 	}
 	
 	public void init() {
-		initDustMultipliers();
 		initRandomDust();
 	}
 

@@ -3,6 +3,7 @@ package languagelearning;
 import languagelearning.actions.Action;
 import languagelearning.agents.AgentType;
 import languagelearning.agents.AgentsConfig;
+import languagelearning.env.DustMultiplierConfig;
 import languagelearning.env.EnvironmentConfig;
 import languagelearning.env.RunnableEnvironment;
 import languagelearning.gui.LLWindow;
@@ -36,6 +37,8 @@ public class LearningLanguage implements Logger {
 		environmentConfig.setDustStartPercentage(0.6);
 		environmentConfig.setDustVariancePercentage(0.1);
 		environmentConfig.setBounded(true);
+		environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 16, 20, 100));
+		environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(16, 0, 16, 20, 0));
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
 		agentsConfig.setAgentType(AgentType.QLEARNING);
@@ -81,8 +84,6 @@ public class LearningLanguage implements Logger {
 		env.setLogger(this);
 		env.setStatusUpdater(getWindow().getControlPanel());
 		env.init();
-		env.setDustMultiplier(0, 0, 16, 20, 100);
-		env.setDustMultiplier(16, 0, 16, 20, 0);
 		
 		agentsConfig.produceAgents(env);
 	}
