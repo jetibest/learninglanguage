@@ -39,6 +39,13 @@ public class LearningLanguage implements Logger {
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
 		agentsConfig.setAgentType(AgentType.QLEARNING);
+                // SARSA & no Sound:        17.9 at 195K ticks
+                // QLEANING & no Sound:     17.8 at 195K ticks
+                // QLEARNING & Sound:       18.0 at 195K ticks
+                // SARSA & Sound:           18.0 at 195K ticks
+                // QLEARNING & Sound production & No sound detection    18.3    at 195K
+                // QLEARNING & Sound detection & No Sound production    17.9    at 195K
+                // QLEARNING & Sound & No normal collect dust           17.6    at 195K
 		agentsConfig.setAgentInitCount(10);
 		agentsConfig.setExplorationRate(0.1);
 		agentsConfig.setExplorationRateDecay(1.0);
@@ -51,7 +58,7 @@ public class LearningLanguage implements Logger {
         		Action.TURN_RIGHT
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
-        		,Action.COLLECT_DUST
+        		//,Action.COLLECT_DUST
         		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
         		//,Action.PRODUCE_SOUND_C
 		});

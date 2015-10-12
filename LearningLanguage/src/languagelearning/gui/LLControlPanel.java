@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
@@ -25,6 +27,10 @@ public class LLControlPanel extends JPanel implements StatusUpdater
         private JLabel totalDustIndicator;
         private NumberFormat ticksNF = new DecimalFormat("#,###,###,##0");
 	private NumberFormat dustNF = new DecimalFormat("0.#");
+        private double[] averagePercentage = new double[1024];
+        private int avgPercentIndex = 0;
+        private double totalPercentage = 0;
+        private long totalCount = 0;
         
 	public LLControlPanel() {
 		super(new FlowLayout(FlowLayout.LEFT));
@@ -92,9 +98,33 @@ public class LLControlPanel extends JPanel implements StatusUpdater
             simTimer.setText(ticksNF.format(ticks) + " ticks");
         }
         
+        public double getAverage()
+        {
+            //dustPercentage
+            if(1==2)
+            {
+                double total = 0;
+                for(int i=0;i<averagePercentage.length;i++)
+                {
+                    total += averagePercentage[i];
+                }
+                return total/averagePercentage.length;
+            }
+            return totalPercentage/totalCount;
+        }
+        
         @Override
         public void updateTotalDustPercentage(double dustPercentage)
         {
-            totalDustIndicator.setText(dustNF.format(dustPercentage) + "%");
+            avgPercentIndex = (avgPercentIndex + 1)%averagePercentage.length;
+            averagePercentage[avgPercentIndex] = dustPercentage;
+            if(totalCount > 100000)
+            {
+                totalPercentage = 0;
+                totalCount = 0;
+            }
+            totalPercentage += dustPercentage;
+            totalCount++;
+            totalDustIndicator.setText(dustNF.format(getAverage()) + "%");
         }
 }
