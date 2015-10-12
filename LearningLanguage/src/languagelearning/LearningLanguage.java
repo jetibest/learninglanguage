@@ -53,6 +53,7 @@ public class LearningLanguage implements Logger {
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
         		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        		//,Action.PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW

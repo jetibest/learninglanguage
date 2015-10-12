@@ -24,6 +24,24 @@ public class BooleanMatrix {
 					{true,true,true,true,true}
 			}
 		);
+
+	public static final BooleanMatrix SQUARE_3x3 = new BooleanMatrix(
+			new boolean[][]{
+					{true,false,true},
+					{true,false,true},
+					{true,true,true},
+			}
+		);
+
+	public static final BooleanMatrix CROSS_5x5 = new BooleanMatrix(
+			new boolean[][]{
+					{false,false,true,false,false},
+					{false,false,false,false,false},
+					{true,true,false,true,true},
+					{false,false,true,false,false},
+					{false,false,true,false,false}
+			}
+		);
 	
 	private boolean[][] matrix = null;
 	
