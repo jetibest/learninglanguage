@@ -64,7 +64,7 @@ public class LearningLanguageStats {
         		,StateVariable.SOUND_C_AHEAD
         		//,StateVariable.INTERNAL_STATE_A
 		});
-		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_7x7);
+		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_9x9);
 		agentsConfig.setDebug(false);
 		
 		DescriptiveStatistics dustRatioStats = new DescriptiveStatistics();
@@ -99,7 +99,7 @@ public class LearningLanguageStats {
 			double dustRatioDiff = dustRatioStart - dustRatioEnd;
 			dustRatioStats.addValue(dustRatioDiff);
 
-			double cleaningRate = dustRatioStart / dustRatioEnd;
+			double cleaningRate = dustRatioEnd / dustRatioStart;
 			cleaningRateStats.addValue(cleaningRate);
 
 			System.out.println((run+1) + ") dustiness start (DS) = " + df.format(dustRatioStart) + " dustiness end (DE) = " + df.format(dustRatioEnd) + " collected dust (DS-DE) = " + df.format(dustRatioDiff) + " cleaning rate (DE/DS) = " + df.format(cleaningRate));
