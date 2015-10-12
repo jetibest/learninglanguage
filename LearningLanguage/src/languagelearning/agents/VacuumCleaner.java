@@ -185,6 +185,16 @@ public class VacuumCleaner extends Agent {
 		return getEnvironment().getDustValue(getX(), getY()) > dustPerceptionThreshold;
 	}
 
+	public boolean isDustRight() {
+		Direction d = getDirection().nextClockWise();
+		return isDustInDirection(d,1);
+	}
+
+	public boolean isDustLeft() {
+		Direction d = getDirection().nextCounterClockWise();
+		return isDustInDirection(d,1);
+	}
+
 	public boolean isDustInDirection(Direction direction, int step) {
 		int xAhead = getNewXInDirection(direction, step);
 		int yAhead = getNewYInDirection(direction, step);
@@ -222,6 +232,10 @@ public class VacuumCleaner extends Agent {
 	public boolean hasStateVariable(StateVariable var) {
 		if (StateVariable.DUST_BELOW == var) {
 			return isDustBelow();
+		} else if (StateVariable.DUST_RIGHT == var) {
+			return isDustRight();
+		} else if (StateVariable.DUST_LEFT == var) {
+			return isDustLeft();
 		} else if (StateVariable.DUST_AHEAD == var) {
 			return isDustInDirection(getDirection(), 1);
 		} else if (StateVariable.DUST_TWO_AHEAD == var) {

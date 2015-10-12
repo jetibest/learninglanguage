@@ -48,7 +48,7 @@ public class LearningLanguageStats {
                 // QLEARNING & Sound detection & No Sound production    17.9    at 195K
                 // QLEARNING & Sound & No normal collect dust           17.6    at 195K
 		agentsConfig.setAgentInitCount(10);
-		agentsConfig.setExplorationRate(0.1);
+		agentsConfig.setExplorationRate(0.05);
 		agentsConfig.setExplorationRateDecay(1);
 		agentsConfig.setDustCleanValue(5000);
 		agentsConfig.setDustPerceptionThreshold(1000);
@@ -60,16 +60,20 @@ public class LearningLanguageStats {
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
-        		,Action.PLACE_PHEROMONE_X
+        		//,Action.COLLECT_DUST_AND_PLACE_PHEROMONE_X
         		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
         		//,Action.PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW
+        		,StateVariable.DUST_LEFT
+        		,StateVariable.DUST_RIGHT
+        		,StateVariable.DUST_AHEAD
+        		,StateVariable.DUST_TWO_AHEAD
         		,StateVariable.OBSTACLE_AHEAD
         		//,StateVariable.PHEROMONE_BELOW
-        		,StateVariable.PHEROMONE_AHEAD
-        		,StateVariable.PHEROMONE_TWO_AHEAD
+        		//,StateVariable.PHEROMONE_AHEAD
+        		//,StateVariable.PHEROMONE_TWO_AHEAD
         		//,StateVariable.SOUND_C_BELOW
         		//,StateVariable.SOUND_C_AHEAD
         		//,StateVariable.SOUND_C_TWO_AHEAD
