@@ -64,7 +64,7 @@ public class LearningLanguageStats {
         		,StateVariable.SOUND_C_AHEAD
         		//,StateVariable.INTERNAL_STATE_A
 		});
-		agentsConfig.setSoundMatrix(BooleanMatrix.CROSS_5x5);
+		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_7x7);
 		agentsConfig.setDebug(false);
 		
 		DescriptiveStatistics dustRatioStats = new DescriptiveStatistics();
