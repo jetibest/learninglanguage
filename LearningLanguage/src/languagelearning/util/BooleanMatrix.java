@@ -32,7 +32,7 @@ public class BooleanMatrix {
 	public static final BooleanMatrix SQUARE_7x7 = new BooleanMatrix(
 			new boolean[][]{
 					{true,true,true,true,true,true,true},
-					{true,true,true,true,true,true,true},
+					{true,true,true,false,true,true,true},
 					{true,true,true,false,true,true,true},
 					{true,true,true,false,true,true,true},
 					{true,true,true,true,true,true,true},
@@ -44,7 +44,7 @@ public class BooleanMatrix {
 	
 	public static final BooleanMatrix SQUARE_5x5 = new BooleanMatrix(
 			new boolean[][]{
-					{true,true,true,true,true},
+					{true,true,false,true,true},
 					{true,true,false,true,true},
 					{true,true,false,true,true},
 					{true,true,true,true,true},

@@ -102,6 +102,24 @@ public class LLPanel extends JPanel implements Runnable {
 					}
 				}
 			}
+			
+			int[][] pheromoneGrid = LearningLanguage.MAIN.getEnvironment().getPheromoneGrid();
+			for (int i = 0; i < gridHeight; i++) {
+				int[] pheromoneRow = pheromoneGrid[i];
+				for (int j = 0; j < gridWidth; j++) {
+					int pheromone = pheromoneRow[j];
+					for (int p = 0; p < pheromone; p++) {
+						Color c = Color.WHITE;
+						g.setColor(c);
+						int dx = (int)(Math.random() * gridSize);
+						int dy = (int)(Math.random() * gridSize);
+						g.drawOval((j * gridSize)+dx, (i * gridSize)+dy, 3, 3);
+						if (p > 50) {
+							break;
+						}
+					}
+				}
+			}			
 
 			List<GridObject> gridObjects = LearningLanguage.MAIN
 					.getEnvironment().getGridObjects();

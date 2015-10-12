@@ -16,8 +16,10 @@ public abstract class Environment {
 
 	private List<GridObject> objects = new ArrayList<GridObject>();
 	private int[][] dustgrid;
+	private double[][] dustMultGrid;
 	private int[][] soundgridCurrent;
 	private int[][] soundgridNew;
+	private int[][] pheromoneGrid;
 	private long ticks = 0;
 	private Logger logger;
 	private StatusUpdater statusUpdater;
@@ -42,11 +44,14 @@ public abstract class Environment {
 		this.bounded = config.isBounded();
 
 		this.dustgrid = new int[gridHeight][gridWidth];
+		this.dustMultGrid = new double[gridHeight][gridWidth];
 		this.soundgridCurrent = new int[gridHeight][gridWidth];
 		this.soundgridNew = new int[gridHeight][gridWidth];
+		this.pheromoneGrid = new int[gridHeight][gridWidth];
 	}
 	
 	public void init() {
+		initDustMultipliers();
 		initRandomDust();
 	}
 
@@ -60,7 +65,29 @@ public abstract class Environment {
 			dustgrid[i] = row;
 		}
 	}
+
+	public void initDustMultipliers() {
+		for (int i = 0; i < gridHeight; i++) {
+			double[] row = new double[gridWidth];
+			for (int j = 0; j < gridWidth; j++) {
+				row[j] = 1;
+			}
+			dustMultGrid[i] = row;
+		}
+	}
 	
+	public void setDustMultiplier(int x,int y,double multiplier) {
+		dustMultGrid[y][x] = multiplier;
+	}
+	
+	public void setDustMultiplier(int fromX,int fromY,int width,int height,double multiplier) {
+		for (int y = fromY; y < fromY+height; y++) {
+			for (int x = fromX; x < fromX+width; x++) {
+				dustMultGrid[y][x] = multiplier;
+			}
+		}
+	}
+
 	public void initMaxDust() {
 		for (int i = 0; i < gridHeight; i++) {
 			int[] row = new int[gridWidth];
@@ -128,9 +155,19 @@ public abstract class Environment {
 		}
 	}
 
+	private void resetPheromones() {
+		for (int i = 0; i < gridHeight; i++) {
+			for (int j = 0; j < gridWidth; j++) {
+				pheromoneGrid[i][j] = Math.max(pheromoneGrid[i][j]-1,0);
+			}
+		}
+	}
+
 	public void tick() {
 
 		resetSound();
+		
+		resetPheromones();
 
 		updateDust();
 
@@ -140,12 +177,23 @@ public abstract class Environment {
 
 		ticks++;
 	}
+	
+	public void addPheromone(int x,int y,int increment) {
+		pheromoneGrid[y][x] = pheromoneGrid[y][x] + increment;
+	}
+	
+	public int getPheromone(int x,int y) {
+		if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
+			return pheromoneGrid[y][x];
+		}
+		return 0;
+	}
 
 	public void updateDust() {
 		for (int i = 0; i < gridHeight; i++) {
 			int[] row = dustgrid[i];
 			for (int j = 0; j < gridWidth; j++) {
-				int val = Math.min(row[j] + dustIncrement, dustMax);
+				int val = Math.min(row[j] + (int)(dustIncrement * dustMultGrid[i][j]), dustMax);
 				row[j] = val;
 			}
 		}
@@ -281,6 +329,10 @@ public abstract class Environment {
 				((Agent)go).setLearning(learning);
 			}
 		}
+	}
+
+	public int[][] getPheromoneGrid() {
+		return pheromoneGrid;
 	}
 
 	public int[][] getDustgrid() {

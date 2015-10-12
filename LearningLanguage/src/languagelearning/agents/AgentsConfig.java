@@ -20,6 +20,7 @@ public class AgentsConfig {
 	private boolean debug;
 	private int dustCleanValue;
 	private int dustPerceptionThreshold;
+	private int pheromoneSize;
 	
 	public double getExplorationRate() {
 		return explorationRate;
@@ -116,6 +117,7 @@ public class AgentsConfig {
 				VacuumCleaner vacuumCleaner = (VacuumCleaner)agent;
 				vacuumCleaner.setDustCleanValue(dustCleanValue);
 				vacuumCleaner.setDustPerceptionThreshold(dustPerceptionThreshold);
+				vacuumCleaner.setPheromoneSize(pheromoneSize);
 			}
 			if (agent instanceof TDVacuumCleaner) {
 				TDVacuumCleaner tdVacuumCleaner = (TDVacuumCleaner)agent;
@@ -136,6 +138,12 @@ public class AgentsConfig {
 			
 			env.addObject(agent);
 		}
+	}
+	public int getPheromoneSize() {
+		return pheromoneSize;
+	}
+	public void setPheromoneSize(int pheromoneSize) {
+		this.pheromoneSize = pheromoneSize;
 	}
 	
 	

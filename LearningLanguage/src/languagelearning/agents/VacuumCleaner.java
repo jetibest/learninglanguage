@@ -9,6 +9,7 @@ import languagelearning.util.BooleanMatrix;
 public class VacuumCleaner extends Agent {
 	private int dustCleanValue = 5000;
 	private int dustPerceptionThreshold = 1000;
+	private int pheromoneSize = 10;
 	private boolean internalStateA;
 	private BooleanMatrix soundMatrix = BooleanMatrix.TRIANGLE_7x5; // Pattern of sounds around agent (in north direction)
 
@@ -34,6 +35,30 @@ public class VacuumCleaner extends Agent {
 
 		return getEnvironment().getCurrentSoundValue(xAhead, yAhead);
 	}
+
+	public int getPheromoneBelow() {
+		return getEnvironment().getPheromone(getX(), getY());
+	}
+
+	public int getPheromoneInDirection(Direction direction, int step) {
+		int xAhead = getNewXInDirection(direction, step);
+		int yAhead = getNewYInDirection(direction, step);
+
+		return getEnvironment().getPheromone(xAhead, yAhead);
+	}
+
+	public boolean isPheromoneBelow() {
+		return getPheromoneBelow() > 0;
+	}
+
+	public boolean isPheromoneInDirection(Direction direction, int step) {
+		return getPheromoneInDirection(direction,step) > 0;
+	}
+
+	public int placePheromone() {
+		getEnvironment().addPheromone(getX(), getY(), pheromoneSize);
+		return 0; // Reward 0
+	}
 	
 	public int produceSoundWithSoundMatrix(int symbol) {
 		if (this.soundMatrix != null) {
@@ -53,7 +78,7 @@ public class VacuumCleaner extends Agent {
 		return 0; // No reward
 	}
 
-	public int produceSound(int symbol) {
+/*	public int produceSound(int symbol) {
 		Direction d = getDirection();
 		Environment env = getEnvironment();
 		int x = getX();
@@ -91,7 +116,7 @@ public class VacuumCleaner extends Agent {
 			env.setSoundValue(x - 2, y3, symbol);
 		}
 		return 0; // No reward
-	}
+	}*/
 
 	public int collectDustWithoutSound() {
 		return collectDustAndProduceSignal(0,Integer.MAX_VALUE);
@@ -111,7 +136,22 @@ public class VacuumCleaner extends Agent {
 
 		return reward;
 	}
+	
+	public int collectDustAndPlacePheromene(int rewardThreshold) {
+		int dustBefore = getEnvironment().getDustValue(getX(), getY());
+		int dustAfter = Math.max(getEnvironment().getDustMin(),
+				getEnvironment().getDustValue(getX(), getY()) - dustCleanValue);
+		getEnvironment().setDustValue(getX(), getY(), dustAfter);
 
+		int reward = dustBefore - dustAfter;
+
+		if (reward >= rewardThreshold) {
+			placePheromone();
+		}
+
+		return reward;
+	}
+	
 	@Override
 	public int doAction(Action action) {
 		int reward = super.doAction(action);
@@ -133,6 +173,10 @@ public class VacuumCleaner extends Agent {
 			reward = reward + collectDustAndProduceSignal(2,1);
 		} else if (action == Action.COLLECT_DUST_AND_PRODUCE_SOUND_C) {
 			reward = reward + collectDustAndProduceSignal(3,1);
+		} else if (action == Action.PLACE_PHEROMONE_X) {
+			reward = reward + placePheromone();
+		} else if (action == Action.COLLECT_DUST_AND_PLACE_PHEROMONE_X) {
+			reward = reward + collectDustAndPlacePheromene(1);
 		}
 		return reward;
 	}
@@ -159,7 +203,7 @@ public class VacuumCleaner extends Agent {
 		return getSoundSymbolBelow() == symbol;
 	}
 
-	public boolean isSoundInDirectionBelow(int symbol, int step) {
+	public boolean isSoundInDirection(int symbol, int step) {
 		return getSoundSymbolInDirection(getDirection(), step) == symbol;
 	}
 
@@ -209,11 +253,23 @@ public class VacuumCleaner extends Agent {
 		} else if (StateVariable.SOUND_C_BELOW == var) {
 			return isSoundBelow(3);
 		} else if (StateVariable.SOUND_A_AHEAD == var) {
-			return isSoundInDirectionBelow(1, 1);
+			return isSoundInDirection(1, 1);
 		} else if (StateVariable.SOUND_B_AHEAD == var) {
-			return isSoundInDirectionBelow(2, 1);
+			return isSoundInDirection(2, 1);
 		} else if (StateVariable.SOUND_C_AHEAD == var) {
-			return isSoundInDirectionBelow(3, 1);
+			return isSoundInDirection(3, 1);
+		} else if (StateVariable.SOUND_A_TWO_AHEAD == var) {
+			return isSoundInDirection(1, 2);
+		} else if (StateVariable.SOUND_B_TWO_AHEAD == var) {
+			return isSoundInDirection(2, 2);
+		} else if (StateVariable.SOUND_C_TWO_AHEAD == var) {
+			return isSoundInDirection(3, 2);
+		} else if (StateVariable.PHEROMONE_BELOW == var) {
+			return isPheromoneBelow();
+		} else if (StateVariable.PHEROMONE_AHEAD == var) {
+			return isPheromoneInDirection(getDirection(), 1);
+		} else if (StateVariable.PHEROMONE_TWO_AHEAD == var) {
+			return isPheromoneInDirection(getDirection(), 2);
 		} else {
 			return false;
 		}
@@ -242,6 +298,14 @@ public class VacuumCleaner extends Agent {
 
 	public void setDustPerceptionThreshold(int dustPerceptionThreshold) {
 		this.dustPerceptionThreshold = dustPerceptionThreshold;
+	}
+
+	public int getPheromoneSize() {
+		return pheromoneSize;
+	}
+
+	public void setPheromoneSize(int pheromoneSize) {
+		this.pheromoneSize = pheromoneSize;
 	}
 
 }

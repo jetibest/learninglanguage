@@ -53,21 +53,27 @@ public class LearningLanguage implements Logger {
 		agentsConfig.setDustPerceptionThreshold(1000);
 		agentsConfig.setLearningRate(0.1);
 		agentsConfig.setFutureRewardDiscountRate(0.95);
-		agentsConfig.setSharedPolicy(true);
+		agentsConfig.setSharedPolicy(false);
 		agentsConfig.setPossibleActions(new Action[]{
         		Action.TURN_RIGHT
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
-        		//,Action.COLLECT_DUST
-        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        		,Action.COLLECT_DUST
+        		,Action.PLACE_PHEROMONE_X
+        		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
         		//,Action.PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW
         		,StateVariable.OBSTACLE_AHEAD
-        		,StateVariable.SOUND_C_AHEAD
+        		//,StateVariable.PHEROMONE_BELOW
+        		,StateVariable.PHEROMONE_AHEAD
+        		//,StateVariable.SOUND_C_BELOW
+        		//,StateVariable.SOUND_C_AHEAD
+        		//,StateVariable.SOUND_C_TWO_AHEAD
 		});
-		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
+		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_7x7);
+		agentsConfig.setPheromoneSize(100);
 		agentsConfig.setDebug(true);
 		
 		env = new RunnableEnvironment(environmentConfig);
@@ -75,6 +81,8 @@ public class LearningLanguage implements Logger {
 		env.setLogger(this);
 		env.setStatusUpdater(getWindow().getControlPanel());
 		env.init();
+		env.setDustMultiplier(0, 0, 16, 20, 100);
+		env.setDustMultiplier(16, 0, 16, 20, 0);
 		
 		agentsConfig.produceAgents(env);
 	}
