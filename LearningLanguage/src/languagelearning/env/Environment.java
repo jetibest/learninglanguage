@@ -323,12 +323,12 @@ public abstract class Environment {
 		return totalDust;
 	}
 	
-	public double getDustinessRatio() {
+/*	public double getDustinessRatio() {
 		long totalDust = getTotalDust();
 		long maxDust = dustMax * gridHeight * gridWidth;
 		
 		return (double)totalDust / (double)maxDust;
-	}
+	}*/
 
 	public long getTicks() {
 		return ticks;

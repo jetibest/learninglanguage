@@ -22,9 +22,9 @@ public class LearningLanguageStats {
 
 	public static void main(String[] args) {
 		SimulationConfig simulationConfig = new SimulationConfig();
-		simulationConfig.setRuns(100);
-		simulationConfig.setTrainingTicks(200000);
-		simulationConfig.setTestTicks(100);
+		simulationConfig.setRuns(10);
+		simulationConfig.setTrainingTicks(100000);
+		simulationConfig.setTestTicks(100000);
 		
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setGridWidth(32);
@@ -51,7 +51,7 @@ public class LearningLanguageStats {
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
-        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
         		//,Action.CLEAR_INTERNAL_STATE_A
         		//,Action.SET_INTERNAL_STATE_A
 		});
@@ -61,16 +61,16 @@ public class LearningLanguageStats {
         		//,StateVariable.DUST_TWO_AHEAD
         		,StateVariable.OBSTACLE_AHEAD
         		//,StateVariable.SOUND_C_BELOW
-        		,StateVariable.SOUND_C_AHEAD
+        		//,StateVariable.SOUND_C_AHEAD
         		//,StateVariable.INTERNAL_STATE_A
 		});
-		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_9x9);
+		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
 		agentsConfig.setDebug(false);
 		
 		DescriptiveStatistics dustRatioStats = new DescriptiveStatistics();
-		DescriptiveStatistics cleaningRateStats = new DescriptiveStatistics();
+		//DescriptiveStatistics cleaningRateStats = new DescriptiveStatistics();
 		StateActionPolicy bestPolicy = null;
-		double maxDustRatioDiff = -99999999;
+		double minDustRatio = Double.MAX_VALUE;
 		
 		for (int run = 0; run < simulationConfig.getRuns(); run++) {
 			Environment environment = new SimulationEnvironment(environmentConfig);
@@ -86,26 +86,33 @@ public class LearningLanguageStats {
 			// Test
 			//environment.initMaxDust(); // Fill everything with dust
 			//environment.setDustIncrement(0); // No new dust
-			environment.initRandomDust();
-			environment.repositionObjectsInRandom();
-			environment.setLearning(false); // Switch off policy updates
+			//environment.initRandomDust();
+			//environment.repositionObjectsInRandom();
+			//environment.setLearning(false); // Switch off policy updates
 			
-			double dustRatioStart = environment.getDustinessRatio();
+			//double dustRatioStart = environment.getDustinessRatio();
+			
+			double dustRatioSum = 0;
 			for (int tick = 0; tick < simulationConfig.getTestTicks(); tick++) {
 				environment.tick();
+				
+				dustRatioSum = dustRatioSum + environment.getTotalDustRatio();
 			}
-			double dustRatioEnd = environment.getDustinessRatio();
 			
-			double dustRatioDiff = dustRatioStart - dustRatioEnd;
-			dustRatioStats.addValue(dustRatioDiff);
-
-			double cleaningRate = dustRatioEnd / dustRatioStart;
-			cleaningRateStats.addValue(cleaningRate);
-
-			System.out.println((run+1) + ") dustiness start (DS) = " + df.format(dustRatioStart) + " dustiness end (DE) = " + df.format(dustRatioEnd) + " collected dust (DS-DE) = " + df.format(dustRatioDiff) + " cleaning rate (DE/DS) = " + df.format(cleaningRate));
+			double averageDustRatio = dustRatioSum / simulationConfig.getTestTicks();
+			dustRatioStats.addValue(averageDustRatio);
+			
+			System.out.println((run+1) + ") average dust ratio = " + df.format(averageDustRatio));
+			
+			//double dustRatioEnd = environment.getDustinessRatio();
+			//double dustRatioDiff = dustRatioStart - dustRatioEnd;
+			//dustRatioStats.addValue(dustRatioDiff);
+			//double cleaningRate = dustRatioEnd / dustRatioStart;
+			//cleaningRateStats.addValue(cleaningRate);
+			//System.out.println((run+1) + ") dustiness start (DS) = " + df.format(dustRatioStart) + " dustiness end (DE) = " + df.format(dustRatioEnd) + " collected dust (DS-DE) = " + df.format(dustRatioDiff) + " cleaning rate (DE/DS) = " + df.format(cleaningRate));
 		
-			if (dustRatioDiff > maxDustRatioDiff) {
-				maxDustRatioDiff = dustRatioDiff;
+			if (averageDustRatio < minDustRatio) {
+				minDustRatio = averageDustRatio;
 				GridObject obj = environment.getObjects().get(0);
 				if (obj instanceof TDVacuumCleaner) {
 					TDVacuumCleaner td = (TDVacuumCleaner)obj;
@@ -116,18 +123,14 @@ public class LearningLanguageStats {
 
 		if (bestPolicy != null) {
 			System.out.println();
-			System.out.println("Best policy with " + df.format(maxDustRatioDiff) + " dust collected:");
+			System.out.println("Best policy with " + df.format(minDustRatio) + " dust ratio:");
 			System.out.println(bestPolicy.toString());
 		}
 		
 		System.out.println();
 		
-		System.out.println("Dust collected average = " + df.format(dustRatioStats.getMean()));
-		System.out.println("Dust collected standard deviation = " + df.format(dustRatioStats.getStandardDeviation()));
-		System.out.println();
-		System.out.println("Cleaning rate average = " + df.format(cleaningRateStats.getMean()));
-		System.out.println("Cleaning rate standard deviation = " + df.format(cleaningRateStats.getStandardDeviation()));
-	
+		System.out.println("Dust ratio average of average = " + df.format(dustRatioStats.getMean()));
+		System.out.println("Dust ratio average standard deviation = " + df.format(dustRatioStats.getStandardDeviation()));
 	}
 
 }
