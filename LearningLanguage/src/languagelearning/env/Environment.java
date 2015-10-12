@@ -218,15 +218,22 @@ public abstract class Environment {
 
 	public void updateStatus() {
 		if (statusUpdater != null) {
-			int gridCellsCount = gridHeight * gridWidth;
-			long totalDust = getTotalDust();
-			getStatusUpdater().updateTotalDustPercentage(
-					100.0D * (totalDust - dustMin * gridCellsCount)
-							/ ((dustMax - dustMin) * gridCellsCount));
+			getStatusUpdater().updateTotalDustPercentage(getTotalDustPercentage());
 			getStatusUpdater().updateTime(getTicks());
 		}
 	}
+	
+	public double getTotalDustRatio() {
+		int gridCellsCount = gridHeight * gridWidth;
+		long totalDust = getTotalDust();
+		return (double)(totalDust - dustMin * gridCellsCount)
+		/ (double)((dustMax - dustMin) * gridCellsCount);
+	}
 
+	public double getTotalDustPercentage() {
+		return 100.0D * getTotalDustRatio();
+	}
+	
 	public void setLogger(Logger logger) {
 		this.logger = logger;
 	}
