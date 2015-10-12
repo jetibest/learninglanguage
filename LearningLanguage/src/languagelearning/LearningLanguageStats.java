@@ -18,11 +18,11 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 
 public class LearningLanguageStats {
-	private final static DecimalFormat df = new DecimalFormat("#0.000");
+	private final static DecimalFormat df = new DecimalFormat("#0.0");
 
 	public static void main(String[] args) {
 		SimulationConfig simulationConfig = new SimulationConfig();
-		simulationConfig.setRuns(10);
+		simulationConfig.setRuns(5);
 		simulationConfig.setTrainingTicks(100000);
 		simulationConfig.setTestTicks(100000);
 		
@@ -35,9 +35,18 @@ public class LearningLanguageStats {
 		environmentConfig.setDustStartPercentage(0.6);
 		environmentConfig.setDustVariancePercentage(0.1);
 		environmentConfig.setBounded(true);
+		//environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 16, 20, 100));
+		//environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(16, 0, 16, 20, 0));
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
 		agentsConfig.setAgentType(AgentType.QLEARNING);
+                // SARSA & no Sound:        17.9 at 195K ticks
+                // QLEANING & no Sound:     17.8 at 195K ticks
+                // QLEARNING & Sound:       18.0 at 195K ticks
+                // SARSA & Sound:           18.0 at 195K ticks
+                // QLEARNING & Sound production & No sound detection    18.3    at 195K
+                // QLEARNING & Sound detection & No Sound production    17.9    at 195K
+                // QLEARNING & Sound & No normal collect dust           17.6    at 195K
 		agentsConfig.setAgentInitCount(10);
 		agentsConfig.setExplorationRate(0.1);
 		agentsConfig.setExplorationRateDecay(1);
@@ -45,26 +54,28 @@ public class LearningLanguageStats {
 		agentsConfig.setDustPerceptionThreshold(1000);
 		agentsConfig.setLearningRate(0.1);
 		agentsConfig.setFutureRewardDiscountRate(0.95);
-		agentsConfig.setSharedPolicy(true);
+		agentsConfig.setSharedPolicy(false);
 		agentsConfig.setPossibleActions(new Action[]{
         		Action.TURN_RIGHT
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
+        		,Action.PLACE_PHEROMONE_X
         		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
-        		//,Action.CLEAR_INTERNAL_STATE_A
-        		//,Action.SET_INTERNAL_STATE_A
+        		//,Action.PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW
-        		//,StateVariable.DUST_AHEAD
-        		//,StateVariable.DUST_TWO_AHEAD
         		,StateVariable.OBSTACLE_AHEAD
+        		//,StateVariable.PHEROMONE_BELOW
+        		,StateVariable.PHEROMONE_AHEAD
+        		,StateVariable.PHEROMONE_TWO_AHEAD
         		//,StateVariable.SOUND_C_BELOW
         		//,StateVariable.SOUND_C_AHEAD
-        		//,StateVariable.INTERNAL_STATE_A
+        		//,StateVariable.SOUND_C_TWO_AHEAD
 		});
-		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
+		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_9x9);
+		agentsConfig.setPheromoneSize(100);
 		agentsConfig.setDebug(false);
 		
 		DescriptiveStatistics dustRatioStats = new DescriptiveStatistics();
@@ -96,13 +107,13 @@ public class LearningLanguageStats {
 			for (int tick = 0; tick < simulationConfig.getTestTicks(); tick++) {
 				environment.tick();
 				
-				dustRatioSum = dustRatioSum + environment.getTotalDustRatio();
+				dustRatioSum = dustRatioSum + environment.getTotalDustPercentage();
 			}
 			
 			double averageDustRatio = dustRatioSum / simulationConfig.getTestTicks();
 			dustRatioStats.addValue(averageDustRatio);
 			
-			System.out.println((run+1) + ") average dust ratio = " + df.format(averageDustRatio));
+			System.out.println((run+1) + ") average dust ratio = " + df.format(averageDustRatio) + "%");
 			
 			//double dustRatioEnd = environment.getDustinessRatio();
 			//double dustRatioDiff = dustRatioStart - dustRatioEnd;
@@ -123,14 +134,14 @@ public class LearningLanguageStats {
 
 		if (bestPolicy != null) {
 			System.out.println();
-			System.out.println("Best policy with " + df.format(minDustRatio) + " dust ratio:");
+			System.out.println("Best policy with " + df.format(minDustRatio) + "% dust ratio:");
 			System.out.println(bestPolicy.toString());
 		}
 		
 		System.out.println();
 		
-		System.out.println("Dust ratio average of average = " + df.format(dustRatioStats.getMean()));
-		System.out.println("Dust ratio average standard deviation = " + df.format(dustRatioStats.getStandardDeviation()));
+		System.out.println("Dust ratio average of average = " + df.format(dustRatioStats.getMean()) + "%");
+		System.out.println("Dust ratio average standard deviation = " + df.format(dustRatioStats.getStandardDeviation()) + "%");
 	}
 
 }

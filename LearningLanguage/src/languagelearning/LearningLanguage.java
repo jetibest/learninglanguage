@@ -37,8 +37,8 @@ public class LearningLanguage implements Logger {
 		environmentConfig.setDustStartPercentage(0.6);
 		environmentConfig.setDustVariancePercentage(0.1);
 		environmentConfig.setBounded(true);
-		environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 16, 20, 100));
-		environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(16, 0, 16, 20, 0));
+		//environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 16, 20, 100));
+		//environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(16, 0, 16, 20, 0));
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
 		agentsConfig.setAgentType(AgentType.QLEARNING);
@@ -61,22 +61,22 @@ public class LearningLanguage implements Logger {
         		Action.TURN_RIGHT
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
-        		,Action.COLLECT_DUST
-        		,Action.PLACE_PHEROMONE_X
-        		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        		//,Action.COLLECT_DUST
+        		//,Action.PLACE_PHEROMONE_X
+        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
         		//,Action.PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW
         		,StateVariable.OBSTACLE_AHEAD
         		//,StateVariable.PHEROMONE_BELOW
-        		,StateVariable.PHEROMONE_AHEAD
+        		//,StateVariable.PHEROMONE_AHEAD
         		//,StateVariable.SOUND_C_BELOW
         		//,StateVariable.SOUND_C_AHEAD
         		//,StateVariable.SOUND_C_TWO_AHEAD
 		});
-		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_7x7);
-		agentsConfig.setPheromoneSize(100);
+		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
+		//agentsConfig.setPheromoneSize(100);
 		agentsConfig.setDebug(true);
 		
 		env = new RunnableEnvironment(environmentConfig);
