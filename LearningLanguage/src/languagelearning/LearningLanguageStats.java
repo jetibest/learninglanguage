@@ -11,6 +11,7 @@ import languagelearning.env.Environment;
 import languagelearning.env.EnvironmentConfig;
 import languagelearning.env.SimulationEnvironment;
 import languagelearning.policies.StateActionPolicy;
+import languagelearning.states.PredicateState;
 import languagelearning.states.StateVariable;
 import languagelearning.util.BooleanMatrix;
 
@@ -22,8 +23,8 @@ public class LearningLanguageStats {
 
 	public static void main(String[] args) {
 		SimulationConfig simulationConfig = new SimulationConfig();
-		simulationConfig.setRuns(5);
-		simulationConfig.setTrainingTicks(100000);
+		simulationConfig.setRuns(1);
+		simulationConfig.setTrainingTicks(1000000);
 		simulationConfig.setTestTicks(100000);
 		
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
@@ -60,22 +61,25 @@ public class LearningLanguageStats {
         		,Action.TURN_LEFT
         		,Action.MOVE_FORWARD
         		,Action.COLLECT_DUST
+        		//,Action.PLACE_PHEROMONE_X
         		//,Action.COLLECT_DUST_AND_PLACE_PHEROMONE_X
         		//,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
         		//,Action.PRODUCE_SOUND_C
 		});
 		agentsConfig.setPossibleStateVariables(new StateVariable[]{
         		StateVariable.DUST_BELOW
-        		,StateVariable.DUST_LEFT
-        		,StateVariable.DUST_RIGHT
-        		,StateVariable.DUST_AHEAD
-        		,StateVariable.DUST_TWO_AHEAD
-        		,StateVariable.OBSTACLE_AHEAD
-        		//,StateVariable.PHEROMONE_BELOW
-        		//,StateVariable.PHEROMONE_AHEAD
-        		//,StateVariable.PHEROMONE_TWO_AHEAD
-        		//,StateVariable.SOUND_C_BELOW
+				,StateVariable.DUST_LEFT
+				,StateVariable.DUST_RIGHT
+				,StateVariable.DUST_AHEAD
+				,StateVariable.DUST_TWO_AHEAD
+				,StateVariable.OBSTACLE_AHEAD
+				//,StateVariable.PHEROMONE_BELOW
+				//,StateVariable.PHEROMONE_AHEAD
+				//,StateVariable.PHEROMONE_TWO_AHEAD
+        		//StateVariable.SOUND_C_BELOW
         		//,StateVariable.SOUND_C_AHEAD
+        		//,StateVariable.SOUND_C_LEFT
+        		//,StateVariable.SOUND_C_RIGHT
         		//,StateVariable.SOUND_C_TWO_AHEAD
 		});
 		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_9x9);
@@ -89,6 +93,7 @@ public class LearningLanguageStats {
 		
 		for (int run = 0; run < simulationConfig.getRuns(); run++) {
 			Environment environment = new SimulationEnvironment(environmentConfig);
+			//environment.setTicksToReplaceAllPoliciesWithMaxRewardPolicy(10000);
 			environment.init();
 			
 			agentsConfig.produceAgents(environment);

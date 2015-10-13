@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import languagelearning.actions.Action;
@@ -27,6 +28,27 @@ public class StateActionPolicy extends Policy {
 	
 	public StateActionPolicy() {
 		this.values = new HashMap<State,HashMap<Action,Double>>();
+	}
+	
+	public StateActionPolicy makeCopy() {
+		StateActionPolicy policy = new StateActionPolicy();
+		
+		Set<State> states = values.keySet();
+		Iterator<State> statesIt = states.iterator();
+		while (statesIt.hasNext()) {
+			State state = statesIt.next();
+			
+			Set<Action> actions = values.get(state).keySet();
+			Iterator<Action> actionsIt = actions.iterator();
+			while (actionsIt.hasNext()) {
+				Action action = actionsIt.next();
+				
+				double value = getValue(state,action);
+				policy.setValue(state, action, value);
+			}
+		}
+		
+		return policy;
 	}
 	
 	public double getValue(State state,Action action) {

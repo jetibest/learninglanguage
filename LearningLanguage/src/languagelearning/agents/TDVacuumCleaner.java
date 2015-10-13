@@ -18,6 +18,7 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 	private Action[] possibleActions = new Action[]{Action.DO_NOTHING};
 	private StateVariable[] possibleStateVariables = new StateVariable[]{};
 	private boolean debug = false;
+	private double policyReward = 0;
 	
 	public TDVacuumCleaner(StateActionPolicy sharedPolicy,int x, int y) {
 		super(x, y);
@@ -122,6 +123,17 @@ public abstract class TDVacuumCleaner extends VacuumCleaner {
 	public boolean isDebug() {
 		return debug;
 	}
-	
 
+	public void setPolicy(StateActionPolicy policy) {
+		this.policy = policy;
+		this.policyReward = 0;
+	}
+
+	public double getPolicyReward() {
+		return policyReward;
+	}
+
+	public void setPolicyReward(double policyReward) {
+		this.policyReward = policyReward;
+	}
 }

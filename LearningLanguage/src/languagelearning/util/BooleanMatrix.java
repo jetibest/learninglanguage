@@ -15,6 +15,22 @@ public class BooleanMatrix {
 				}
 			);
 	
+	public static final BooleanMatrix SQUARE_11x11 = new BooleanMatrix(
+			new boolean[][]{
+					{true,true,true,true,true,true,true,true,true,true,true},
+					{true,true,true,true,true,true,true,true,true,true,true},
+					{true,true,true,true,true,true,true,true,true,true,true},
+					{true,true,true,true,true,false,true,true,true,true,true},
+					{true,true,true,true,true,false,true,true,true,true,true},
+					{true,true,true,true,true,false,true,true,true,true,true},
+					{true,true,true,true,true,true,true,true,true,true,true},
+					{true,true,true,true,true,true,true,true,true,true,true},
+					{true,true,true,true,true,true,true,true,true,true,true},
+					{true,true,true,true,true,true,true,true,true,true,true},
+					{true,true,true,true,true,true,true,true,true,true,true},
+			}
+		);
+	
 	public static final BooleanMatrix SQUARE_9x9 = new BooleanMatrix(
 			new boolean[][]{
 					{true,true,true,true,true,true,true,true,true},

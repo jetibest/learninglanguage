@@ -28,20 +28,23 @@ public class LearningLanguage implements Logger {
 	}
 
 	public void init(String[] args) {
-		EnvironmentConfig environmentConfig = new EnvironmentConfig();
-		environmentConfig.setGridWidth(32);
-		environmentConfig.setGridHeight(20);
-		environmentConfig.setDustMin(0);
-		environmentConfig.setDustMax(10000);
-		environmentConfig.setDustIncrement(10);
-		environmentConfig.setDustStartPercentage(0.6);
-		environmentConfig.setDustVariancePercentage(0.1);
-		environmentConfig.setBounded(true);
-		//environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 16, 20, 100));
-		//environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(16, 0, 16, 20, 0));
-		
-		AgentsConfig agentsConfig = new AgentsConfig();
-		agentsConfig.setAgentType(AgentType.QLEARNING);
+        EnvironmentConfig environmentConfig = new EnvironmentConfig();
+        environmentConfig.setGridWidth(32);
+        environmentConfig.setGridHeight(20);
+        environmentConfig.setDustMin(0);
+        environmentConfig.setDustMax(10000);
+        environmentConfig.setDustIncrement(10);
+        environmentConfig.setDustStartPercentage(0.6);
+        environmentConfig.setDustVariancePercentage(0.1);
+        environmentConfig.setBounded(true);
+        environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 32, 20, 0));
+        environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(8, 4, 16, 10, 1));
+        //environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(14, 6, 4, 4, 50));
+        //environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 10, 32, 1, 50));
+
+        
+        AgentsConfig agentsConfig = new AgentsConfig();
+        agentsConfig.setAgentType(AgentType.QLEARNING);
                 // SARSA & no Sound:        17.9 at 195K ticks
                 // QLEANING & no Sound:     17.8 at 195K ticks
                 // QLEARNING & Sound:       18.0 at 195K ticks
@@ -49,35 +52,36 @@ public class LearningLanguage implements Logger {
                 // QLEARNING & Sound production & No sound detection    18.3    at 195K
                 // QLEARNING & Sound detection & No Sound production    17.9    at 195K
                 // QLEARNING & Sound & No normal collect dust           17.6    at 195K
-		agentsConfig.setAgentInitCount(10);
-		agentsConfig.setExplorationRate(0.1);
-		agentsConfig.setExplorationRateDecay(1.0);
-		agentsConfig.setDustCleanValue(5000);
-		agentsConfig.setDustPerceptionThreshold(1000);
-		agentsConfig.setLearningRate(0.1);
-		agentsConfig.setFutureRewardDiscountRate(0.95);
-		agentsConfig.setSharedPolicy(false);
-		agentsConfig.setPossibleActions(new Action[]{
-        		Action.TURN_RIGHT
-        		,Action.TURN_LEFT
-        		,Action.MOVE_FORWARD
-        		//,Action.COLLECT_DUST
-        		//,Action.PLACE_PHEROMONE_X
-        		,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
-        		//,Action.PRODUCE_SOUND_C
-		});
-		agentsConfig.setPossibleStateVariables(new StateVariable[]{
-        		StateVariable.DUST_BELOW
-        		,StateVariable.OBSTACLE_AHEAD
-        		//,StateVariable.PHEROMONE_BELOW
-        		//,StateVariable.PHEROMONE_AHEAD
-        		//,StateVariable.SOUND_C_BELOW
-        		//,StateVariable.SOUND_C_AHEAD
-        		//,StateVariable.SOUND_C_TWO_AHEAD
-		});
-		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_5x5);
-		//agentsConfig.setPheromoneSize(100);
-		agentsConfig.setDebug(true);
+        agentsConfig.setAgentInitCount(8);
+        agentsConfig.setExplorationRate(0.1);
+        agentsConfig.setExplorationRateDecay(1);
+        agentsConfig.setDustCleanValue(5000);
+        agentsConfig.setDustPerceptionThreshold(1000);
+        agentsConfig.setLearningRate(0.1);
+        agentsConfig.setFutureRewardDiscountRate(0.95);
+        agentsConfig.setSharedPolicy(true);
+        agentsConfig.setPossibleActions(new Action[]{
+                Action.TURN_RIGHT
+                ,Action.TURN_LEFT
+                ,Action.MOVE_FORWARD
+                ,Action.COLLECT_DUST
+                ,Action.PLACE_PHEROMONE_X
+                ,Action.COLLECT_DUST_AND_PLACE_PHEROMONE_X
+                //,Action.PRODUCE_SOUND_C
+                //,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
+        });
+        agentsConfig.setPossibleStateVariables(new StateVariable[]{
+                //StateVariable.DUST_BELOW
+                //,StateVariable.OBSTACLE_AHEAD
+                //StateVariable.PHEROMONE_BELOW
+                //StateVariable.PHEROMONE_AHEAD
+                //,StateVariable.SOUND_C_BELOW
+                //,StateVariable.SOUND_C_AHEAD
+                //,StateVariable.SOUND_C_TWO_AHEAD
+        });
+        agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_7x7);
+        agentsConfig.setPheromoneSize(100);
+		agentsConfig.setDebug(false);
 		
 		env = new RunnableEnvironment(environmentConfig);
 		win = new LLWindow();

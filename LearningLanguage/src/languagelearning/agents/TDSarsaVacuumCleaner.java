@@ -40,6 +40,8 @@ public class TDSarsaVacuumCleaner extends TDVacuumCleaner {
 		
 		// Take action, observe reward
 		double reward0 = doAction(action0);
+		setPolicyReward(getPolicyReward() + reward0);
+
 		// Observe new state'
 		state1 = getCurrentState();
 		

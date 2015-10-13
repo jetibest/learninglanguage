@@ -8,6 +8,8 @@ import languagelearning.Logger;
 import languagelearning.StatusUpdater;
 import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
+import languagelearning.agents.TDVacuumCleaner;
+import languagelearning.policies.StateActionPolicy;
 
 public abstract class Environment {
 	public static final int SOUND_MAX = 3;
@@ -32,6 +34,7 @@ public abstract class Environment {
 	private double dustStartPercentage;
 	private double dustVariancePercentage;
 	private boolean bounded;
+	private int ticksToReplaceAllPoliciesWithMaxRewardPolicy;
 
 	public Environment(EnvironmentConfig config) {
 		this.gridWidth = config.getGridWidth();
@@ -178,6 +181,8 @@ public abstract class Environment {
 		updateObjects();
 
 		updateStatus();
+		
+		updatePolicies();
 
 		ticks++;
 	}
@@ -216,6 +221,14 @@ public abstract class Environment {
 				i = (i + (int) (n * Math.random())) % n;
 				objects.get(visited.remove(i)).run();
 				n--;
+			}
+		}
+	}
+	
+	public void updatePolicies() {
+		if (ticksToReplaceAllPoliciesWithMaxRewardPolicy > 0) {
+			if (ticks % ticksToReplaceAllPoliciesWithMaxRewardPolicy == 0) {
+				replaceAllPoliciesWithMaxRewardPolicy();
 			}
 		}
 	}
@@ -431,4 +444,44 @@ public abstract class Environment {
 			go.setXY((int) (Math.random() * gridWidth), (int) (Math.random() * gridHeight));
 		}
 	}
+	
+	public StateActionPolicy getMaxRewardPolicy() {
+		double maxReward = 0;
+		StateActionPolicy maxPolicy = null;
+		for (GridObject go: objects) {
+			if (go instanceof TDVacuumCleaner) {
+				TDVacuumCleaner tdvc = (TDVacuumCleaner)go;
+				if (tdvc.getPolicyReward() > maxReward) {
+					maxReward = tdvc.getPolicyReward();
+					maxPolicy = tdvc.getPolicy();
+				}
+			}
+		}
+		//System.out.println("Max policy with reward " + maxReward);
+		//System.out.println(maxPolicy);
+		return maxPolicy;
+	}
+	
+	public void replaceAllPoliciesWithMaxRewardPolicy() {
+		StateActionPolicy maxPolicy = getMaxRewardPolicy();
+		if (maxPolicy != null) {
+			for (GridObject go: objects) {
+				if (go instanceof TDVacuumCleaner) {
+					TDVacuumCleaner tdvc = (TDVacuumCleaner)go;
+					tdvc.setPolicy(maxPolicy.makeCopy());
+				}
+			}
+		}
+	}
+
+	public int getTicksToReplaceAllPoliciesWithMaxRewardPolicy() {
+		return ticksToReplaceAllPoliciesWithMaxRewardPolicy;
+	}
+
+	public void setTicksToReplaceAllPoliciesWithMaxRewardPolicy(
+			int ticksToReplaceAllPoliciesWithMaxRewardPolicy) {
+		this.ticksToReplaceAllPoliciesWithMaxRewardPolicy = ticksToReplaceAllPoliciesWithMaxRewardPolicy;
+	}
+	
+	
 }

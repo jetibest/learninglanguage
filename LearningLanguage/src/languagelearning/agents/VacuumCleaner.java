@@ -78,46 +78,6 @@ public class VacuumCleaner extends Agent {
 		return 0; // No reward
 	}
 
-/*	public int produceSound(int symbol) {
-		Direction d = getDirection();
-		Environment env = getEnvironment();
-		int x = getX();
-		int y = getY();
-		if (d == Direction.EAST || d == Direction.WEST) {
-			// this is now hardcoded, but this should be transferred into
-			// representation in 2-D table around the agent with 1 and 0
-			// representing if there is sound or not
-			// default direction is north, so turn matrix relative to direction
-			// then just loop through the matrix
-			int x1 = getNewXInDirection(d, 1);
-			int x2 = getNewXInDirection(d, 2);
-			int x3 = getNewXInDirection(d, 3);
-			env.setSoundValue(x1, y, symbol);
-			env.setSoundValue(x2, y, symbol);
-			env.setSoundValue(x3, y, symbol);
-			env.setSoundValue(x2, y + 1, symbol);
-			env.setSoundValue(x2, y - 1, symbol);
-			env.setSoundValue(x3, y + 1, symbol);
-			env.setSoundValue(x3, y - 1, symbol);
-			env.setSoundValue(x3, y + 2, symbol);
-			env.setSoundValue(x3, y - 2, symbol);
-		} else {
-			int y1 = getNewYInDirection(d, 1);
-			int y2 = getNewYInDirection(d, 2);
-			int y3 = getNewYInDirection(d, 3);
-			env.setSoundValue(x, y1, symbol);
-			env.setSoundValue(x, y2, symbol);
-			env.setSoundValue(x, y3, symbol);
-			env.setSoundValue(x + 1, y2, symbol);
-			env.setSoundValue(x - 1, y2, symbol);
-			env.setSoundValue(x + 1, y3, symbol);
-			env.setSoundValue(x - 1, y3, symbol);
-			env.setSoundValue(x + 2, y3, symbol);
-			env.setSoundValue(x - 2, y3, symbol);
-		}
-		return 0; // No reward
-	}*/
-
 	public int collectDustWithoutSound() {
 		return collectDustAndProduceSignal(0,Integer.MAX_VALUE);
 	}
@@ -213,6 +173,14 @@ public class VacuumCleaner extends Agent {
 		return getSoundSymbolBelow() == symbol;
 	}
 
+	public boolean isSoundLeft(int symbol) {
+		return getSoundSymbolInDirection(getDirection().nextCounterClockWise(), 1) == symbol;
+	}
+	
+	public boolean isSoundRight(int symbol) {
+		return getSoundSymbolInDirection(getDirection().nextClockWise(), 1) == symbol;
+	}
+	
 	public boolean isSoundInDirection(int symbol, int step) {
 		return getSoundSymbolInDirection(getDirection(), step) == symbol;
 	}
@@ -278,6 +246,10 @@ public class VacuumCleaner extends Agent {
 			return isSoundInDirection(2, 2);
 		} else if (StateVariable.SOUND_C_TWO_AHEAD == var) {
 			return isSoundInDirection(3, 2);
+		} else if (StateVariable.SOUND_C_LEFT == var) {
+			return isSoundLeft(3);
+		} else if (StateVariable.SOUND_C_RIGHT == var) {
+			return isSoundRight(3);
 		} else if (StateVariable.PHEROMONE_BELOW == var) {
 			return isPheromoneBelow();
 		} else if (StateVariable.PHEROMONE_AHEAD == var) {
