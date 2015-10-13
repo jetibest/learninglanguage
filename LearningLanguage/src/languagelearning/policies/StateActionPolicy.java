@@ -1,18 +1,12 @@
 package languagelearning.policies;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
-import languagelearning.LearningLanguage;
 
 import languagelearning.actions.Action;
 import languagelearning.states.State;
-
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public class StateActionPolicy extends Policy {
 	private HashMap<State, HashMap<Action, Double>> values;
@@ -86,10 +80,9 @@ public class StateActionPolicy extends Policy {
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 
-		Set<State> states = values.keySet();
-		Iterator<State> statesIt = states.iterator();
-		while (statesIt.hasNext()) {
-			State state = statesIt.next();
+		State[] states = values.keySet().toArray(new State[values.keySet().size()]);
+		Arrays.sort(states);
+		for (State state: states) {
 			buffer.append("State = " + state + "\n");
 			Action maxAction = getActionWithMaxValue(state, Action.values());
 

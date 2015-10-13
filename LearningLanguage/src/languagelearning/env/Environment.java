@@ -528,7 +528,7 @@ public abstract class Environment {
     
     public void writeStats() {
     	if (statWriter != null) {
-    		statWriter.write(this);
+    		statWriter.write(this.getFirstAgentPolicy(),this.getTotalDustPercentage());
     	}
     }
 }
