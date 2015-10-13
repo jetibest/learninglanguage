@@ -2,65 +2,71 @@ package languagelearning.gui;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import languagelearning.LearningLanguage;
 
-public class LLWindow extends JFrame
-{
+public class LLWindow extends JFrame {
 	/*
 	 * Main window for LLPanel and parameter-controls/settings etc.
-	 * 
 	 */
-	
-	private LLPanel llPanel;
+
+	private LLGridPanel llPanel;
 	private LLControlPanel llControlPanel;
-	
-	public LLWindow()
-	{
+	private LLConfigPanel llConfigPanel;
+
+	public LLWindow() {
 		init();
 	}
-        
-        public LLPanel getVisualPanel()
-        {
-            return llPanel;
-        }
-        
-        public LLControlPanel getControlPanel()
-        {
-            return llControlPanel;
-        }
-	
-	public void stop()
-	{
+
+	public LLGridPanel getGridPanel() {
+		return llPanel;
+	}
+
+	public LLControlPanel getControlPanel() {
+		return llControlPanel;
+	}
+
+	public LLConfigPanel getConfigPanel() {
+		return llConfigPanel;
+	}
+
+	public void stop() {
 		llPanel.stop();
-                llControlPanel.stop();
+		llControlPanel.stop();
+		llConfigPanel.stop();
 	}
-	
-	public void start()
-	{
+
+	public void start() {
 		llPanel.start();
-                llControlPanel.start();
+		llControlPanel.start();
+		llConfigPanel.start();
 	}
-	
+
 	@Override
-	public void dispose()
-	{
+	public void dispose() {
 		super.dispose();
-		
+
 		LearningLanguage.MAIN.stop();
 	}
-	
-	private void init()
-	{
-		setLayout(new BoxLayout(getContentPane(),BoxLayout.Y_AXIS));
+
+	private void init() {
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 		setTitle("Learning Language");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		JPanel leftPanel = new JPanel();
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+		getContentPane().add(leftPanel);
 		
-		llPanel = new LLPanel();
-		getContentPane().add(llPanel);
-		
+		llPanel = new LLGridPanel();
+		leftPanel.add(llPanel);
+
 		llControlPanel = new LLControlPanel();
-		getContentPane().add(llControlPanel);
+		leftPanel.add(llControlPanel);
+
+		llConfigPanel = new LLConfigPanel();
+		getContentPane().add(llConfigPanel);
 		
 		pack();
 		setVisible(true);

@@ -23,44 +23,45 @@ public class LearningLanguage implements Logger {
 	private boolean isRunning;
 	private LLWindow win;
 	private RunnableEnvironment env;
+	private String currentConfigName;
 
 	public LearningLanguage() {
 	}
+	
+	public String getCurrentConfigName() {
+		return currentConfigName; 
+	}
 
-	public void init(String[] args) throws IOException {
-            
-            // Conclusions:
-            // Local placement of symbols (pheromones) can be better than basic symbol signalling through sound
-            // 
-			String configFilePath = "Visual.txt";
-			if (args.length > 0) {
-				configFilePath = args[0];
-				if (!configFilePath.endsWith(".txt")) {
-					configFilePath = configFilePath + ".txt";
-				}
-			}
-		
-			Props props = new Props(new File(configFilePath));
-			SimulationConfig simulationConfig = new SimulationConfig(props);
-			EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
-			AgentsConfig agentsConfig = new AgentsConfig(props);
+	public void init(String configName) throws IOException {
+		if (!configName.endsWith(".txt")) {
+			configName = configName + ".txt";
+		}
+		File configFile = new File(configName);
+		this.currentConfigName = configFile.getName().replace(".txt", "");
+		Props props = new Props(configFile);
+		SimulationConfig simulationConfig = new SimulationConfig(props);
+		EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
+		AgentsConfig agentsConfig = new AgentsConfig(props);
 
+		env = new RunnableEnvironment(environmentConfig);
 
-            env = new RunnableEnvironment(environmentConfig);
+		if (simulationConfig.isWriteStats()) {
+			File statDirPath = new File(configName.replace(".txt",
+					".output"));
+			StatWriter statWriter = new StatWriter(statDirPath);
+			statWriter.setActions(agentsConfig.getPossibleActions());
+			env.setStatWriter(statWriter);
+		}
 
-            if (simulationConfig.isWriteStats()) {
-    			File statDirPath = new File(configFilePath.replace(".txt", ".output"));
-    			StatWriter statWriter = new StatWriter(statDirPath);
-    			statWriter.setActions(agentsConfig.getPossibleActions());
-                env.setStatWriter(statWriter);
-            }
-            
-            win = new LLWindow();
-            env.setLogger(this);
-            env.setStatusUpdater(getWindow().getControlPanel());
-            env.init();
+		if (win != null) {
+			win.dispose();
+		}
+		win = new LLWindow();
+		env.setLogger(this);
+		env.setStatusUpdater(getWindow().getControlPanel());
+		env.init();
 
-            agentsConfig.produceAgents(env);
+		agentsConfig.produceAgents(env);
 	}
 
 	public LLWindow getWindow() {
@@ -98,7 +99,12 @@ public class LearningLanguage implements Logger {
 	}
 
 	public static void main(String[] args) throws IOException {
-		MAIN.init(args);
+		String configName = "Visual";
+		if (args.length > 0) {
+			configName = args[0];
+		}
+
+		MAIN.init(configName);
 		MAIN.start();
 
 	}
