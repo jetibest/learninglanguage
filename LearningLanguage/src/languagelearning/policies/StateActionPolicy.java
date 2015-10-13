@@ -6,8 +6,8 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import languagelearning.LearningLanguage;
 
 import languagelearning.actions.Action;
 import languagelearning.states.State;
@@ -23,6 +23,7 @@ public class StateActionPolicy extends Policy {
 	private Map<State, BufferedWriter> brs = new HashMap<State, BufferedWriter>();
 	private Map<String, DescriptiveStatistics> stats = new HashMap<String, DescriptiveStatistics>();
 	private File dir = new File("output" + System.currentTimeMillis());
+        private BufferedWriter dpbr = null;
 	
 
 	
@@ -123,7 +124,17 @@ public class StateActionPolicy extends Policy {
 			dir.mkdir();
 		}
 		writeCount++;
-		
+                
+                double currentDustScore = LearningLanguage.MAIN.getWindow().getControlPanel().getCurrentDustPercentage();
+		DescriptiveStatistics dpscore = stats.get("dustpercentage");
+                if(dpscore == null)
+                {
+                    dpscore = new DescriptiveStatistics();
+                    stats.put("dustpercentage", dpscore);
+                }
+                dpscore.addValue(currentDustScore);
+                
+                
 		State[] states = getStates();
 		for (State state: states) {
 			for (Action action: actions) {
@@ -174,6 +185,23 @@ public class StateActionPolicy extends Policy {
 					e.printStackTrace();
 				}
 			}
+                        
+                        // Print the dust percentage score in separate file
+                        try
+                        {
+                                StringBuilder actionValues = new StringBuilder();
+                                if(dpbr == null)
+                                {
+                                        dpbr = new BufferedWriter(new FileWriter(new File(dir,"dustpercentage.csv")));
+                                }
+                                actionValues.append(stats.get("dustpercentage").getMean()).append('\n');
+                                dpbr.write(actionValues.toString());
+                                dpbr.flush();
+                        }
+                        catch(Exception e)
+                        {
+                                e.printStackTrace();
+                        }
 
 			writeCount = 0;
 			stats.clear();

@@ -31,6 +31,7 @@ public class LLControlPanel extends JPanel implements StatusUpdater
         private int avgPercentIndex = 0;
         private double totalPercentage = 0;
         private long totalCount = 0;
+        private double currentDustPercentage;
         
 	public LLControlPanel() {
 		super(new FlowLayout(FlowLayout.LEFT));
@@ -113,9 +114,15 @@ public class LLControlPanel extends JPanel implements StatusUpdater
             return totalPercentage/totalCount;
         }
         
+        public double getCurrentDustPercentage()
+        {
+            return currentDustPercentage;
+        }
+        
         @Override
         public void updateTotalDustPercentage(double dustPercentage)
         {
+            currentDustPercentage = dustPercentage;
             avgPercentIndex = (avgPercentIndex + 1)%averagePercentage.length;
             averagePercentage[avgPercentIndex] = dustPercentage;
             if(totalCount > 100000)

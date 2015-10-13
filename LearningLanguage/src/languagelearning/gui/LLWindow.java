@@ -20,6 +20,11 @@ public class LLWindow extends JFrame
 		init();
 	}
         
+        public LLPanel getVisualPanel()
+        {
+            return llPanel;
+        }
+        
         public LLControlPanel getControlPanel()
         {
             return llControlPanel;
