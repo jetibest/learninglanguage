@@ -3,7 +3,7 @@ package languagelearning.util;
 import languagelearning.agents.Direction;
 
 public class BooleanMatrix {
-	public static final BooleanMatrix TRIANGLE_7x5 = new BooleanMatrix(
+	public static final BooleanMatrix TRIANGLE_7x5 = new BooleanMatrix("TRIANGLE_7x5",
 				new boolean[][]{
 						{true,true,true,true,true},
 						{false,true,true,true,false},
@@ -15,7 +15,7 @@ public class BooleanMatrix {
 				}
 			);
 	
-	public static final BooleanMatrix SQUARE_11x11 = new BooleanMatrix(
+	public static final BooleanMatrix SQUARE_11x11 = new BooleanMatrix("SQUARE_11x11",
 			new boolean[][]{
 					{true,true,true,true,true,true,true,true,true,true,true},
 					{true,true,true,true,true,true,true,true,true,true,true},
@@ -31,7 +31,7 @@ public class BooleanMatrix {
 			}
 		);
 	
-	public static final BooleanMatrix SQUARE_9x9 = new BooleanMatrix(
+	public static final BooleanMatrix SQUARE_9x9 = new BooleanMatrix("SQUARE_9x9",
 			new boolean[][]{
 					{true,true,true,true,true,true,true,true,true},
 					{true,true,true,true,true,true,true,true,true},
@@ -45,7 +45,7 @@ public class BooleanMatrix {
 			}
 		);
 
-	public static final BooleanMatrix SQUARE_7x7 = new BooleanMatrix(
+	public static final BooleanMatrix SQUARE_7x7 = new BooleanMatrix("SQUARE_7x7",
 			new boolean[][]{
 					{true,true,true,true,true,true,true},
 					{true,true,true,false,true,true,true},
@@ -58,7 +58,7 @@ public class BooleanMatrix {
 		);
 
 	
-	public static final BooleanMatrix SQUARE_5x5 = new BooleanMatrix(
+	public static final BooleanMatrix SQUARE_5x5 = new BooleanMatrix("SQUARE_5x5",
 			new boolean[][]{
 					{true,true,false,true,true},
 					{true,true,false,true,true},
@@ -68,7 +68,7 @@ public class BooleanMatrix {
 			}
 		);
 
-	public static final BooleanMatrix SQUARE_3x3 = new BooleanMatrix(
+	public static final BooleanMatrix SQUARE_3x3 = new BooleanMatrix("SQUARE_3x3",
 			new boolean[][]{
 					{true,false,true},
 					{true,false,true},
@@ -76,7 +76,7 @@ public class BooleanMatrix {
 			}
 		);
 
-	public static final BooleanMatrix CROSS_5x5 = new BooleanMatrix(
+	public static final BooleanMatrix CROSS_5x5 = new BooleanMatrix("CROSS_5x5",
 			new boolean[][]{
 					{false,false,true,false,false},
 					{false,false,false,false,false},
@@ -86,9 +86,14 @@ public class BooleanMatrix {
 			}
 		);
 	
+	public static final BooleanMatrix[] MATRIXES = new BooleanMatrix[]{
+		TRIANGLE_7x5,SQUARE_11x11,SQUARE_9x9,SQUARE_7x7,SQUARE_5x5,SQUARE_3x3,CROSS_5x5};
+	
+	private String name = null;
 	private boolean[][] matrix = null;
 	
-	public BooleanMatrix(boolean[][] values) {
+	public BooleanMatrix(String name,boolean[][] values) {
+		this.name = name;
 		this.matrix = values;
 		if (getWidth() % 2 != 1) {
 			throw new RuntimeException("Number of columns is not odd");
@@ -108,7 +113,7 @@ public class BooleanMatrix {
 	        }
 	    }
 	    
-	    return new BooleanMatrix(matrix2);
+	    return new BooleanMatrix(name,matrix2);
 	}
 	
 	public BooleanMatrix rotateInDirection(Direction direction) {
@@ -180,13 +185,27 @@ public class BooleanMatrix {
 		return buffer.toString();
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public static BooleanMatrix fromName(String name) {
+		for (BooleanMatrix m: MATRIXES) {
+			if (name.equals(m.getName())) {
+				return m;
+			}
+		}
+		return null;
+	}
+	
 	public static void main(String[] args) {
-		BooleanMatrix m = new BooleanMatrix(new boolean[][]{{true,true,true},{true,true,false},{false,false,true}});
+		/*BooleanMatrix m = new BooleanMatrix(new boolean[][]{{true,true,true},{true,true,false},{false,false,true}});
 		m = BooleanMatrix.TRIANGLE_7x5;
 		System.out.println(m.toString('0', '1'));
 		System.out.println("middle x="+m.getMiddleX() + " middle y="+m.getMiddleY());
 		m = m.rotateClockWise();
 		System.out.println(m.toString('0','1'));
-		System.out.println("middle x="+m.getMiddleX() + " middle y="+m.getMiddleY());
+		System.out.println("middle x="+m.getMiddleX() + " middle y="+m.getMiddleY());*/
 	}
+	
 }

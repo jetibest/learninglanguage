@@ -31,8 +31,9 @@ public class LearningLanguageStats {
 		simulationConfig.setTestTicks(100000);
 
 		//Props props = new Props(new File("config.txt"));
+		//Props props = new Props();
 
-		EnvironmentConfig environmentConfig = new EnvironmentConfig();
+		/*EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setGridWidth(32);
 		environmentConfig.setGridHeight(20);
 		environmentConfig.setDustMin(0);
@@ -44,10 +45,7 @@ public class LearningLanguageStats {
 		environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 16, 20, 100));
 		environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(16, 0, 16, 20, 0));
 		
-/*		Props props = new Props();
 		environmentConfig.fillProps(props);
-		props.saveToFile(new File("config.txt"));*/
-
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
 		agentsConfig.setAgentType(AgentType.QLEARNING);
@@ -95,6 +93,15 @@ public class LearningLanguageStats {
 		agentsConfig.setSoundMatrix(BooleanMatrix.SQUARE_9x9);
 		agentsConfig.setPheromoneSize(100);
 		agentsConfig.setDebug(false);
+
+		agentsConfig.fillProps(props);
+		
+		props.saveToFile(new File("stats.txt"));*/
+		
+		Props props = new Props(new File("Experimental 1.txt"));
+		EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
+		AgentsConfig agentsConfig = new AgentsConfig(props);
+		props.saveToFile(new File("Experimental 2.txt"));
 		
 		DescriptiveStatistics dustRatioStats = new DescriptiveStatistics();
 		//DescriptiveStatistics cleaningRateStats = new DescriptiveStatistics();
