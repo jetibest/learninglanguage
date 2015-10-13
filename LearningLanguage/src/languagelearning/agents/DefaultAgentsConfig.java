@@ -42,8 +42,8 @@ public class DefaultAgentsConfig extends AgentsConfig
                 //,Action.COLLECT_DUST_AND_PRODUCE_SOUND_C
         });
         setPossibleStateVariables(new StateVariable[]{
-                //StateVariable.DUST_BELOW
-                StateVariable.OBSTACLE_AHEAD
+                StateVariable.DUST_BELOW
+                ,StateVariable.OBSTACLE_AHEAD
                 //StateVariable.PHEROMONE_BELOW
                 //StateVariable.PHEROMONE_AHEAD
                 //,StateVariable.SOUND_C_BELOW
@@ -53,5 +53,10 @@ public class DefaultAgentsConfig extends AgentsConfig
         setSoundMatrix(BooleanMatrix.SQUARE_7x7);
         setPheromoneSize(100);
         setDebug(true);
+    }
+    
+    public String getName()
+    {
+    	return "default";
     }
 }
