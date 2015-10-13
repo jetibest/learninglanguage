@@ -1,11 +1,15 @@
 package languagelearning;
 
+import java.io.File;
+import java.io.IOException;
+
 import languagelearning.agents.AgentsConfig;
 import languagelearning.agents.DefaultAgentsConfig;
 import languagelearning.env.DustMultiplierConfig;
 import languagelearning.env.EnvironmentConfig;
 import languagelearning.env.RunnableEnvironment;
 import languagelearning.gui.LLWindow;
+import languagelearning.util.Props;
 
 public class LearningLanguage implements Logger {
 	/*
@@ -24,12 +28,13 @@ public class LearningLanguage implements Logger {
 	public LearningLanguage() {
 	}
 
-	public void init(String[] args) {
+	public void init(String[] args) throws IOException {
             
             // Conclusions:
             // Local placement of symbols (pheromones) can be better than basic symbol signalling through sound
             // 
             
+			/*Props props = new Props();
             
             EnvironmentConfig environmentConfig = new EnvironmentConfig();
             environmentConfig.setGridWidth(32);
@@ -45,8 +50,18 @@ public class LearningLanguage implements Logger {
             //environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(14, 6, 4, 4, 50));
             //environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 10, 32, 1, 50));
 
+            environmentConfig.fillProps(props);
 
             AgentsConfig agentsConfig = new DefaultAgentsConfig();
+            
+            agentsConfig.fillProps(props);
+            
+            props.saveToFile(new File("Visual.txt"));*/
+		
+			Props props = new Props(new File("Visual.txt"));
+			EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
+			AgentsConfig agentsConfig = new AgentsConfig(props);
+		
             // Default: Only has bumper as sensor, and default actions
             // Normal: Can sense dust below, bumper as sensor, and has default actions
             
@@ -94,7 +109,7 @@ public class LearningLanguage implements Logger {
 		System.out.println(key + ": " + msg);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		MAIN.init(args);
 		MAIN.start();
 

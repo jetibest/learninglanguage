@@ -101,7 +101,7 @@ public class LearningLanguageStats {
 		Props props = new Props(new File("Experimental 1.txt"));
 		EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
 		AgentsConfig agentsConfig = new AgentsConfig(props);
-		props.saveToFile(new File("Experimental 2.txt"));
+		//props.saveToFile(new File("Experimental 2.txt"));
 		
 		DescriptiveStatistics dustRatioStats = new DescriptiveStatistics();
 		//DescriptiveStatistics cleaningRateStats = new DescriptiveStatistics();
