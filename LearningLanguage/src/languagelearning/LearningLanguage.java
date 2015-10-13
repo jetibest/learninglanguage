@@ -31,39 +31,20 @@ public class LearningLanguage implements Logger {
             // Conclusions:
             // Local placement of symbols (pheromones) can be better than basic symbol signalling through sound
             // 
-            
-			/*Props props = new Props();
-            
-            EnvironmentConfig environmentConfig = new EnvironmentConfig();
-            environmentConfig.setGridWidth(32);
-            environmentConfig.setGridHeight(20);
-            environmentConfig.setDustMin(0);
-            environmentConfig.setDustMax(10000);
-            environmentConfig.setDustIncrement(10);
-            environmentConfig.setDustStartPercentage(0.6);
-            environmentConfig.setDustVariancePercentage(0.1);
-            environmentConfig.setBounded(true);
-            environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 32, 20, 0));
-            environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(8, 4, 16, 10, 1));
-            //environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(14, 6, 4, 4, 50));
-            //environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 10, 32, 1, 50));
-
-            environmentConfig.fillProps(props);
-
-            AgentsConfig agentsConfig = new DefaultAgentsConfig();
-            
-            agentsConfig.fillProps(props);
-            
-            props.saveToFile(new File("Visual.txt"));*/
+			String configFilePath = "Visual.txt";
+			if (args.length > 0) {
+				configFilePath = args[0];
+				if (!configFilePath.endsWith(".txt")) {
+					configFilePath = configFilePath + ".txt";
+				}
+			}
 		
-			Props props = new Props(new File("Visual.txt"));
+			Props props = new Props(new File(configFilePath));
 			EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
 			AgentsConfig agentsConfig = new AgentsConfig(props);
-			props.saveToFile(new File("Tmp.txt"));
 			
             // Default: Only has bumper as sensor, and default actions
             // Normal: Can sense dust below, bumper as sensor, and has default actions
-            
 
             env = new RunnableEnvironment(environmentConfig);
             win = new LLWindow();
