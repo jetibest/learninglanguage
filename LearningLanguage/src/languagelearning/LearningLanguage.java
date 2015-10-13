@@ -8,6 +8,7 @@ import languagelearning.env.EnvironmentConfig;
 import languagelearning.env.RunnableEnvironment;
 import languagelearning.gui.LLWindow;
 import languagelearning.util.Props;
+import languagelearning.util.StatWriter;
 
 public class LearningLanguage implements Logger {
 	/*
@@ -42,11 +43,13 @@ public class LearningLanguage implements Logger {
 			Props props = new Props(new File(configFilePath));
 			EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
 			AgentsConfig agentsConfig = new AgentsConfig(props);
-			
-            // Default: Only has bumper as sensor, and default actions
-            // Normal: Can sense dust below, bumper as sensor, and has default actions
+
+			File statDirPath = new File(configFilePath.replace(".txt", ".output"));
+			StatWriter statWriter = new StatWriter(statDirPath);
+			statWriter.setActions(agentsConfig.getPossibleActions());
 
             env = new RunnableEnvironment(environmentConfig);
+            env.setStatWriter(statWriter);
             win = new LLWindow();
             env.setLogger(this);
             env.setStatusUpdater(getWindow().getControlPanel());

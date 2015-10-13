@@ -10,6 +10,7 @@ import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
 import languagelearning.agents.TDVacuumCleaner;
 import languagelearning.policies.StateActionPolicy;
+import languagelearning.util.StatWriter;
 
 public abstract class Environment {
 	public static final int SOUND_MAX = 3;
@@ -25,6 +26,7 @@ public abstract class Environment {
 	private long ticks = 0;
 	private Logger logger;
 	private StatusUpdater statusUpdater;
+	private StatWriter statWriter;
 
 	private int gridWidth;
 	private int gridHeight;
@@ -35,6 +37,10 @@ public abstract class Environment {
 	private double dustVariancePercentage;
 	private boolean bounded;
 	private int ticksToReplaceAllPoliciesWithMaxRewardPolicy;
+	
+	// Stats
+    private double totalCumulativeDustPercentage = 0;
+    private long totalCumulativeCount = 0;
 
 	public Environment(EnvironmentConfig config) {
 		this.gridWidth = config.getGridWidth();
@@ -180,9 +186,11 @@ public abstract class Environment {
 
 		updateObjects();
 
+		updatePolicies();
+		
 		updateStatus();
 		
-		updatePolicies();
+		writeStats();
 
 		ticks++;
 	}
@@ -234,8 +242,10 @@ public abstract class Environment {
 	}
 
 	public void updateStatus() {
+		updateCumulativeAverage();
+		
 		if (statusUpdater != null) {
-			getStatusUpdater().updateTotalDustPercentage(getTotalDustPercentage());
+			getStatusUpdater().updateCumulativeAverageDustPercentage(getCumulativeAverageDustPercentage());
 			getStatusUpdater().updateTime(getTicks());
 		}
 	}
@@ -445,6 +455,16 @@ public abstract class Environment {
 		}
 	}
 	
+	public StateActionPolicy getFirstAgentPolicy() {
+		for (GridObject go: objects) {
+			if (go instanceof TDVacuumCleaner) {
+				TDVacuumCleaner tdvc = (TDVacuumCleaner)go;
+				return tdvc.getPolicy();
+			}
+		}
+		return null;
+	}
+	
 	public StateActionPolicy getMaxRewardPolicy() {
 		double maxReward = 0;
 		StateActionPolicy maxPolicy = null;
@@ -483,5 +503,32 @@ public abstract class Environment {
 		this.ticksToReplaceAllPoliciesWithMaxRewardPolicy = ticksToReplaceAllPoliciesWithMaxRewardPolicy;
 	}
 	
+	public void setStatWriter(StatWriter statWriter) {
+		this.statWriter = statWriter;
+	}
 	
+	// From GUI
+    public double getCumulativeAverageDustPercentage()
+    {
+        return totalCumulativeDustPercentage/totalCumulativeCount;
+    }
+	
+    public void updateCumulativeAverage()
+    {
+    	double dustPercentage = getTotalDustPercentage();
+        
+    	if(totalCumulativeCount > 100000)
+        {
+            totalCumulativeDustPercentage = 0;
+            totalCumulativeCount = 0;
+        }
+        totalCumulativeDustPercentage += dustPercentage;
+        totalCumulativeCount++;
+    }
+    
+    public void writeStats() {
+    	if (statWriter != null) {
+    		statWriter.write(this);
+    	}
+    }
 }

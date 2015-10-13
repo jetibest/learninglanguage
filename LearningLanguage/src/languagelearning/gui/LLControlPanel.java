@@ -27,11 +27,6 @@ public class LLControlPanel extends JPanel implements StatusUpdater
         private JLabel totalDustIndicator;
         private NumberFormat ticksNF = new DecimalFormat("#,###,###,##0");
 	private NumberFormat dustNF = new DecimalFormat("0.#");
-        private double[] averagePercentage = new double[1024];
-        private int avgPercentIndex = 0;
-        private double totalPercentage = 0;
-        private long totalCount = 0;
-        private double currentDustPercentage;
         
 	public LLControlPanel() {
 		super(new FlowLayout(FlowLayout.LEFT));
@@ -99,30 +94,10 @@ public class LLControlPanel extends JPanel implements StatusUpdater
             simTimer.setText(ticksNF.format(ticks) + " ticks");
         }
         
-        public double getAverage()
-        {
-            //dustPercentage
-            if(1==2)
-            {
-                double total = 0;
-                for(int i=0;i<averagePercentage.length;i++)
-                {
-                    total += averagePercentage[i];
-                }
-                return total/averagePercentage.length;
-            }
-            return totalPercentage/totalCount;
-        }
-        
-        public double getCurrentDustPercentage()
-        {
-            return currentDustPercentage;
-        }
-        
         @Override
-        public void updateTotalDustPercentage(double dustPercentage)
+        public void updateCumulativeAverageDustPercentage(double averageDustPercentage)
         {
-            currentDustPercentage = dustPercentage;
+/*            currentDustPercentage = dustPercentage;
             avgPercentIndex = (avgPercentIndex + 1)%averagePercentage.length;
             averagePercentage[avgPercentIndex] = dustPercentage;
             if(totalCount > 100000)
@@ -131,7 +106,7 @@ public class LLControlPanel extends JPanel implements StatusUpdater
                 totalCount = 0;
             }
             totalPercentage += dustPercentage;
-            totalCount++;
-            totalDustIndicator.setText(dustNF.format(getAverage()) + "%");
+            totalCount++;*/
+            totalDustIndicator.setText(dustNF.format(averageDustPercentage) + "%");
         }
 }

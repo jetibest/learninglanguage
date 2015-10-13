@@ -82,9 +82,5 @@ public class TDQLearningVacuumCleaner extends TDVacuumCleaner {
 			// Decay exploration
 			setExplorationRate(getExplorationRate() * getExplorationRateDecay());
 		}
-		
-		if (isDebug()) {
-			policy.write(getPossibleActions());
-		}
 	}
 }
