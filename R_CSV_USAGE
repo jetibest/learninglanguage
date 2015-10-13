@@ -1,0 +1,11 @@
+> library(reshape2)
+> library(ggplot2)
+> data = read.csv("empty.csv", header=T)
+> data$id = 1:nrow(data)
+> data.m = melt(data, id.vars='id')
+> ggplot(data.m, aes(x=id, y=value, colour=variable)) + geom_smooth() + geom_line()
+
+print to file:
+> postscript("file.eps", width=60, height=3); OR: > png("file.png", width=640, height=200)
+> ggplot(data.m, aes(x=id, y=value, colour=variable)) + geom_smooth() + geom_line()
+> dev.off()
