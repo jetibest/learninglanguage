@@ -47,10 +47,19 @@ public class Props {
 			}
 			return value;
 		} else {
-			return null;
+			return new int[0];
 		}
 	}
 	
+	public String[] getStringArrayValue(String key) {
+		String str = getStringValue(key);
+		if (str != null) {
+			return str.split(",");
+		} else {
+			return new String[0];
+		}
+	}
+
 	public boolean getBooleanValue(String key) {
 		return Boolean.valueOf(getStringValue(key)).booleanValue();
 	}
@@ -69,6 +78,17 @@ public class Props {
 	}
 	
 	public void addValue(String key,int[] value) {
+		StringBuffer buffer = new StringBuffer();
+		for (int i = 0; i < value.length; i++) {
+			if (i > 0) {
+				buffer.append(',');
+			}
+			buffer.append(value[i]);
+		}
+		addValue(key,buffer.toString());
+	}
+	
+	public void addValue(String key,String[] value) {
 		StringBuffer buffer = new StringBuffer();
 		for (int i = 0; i < value.length; i++) {
 			if (i > 0) {

@@ -166,12 +166,16 @@ public class AgentsConfig {
 		props.addValue("learningRate",learningRate);
 		props.addValue("futureRewardDiscountRate",futureRewardDiscountRate);
 		props.addValue("sharedPolicy",sharedPolicy);
+		String[] actionsStr = new String[possibleActions.length];
 		for (int i = 0; i < possibleActions.length; i++) {
-			props.addValue("possibleAction" + i,possibleActions[i].toString());
+			actionsStr[i] = possibleActions[i].toString();
 		}
+		props.addValue("possibleActions", actionsStr);
+		String[] varsStr = new String[possibleStateVariables.length];
 		for (int i = 0; i < possibleStateVariables.length; i++) {
-			props.addValue("possibleStateVariable" + i,possibleStateVariables[i].toString());
+			varsStr[i] = possibleStateVariables[i].toString();
 		}
+		props.addValue("possibleStateVariables", varsStr);
 		props.addValue("soundMatrix",soundMatrix.getName());
 		props.addValue("debug",debug);
 		props.addValue("dustCleanValue",dustCleanValue);
@@ -187,24 +191,16 @@ public class AgentsConfig {
 		learningRate = props.getDoubleValue("learningRate");
 		futureRewardDiscountRate = props.getDoubleValue("futureRewardDiscountRate");
 		sharedPolicy = props.getBooleanValue("sharedPolicy");
-		List<Action> actions = new ArrayList<Action>();
-		for (int i = 0; i < 100; i++) {
-			if (props.hasKey("possibleAction"+i)) {
-				actions.add(Action.valueOf(props.getStringValue("possibleAction"+i)));
-			} else {
-				break;
-			}
+		String[] actionsStr = props.getStringArrayValue("possibleActions");
+		possibleActions = new Action[actionsStr.length];
+		for (int i = 0; i < actionsStr.length; i++) {
+			possibleActions[i] = Action.valueOf(actionsStr[i]);
 		}
-		possibleActions = actions.toArray(new Action[actions.size()]);
-		List<StateVariable> vars = new ArrayList<StateVariable>();
-		for (int i = 0; i < 100; i++) {
-			if (props.hasKey("possibleStateVariable"+i)) {
-				vars.add(StateVariable.valueOf(props.getStringValue("possibleStateVariable"+i)));
-			} else {
-				break;
-			}
+		String[] varsStr = props.getStringArrayValue("possibleStateVariables");
+		possibleStateVariables = new StateVariable[varsStr.length];
+		for (int i = 0; i < varsStr.length; i++) {
+			possibleStateVariables[i] = StateVariable.valueOf(varsStr[i]);
 		}
-		possibleStateVariables = vars.toArray(new StateVariable[vars.size()]);
 		soundMatrix = BooleanMatrix.fromName(props.getStringValue("soundMatrix"));
 		debug = props.getBooleanValue("debug");
 		dustCleanValue = props.getIntValue("dustCleanValue");

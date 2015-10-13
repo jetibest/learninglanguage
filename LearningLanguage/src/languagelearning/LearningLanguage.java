@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import languagelearning.agents.AgentsConfig;
-import languagelearning.agents.DefaultAgentsConfig;
-import languagelearning.env.DustMultiplierConfig;
 import languagelearning.env.EnvironmentConfig;
 import languagelearning.env.RunnableEnvironment;
 import languagelearning.gui.LLWindow;
@@ -61,7 +59,8 @@ public class LearningLanguage implements Logger {
 			Props props = new Props(new File("Visual.txt"));
 			EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
 			AgentsConfig agentsConfig = new AgentsConfig(props);
-		
+			props.saveToFile(new File("Tmp.txt"));
+			
             // Default: Only has bumper as sensor, and default actions
             // Normal: Can sense dust below, bumper as sensor, and has default actions
             
