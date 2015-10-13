@@ -99,7 +99,7 @@ public class LearningLanguage implements Logger {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String configName = "Visual";
+		String configName = "Default";
 		if (args.length > 0) {
 			configName = args[0];
 		}
