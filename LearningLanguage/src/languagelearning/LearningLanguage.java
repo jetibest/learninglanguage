@@ -41,15 +41,20 @@ public class LearningLanguage implements Logger {
 			}
 		
 			Props props = new Props(new File(configFilePath));
+			SimulationConfig simulationConfig = new SimulationConfig(props);
 			EnvironmentConfig environmentConfig = new EnvironmentConfig(props);
 			AgentsConfig agentsConfig = new AgentsConfig(props);
 
-			File statDirPath = new File(configFilePath.replace(".txt", ".output"));
-			StatWriter statWriter = new StatWriter(statDirPath);
-			statWriter.setActions(agentsConfig.getPossibleActions());
 
             env = new RunnableEnvironment(environmentConfig);
-            env.setStatWriter(statWriter);
+
+            if (simulationConfig.isWriteStats()) {
+    			File statDirPath = new File(configFilePath.replace(".txt", ".output"));
+    			StatWriter statWriter = new StatWriter(statDirPath);
+    			statWriter.setActions(agentsConfig.getPossibleActions());
+                env.setStatWriter(statWriter);
+            }
+            
             win = new LLWindow();
             env.setLogger(this);
             env.setStatusUpdater(getWindow().getControlPanel());

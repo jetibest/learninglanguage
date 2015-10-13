@@ -1,3 +1,7 @@
+runs = 1
+trainingTicks = 100000
+testTicks = 100000
+writeStats = true
 gridWidth = 32
 gridHeight = 20
 dustMin = 0

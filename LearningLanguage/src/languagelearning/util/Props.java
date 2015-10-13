@@ -30,11 +30,21 @@ public class Props {
 	}
 	
 	public int getIntValue(String key) {
-		return Integer.valueOf(getStringValue(key)).intValue();
+		String str = getStringValue(key);
+		if (str != null) {
+			return Integer.valueOf(str).intValue();
+		} else {
+			return 0;
+		}
 	}
 	
 	public double getDoubleValue(String key) {
-		return Double.valueOf(getStringValue(key)).doubleValue();
+		String str = getStringValue(key);
+		if (str != null) {
+			return Double.valueOf(str).doubleValue();
+		} else {
+			return 0;
+		}
 	}
 	
 	public int[] getIntArrayValue(String key) {
@@ -61,7 +71,12 @@ public class Props {
 	}
 
 	public boolean getBooleanValue(String key) {
-		return Boolean.valueOf(getStringValue(key)).booleanValue();
+		String str = getStringValue(key);
+		if (str != null) {
+			return Boolean.valueOf(str).booleanValue();
+		} else {
+			return false;
+		}
 	}
 	
 	public void addValue(String key,String value) {
