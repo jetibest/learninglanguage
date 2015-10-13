@@ -14,7 +14,7 @@ import languagelearning.agents.Agent;
 import languagelearning.agents.GridObject;
 import languagelearning.env.Environment;
 
-public class LLPanel extends JPanel implements Runnable {
+public class LLGridPanel extends JPanel implements Runnable {
 	/*
 	 * Paint the grid and show agents/objects on it
 	 */
@@ -27,7 +27,7 @@ public class LLPanel extends JPanel implements Runnable {
 	private Dimension panelSize;
 	private Thread t;
 
-	public LLPanel() {
+	public LLGridPanel() {
 		init();
 	}
 
