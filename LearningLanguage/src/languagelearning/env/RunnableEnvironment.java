@@ -11,7 +11,8 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	public static final int SIM_SPEED_MAX = 1000;
 	public static final int SIM_SPEED_DEFAULT = 500;
 	
-
+	private long ticks = 0;
+	private long maxTicks = 500000;
 	private Thread t;
 	private int simulationSpeed = SIM_SPEED_DEFAULT;
 
@@ -40,8 +41,15 @@ public class RunnableEnvironment extends Environment implements Runnable {
 		while (LearningLanguage.MAIN.isRunning()) {
 			start = System.currentTimeMillis();
 			
+			if(ticks >= maxTicks)
+			{
+				LearningLanguage.MAIN.stop();
+				return;
+			}
+			
 			tick();
-
+			ticks++;
+			
 			try {
 				Thread.sleep(Math.max(0,
 						(long) (getSimulationSpeedMultiplier()

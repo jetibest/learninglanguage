@@ -31,4 +31,9 @@ public class BasicAgentsConfig extends DefaultAgentsConfig
                 //,StateVariable.SOUND_C_TWO_AHEAD
         });
     }
+    
+    public String getName()
+    {
+    	return "basic";
+    }
 }
