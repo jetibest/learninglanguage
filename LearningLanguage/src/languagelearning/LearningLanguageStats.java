@@ -1,5 +1,7 @@
 package languagelearning;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 import languagelearning.actions.Action;
@@ -7,13 +9,14 @@ import languagelearning.agents.AgentType;
 import languagelearning.agents.AgentsConfig;
 import languagelearning.agents.GridObject;
 import languagelearning.agents.TDVacuumCleaner;
+import languagelearning.env.DustMultiplierConfig;
 import languagelearning.env.Environment;
 import languagelearning.env.EnvironmentConfig;
 import languagelearning.env.SimulationEnvironment;
 import languagelearning.policies.StateActionPolicy;
-import languagelearning.states.PredicateState;
 import languagelearning.states.StateVariable;
 import languagelearning.util.BooleanMatrix;
+import languagelearning.util.Props;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -21,12 +24,14 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 public class LearningLanguageStats {
 	private final static DecimalFormat df = new DecimalFormat("#0.0");
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		SimulationConfig simulationConfig = new SimulationConfig();
-		simulationConfig.setRuns(1);
-		simulationConfig.setTrainingTicks(1000000);
+		simulationConfig.setRuns(5);
+		simulationConfig.setTrainingTicks(100000);
 		simulationConfig.setTestTicks(100000);
-		
+
+		//Props props = new Props(new File("config.txt"));
+
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setGridWidth(32);
 		environmentConfig.setGridHeight(20);
@@ -36,8 +41,13 @@ public class LearningLanguageStats {
 		environmentConfig.setDustStartPercentage(0.6);
 		environmentConfig.setDustVariancePercentage(0.1);
 		environmentConfig.setBounded(true);
-		//environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 16, 20, 100));
-		//environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(16, 0, 16, 20, 0));
+		environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(0, 0, 16, 20, 100));
+		environmentConfig.getDustMultipliers().add(new DustMultiplierConfig(16, 0, 16, 20, 0));
+		
+/*		Props props = new Props();
+		environmentConfig.fillProps(props);
+		props.saveToFile(new File("config.txt"));*/
+
 		
 		AgentsConfig agentsConfig = new AgentsConfig();
 		agentsConfig.setAgentType(AgentType.QLEARNING);

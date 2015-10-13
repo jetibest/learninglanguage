@@ -3,6 +3,8 @@ package languagelearning.env;
 import java.util.ArrayList;
 import java.util.List;
 
+import languagelearning.util.Props;
+
 
 public class EnvironmentConfig implements Cloneable {
 	private int gridWidth;
@@ -14,6 +16,14 @@ public class EnvironmentConfig implements Cloneable {
 	private double dustVariancePercentage;
 	private boolean bounded;
 	private List<DustMultiplierConfig> dustMultipliers = new ArrayList<DustMultiplierConfig>();
+	
+	public EnvironmentConfig() {
+		
+	}
+	
+	public EnvironmentConfig(Props props) {
+		this.readFromProps(props);
+	}
 	
 	public int getGridWidth() {
 		return gridWidth;
@@ -73,5 +83,46 @@ public class EnvironmentConfig implements Cloneable {
 		this.dustMultipliers = dustMultipliers;
 	}
 	
+	public void fillProps(Props props) {
+		props.addValue("gridWidth",gridWidth);
+		props.addValue("gridHeight",gridHeight);
+		props.addValue("dustMin",dustMin);
+		props.addValue("dustMax",dustMax);
+		props.addValue("dustIncrement",dustIncrement);
+		props.addValue("dustStartPercentage",dustStartPercentage);
+		props.addValue("dustVariancePercentage",dustVariancePercentage);
+		props.addValue("bounded",bounded);
+		for (int i = 0; i < dustMultipliers.size(); i++) {
+			DustMultiplierConfig dustMultiplierConfig = dustMultipliers.get(i);
+			String key = "dustMultiplier" + i + ".";
+			props.addValue(key+"fromX", dustMultiplierConfig.getFromX());
+			props.addValue(key+"fromY", dustMultiplierConfig.getFromY());
+			props.addValue(key+"width", dustMultiplierConfig.getWidth());
+			props.addValue(key+"height", dustMultiplierConfig.getHeight());
+			props.addValue(key+"multiplier", dustMultiplierConfig.getMultiplier());
+		}
+	}
 	
+	public void readFromProps(Props props) {
+		gridWidth = props.getIntValue("gridWidth");
+		gridHeight = props.getIntValue("gridHeight");
+		dustMin = props.getIntValue("dustMin");
+		dustMax = props.getIntValue("dustMax");
+		dustIncrement = props.getIntValue("dustIncrement");
+		dustStartPercentage = props.getDoubleValue("dustStartPercentage");
+		dustVariancePercentage = props.getDoubleValue("dustVariancePercentage");
+		bounded = props.getBooleanValue("bounded");
+		dustMultipliers.clear();
+		for (int i = 0; i < 100; i++) {
+			String key = "dustMultiplier" + i + ".";
+			if (props.hasKey(key + "fromX")) {
+				DustMultiplierConfig dustMultiplierConfig = 
+						new DustMultiplierConfig(props.getIntValue(key + "fromX"),props.getIntValue(key + "fromY")
+								,props.getIntValue(key + "width"),props.getIntValue(key + "height"),props.getDoubleValue(key + "multiplier"));
+				dustMultipliers.add(dustMultiplierConfig);
+			} else {
+				break;
+			}
+		}
+	}
 }

@@ -21,6 +21,10 @@ public class Props {
 		loadFromFile(file);
 	}
 	
+	public boolean hasKey(String key) {
+		return values.containsKey(key);
+	}
+	
 	public String getStringValue(String key) {
 		return values.get(key);
 	}
@@ -35,12 +39,16 @@ public class Props {
 	
 	public int[] getIntArrayValue(String key) {
 		String str = getStringValue(key);
-		String[] strArray = str.split(",");
-		int[] value = new int[strArray.length];
-		for (int i = 0; i < strArray.length; i++) {
-			value[i] = Integer.valueOf(strArray[i]);
+		if (str != null) {
+			String[] strArray = str.split(",");
+			int[] value = new int[strArray.length];
+			for (int i = 0; i < strArray.length; i++) {
+				value[i] = Integer.valueOf(strArray[i]);
+			}
+			return value;
+		} else {
+			return null;
 		}
-		return value;
 	}
 	
 	public boolean getBooleanValue(String key) {
