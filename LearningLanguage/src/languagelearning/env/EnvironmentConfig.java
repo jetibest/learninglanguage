@@ -15,6 +15,7 @@ public class EnvironmentConfig implements Cloneable {
 	private double dustStartPercentage;
 	private double dustVariancePercentage;
 	private boolean bounded;
+	private int maxTicks;
 	private List<DustMultiplierConfig> dustMultipliers = new ArrayList<DustMultiplierConfig>();
 	
 	public EnvironmentConfig() {
@@ -83,6 +84,14 @@ public class EnvironmentConfig implements Cloneable {
 		this.dustMultipliers = dustMultipliers;
 	}
 	
+	public int getMaxTicks() {
+		return maxTicks;
+	}
+
+	public void setMaxTicks(int maxTicks) {
+		this.maxTicks = maxTicks;
+	}
+	
 	public void fillProps(Props props) {
 		props.addValue("gridWidth",gridWidth);
 		props.addValue("gridHeight",gridHeight);
@@ -92,6 +101,7 @@ public class EnvironmentConfig implements Cloneable {
 		props.addValue("dustStartPercentage",dustStartPercentage);
 		props.addValue("dustVariancePercentage",dustVariancePercentage);
 		props.addValue("bounded",bounded);
+		props.addValue("maxTicks",maxTicks);
 		for (int i = 0; i < dustMultipliers.size(); i++) {
 			DustMultiplierConfig dustMultiplierConfig = dustMultipliers.get(i);
 			String key = "dustMultiplier" + i + ".";
@@ -112,6 +122,7 @@ public class EnvironmentConfig implements Cloneable {
 		dustStartPercentage = props.getDoubleValue("dustStartPercentage");
 		dustVariancePercentage = props.getDoubleValue("dustVariancePercentage");
 		bounded = props.getBooleanValue("bounded");
+		maxTicks = props.getIntValue("maxTicks");
 		dustMultipliers.clear();
 		for (int i = 0; i < 100; i++) {
 			String key = "dustMultiplier" + i + ".";

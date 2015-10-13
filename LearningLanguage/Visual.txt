@@ -1,6 +1,3 @@
-runs = 1
-trainingTicks = 100000
-testTicks = 100000
 writeStats = true
 gridWidth = 32
 gridHeight = 20
@@ -10,6 +7,7 @@ dustIncrement = 10
 dustStartPercentage = 0.6
 dustVariancePercentage = 0.1
 bounded = true
+maxTicks = 500000
 dustMultiplier0.fromX = 0
 dustMultiplier0.fromY = 0
 dustMultiplier0.width = 32

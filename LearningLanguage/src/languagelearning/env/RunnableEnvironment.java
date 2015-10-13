@@ -12,12 +12,13 @@ public class RunnableEnvironment extends Environment implements Runnable {
 	public static final int SIM_SPEED_DEFAULT = 500;
 	
 	private long ticks = 0;
-	private long maxTicks = 500000;
+	private long maxTicks = 0;
 	private Thread t;
 	private int simulationSpeed = SIM_SPEED_DEFAULT;
 
 	public RunnableEnvironment(EnvironmentConfig environmentConfig) {
 		super(environmentConfig);
+		maxTicks = environmentConfig.getMaxTicks();
 	}
 	
 	public void init() {
