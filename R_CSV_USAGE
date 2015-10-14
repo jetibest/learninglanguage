@@ -9,3 +9,57 @@ print to file:
 > postscript("file.eps", width=60, height=3); OR: > png("file.png", width=640, height=200)
 > ggplot(data.m, aes(x=id, y=value, colour=variable)) + geom_smooth() + geom_line()
 > dev.off()
+
+new script for plotting summaries:
+
+> getDustPercentage = function(fname)
+{
+    data=read.csv(fname, header=F);
+    data$tick=1:nrow(data);
+    data.m=melt(data, id.vars="tick");
+    res = ggplot(data.m, aes(x=tick, y=value, colour=variable)) + geom_smooth() + geom_line() + ylim(0,50) + ggtitle("Percentage of Dust in Environment");
+    return(res);
+}
+> getStatePlot = function(fname)
+{
+    data=read.csv(fname, header=T)
+    data$tick=1:nrow(data);
+    data.m=melt(data, id.vars="tick");
+    res = ggplot(data.m, aes(x=tick, y=value, colour=variable)) + geom_line() + ggtitle(fname)
+    return(res)
+}
+> showResults = function(dirname, states)
+{
+    i=2;
+    plots=list();
+    plots[[1]]=getDustPercentage(paste(dirname, "dustpercentage.csv", sep=""));
+    for(state in states)
+    {
+        plots[[i]]=getStatePlot(paste(dirname, paste("state-", paste(state, ".csv", sep=""), sep=""), sep=""));
+        i = i + 1;
+    }
+    do.call("grid.arrange", c(plots, ncol=1));
+}
+> compareDustPercentages = function(maxticks=200, dirnames)
+{
+    comparisonData = as.data.frame(setNames(replicate(1,numeric(maxticks), simplify = F), c("tick")));
+    for(dirname in dirnames)
+    {
+        data = read.csv(paste(dirname, "dustpercentage.csv", sep=""), header=F)
+        comparisonData[dirname] = data
+    }
+    comparisonData$tick=1:nrow(comparisonData)
+    comparisonData.m = melt(comparisonData, id.vars="tick")
+    res = ggplot(comparisonData.m, aes(x=tick, y=value, colour=variable)) + geom_smooth() + geom_line() + ylim(0, 50) + ggtitle("Comparison of Percentage of Dust in Environment")
+    return(res)
+}
+
+Individual result:
+> showResults(".../.../Default.output/", c("EMPTY", "OBSTACLE_AHEAD", ...))
+Compare scores:
+> compareDustPercentages(c(".../.../Default.output/", ".../.../Sound.output/", ...))
+
+Printing to png file:
+> png("file.png", width=800, height=200)
+> compareDustPercentages(...)
+> dev.off()
