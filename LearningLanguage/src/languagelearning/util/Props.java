@@ -50,7 +50,7 @@ public class Props {
 	public int[] getIntArrayValue(String key) {
 		String str = getStringValue(key);
 		if (str != null) {
-			String[] strArray = str.split(",");
+			String[] strArray = str.trim().split(",");
 			int[] value = new int[strArray.length];
 			for (int i = 0; i < strArray.length; i++) {
 				value[i] = Integer.valueOf(strArray[i]);
@@ -63,8 +63,8 @@ public class Props {
 	
 	public String[] getStringArrayValue(String key) {
 		String str = getStringValue(key);
-		if (str != null) {
-			return str.split(",");
+		if (str != null && str.trim().length() > 0) {
+			return str.trim().replace(" ", "").split(",");
 		} else {
 			return new String[0];
 		}

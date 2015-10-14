@@ -194,12 +194,14 @@ public class AgentsConfig {
 		String[] actionsStr = props.getStringArrayValue("possibleActions");
 		possibleActions = new Action[actionsStr.length];
 		for (int i = 0; i < actionsStr.length; i++) {
-			possibleActions[i] = Action.valueOf(actionsStr[i]);
+			Action action = Action.valueOf(actionsStr[i]);
+			possibleActions[i] = action;
 		}
 		String[] varsStr = props.getStringArrayValue("possibleStateVariables");
 		possibleStateVariables = new StateVariable[varsStr.length];
 		for (int i = 0; i < varsStr.length; i++) {
-			possibleStateVariables[i] = StateVariable.valueOf(varsStr[i]);
+			StateVariable var = StateVariable.valueOf(varsStr[i]);
+			possibleStateVariables[i] = var;
 		}
 		soundMatrix = BooleanMatrix.fromName(props.getStringValue("soundMatrix"));
 		debug = props.getBooleanValue("debug");

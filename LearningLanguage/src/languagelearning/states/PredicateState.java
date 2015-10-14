@@ -3,7 +3,7 @@ package languagelearning.states;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PredicateState extends State {
+public class PredicateState extends State implements Comparable {
 	private Set<StateVariable> vars;
 	private String stringValue;
 	
@@ -54,5 +54,15 @@ public class PredicateState extends State {
 	@Override
 	public int hashCode() {
 		return toString().hashCode();
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		if (o instanceof PredicateState) {
+			String str2 = o.toString();
+			return toString().compareTo(str2);
+		}
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

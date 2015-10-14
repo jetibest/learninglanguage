@@ -3,6 +3,7 @@ package languagelearning.util;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import languagelearning.env.Environment;
 import languagelearning.policies.StateActionPolicy;
 import languagelearning.states.State;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public class StatWriter {
@@ -37,24 +39,16 @@ public class StatWriter {
 		}
 	}
 
-	public void write(Environment environment) {
+	public void write(StateActionPolicy policy,double totalDustPercentage) {
 		writeCount++;
 
-		// double currentDustScore = LearningLanguage.MAIN.getWindow()
-		// .getControlPanel().getCurrentDustPercentage();
-		double currentDustScore = environment.getTotalDustPercentage();
 		DescriptiveStatistics dpscore = stats.get("dustpercentage");
 		if (dpscore == null) {
 			dpscore = new DescriptiveStatistics();
 			stats.put("dustpercentage", dpscore);
 		}
-		dpscore.addValue(currentDustScore);
+		dpscore.addValue(totalDustPercentage);
 
-		StateActionPolicy policy = environment.getFirstAgentPolicy(); // Just
-																		// take
-																		// first
-																		// agent
-																		// policy
 		State[] states = policy.getStates();
 		for (State state : states) {
 			for (Action action : actions) {
@@ -113,6 +107,15 @@ public class StatWriter {
 				dpbr.write(actionValues.toString());
 				dpbr.flush();
 			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			// Write policy
+			try {
+				FileUtils.writeStringToFile(new File(dir,
+						"policy.txt"), policy.toString());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
